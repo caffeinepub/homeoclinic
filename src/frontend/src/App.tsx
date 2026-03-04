@@ -9,6 +9,7 @@ import {
 import { AppLayout } from "./components/AppLayout";
 import { LoginPage } from "./components/LoginPage";
 import { useInternetIdentity } from "./hooks/useInternetIdentity";
+import { useEnsureRegistered } from "./hooks/useQueries";
 import { Appointments } from "./pages/Appointments";
 import { CaseSheet } from "./pages/CaseSheet";
 import { Dashboard } from "./pages/Dashboard";
@@ -20,6 +21,8 @@ import { Remedies } from "./pages/Remedies";
 // Root route with auth guard
 function RootLayout() {
   const { identity, isInitializing } = useInternetIdentity();
+  // Proactively register the user on every login so all subsequent calls succeed
+  useEnsureRegistered();
 
   if (isInitializing) {
     return (

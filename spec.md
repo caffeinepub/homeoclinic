@@ -1,9 +1,7 @@
 # HomeoClinic
 
 ## Current State
-Full-stack homeopathic clinical management app with patient registration, HMCC-format case sheets, prescriptions with remedy suggestion popups, follow-ups, 43+ polychrest remedy reference, appointments, memo pad, and dashboard.
-
-Critical bug: The authorization component uses `Runtime.trap("User is not registered")` for any new login, blocking all users from doing anything.
+Full homeopathic clinical management app with patient registry, HMCC-format case sheets, prescriptions, follow-ups, appointments, memos, and remedy reference (43+ polychrest remedies). Access control uses an authorization mixin where `getUserRole` traps with "User is not registered" when an unrecognized principal calls any backend function -- blocking all new logins from doing anything.
 
 ## Requested Changes (Diff)
 
@@ -11,13 +9,10 @@ Critical bug: The authorization component uses `Runtime.trap("User is not regist
 - Nothing new
 
 ### Modify
-- Remove the authorization component entirely. Replace all permission checks with a simple anonymous-user check: only block `caller.isAnonymous()`. Any authenticated principal (non-anonymous) can do everything.
+- `access-control.mo`: Change `getUserRole` so that when a principal is not found in the userRoles map, instead of calling `Runtime.trap("User is not registered")`, it auto-registers the caller as `#user` and returns `#user`. This means any authenticated (non-anonymous) principal gets immediate access without needing to call `_initializeAccessControlWithSecret` first.
 
 ### Remove
-- All `AccessControl.hasPermission(...)` guards replaced with simple `if (caller.isAnonymous()) { Runtime.trap("Must be logged in") }` checks.
-- No more `include MixinAuthorization` or `AccessControl` imports.
+- Nothing
 
 ## Implementation Plan
-1. Regenerate backend WITHOUT the authorization component. Every endpoint just checks `caller.isAnonymous()` and traps if true. All authenticated callers get full access.
-2. Keep all existing data models and endpoints identical (Patient, CaseSheet, Prescription, FollowUp, Appointment, Memo).
-3. No frontend changes needed.
+1. Regenerate the Motoko backend with the same data model and all the same functions, but with the access control logic changed so unregistered authenticated users are automatically granted `#user` role on first access (no trapping). The `hasPermission` check should only block anonymous (unauthenticated) callers.

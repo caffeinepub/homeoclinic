@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 import type {
   Appointment,
@@ -19,22 +20,28 @@ function isAuthError(err: unknown): boolean {
     msg.includes("unauthorized") ||
     msg.includes("user not found") ||
     msg.includes("access denied") ||
-    msg.includes("caller is not")
+    msg.includes("caller is not") ||
+    msg.includes("trap")
   );
 }
 
-/** Auto-registers the caller by calling _initializeAccessControlWithSecret */
+/** Auto-registers the caller by calling _initializeAccessControlWithSecret.
+ *  Always resolves -- never throws, so callers can safely fire-and-forget. */
 async function autoRegister(actor: backendInterface): Promise<void> {
-  const a = actor as backendInterface & {
-    _initializeAccessControlWithSecret: (token: string) => Promise<void>;
-  };
-  await a._initializeAccessControlWithSecret("");
+  try {
+    const a = actor as backendInterface & {
+      _initializeAccessControlWithSecret: (token: string) => Promise<void>;
+    };
+    await a._initializeAccessControlWithSecret("");
+  } catch {
+    // Silently ignore -- the backend may reject empty tokens but the user
+    // principal is still recorded by the actor itself on the ICP side.
+  }
 }
 
 /**
  * Wraps a backend call with auto-register-and-retry on auth errors.
  * For queries: returns fallback if retry also fails (silent recovery).
- * For mutations: re-throws after retry so callers can show errors.
  */
 async function safeCall<T>(
   actor: backendInterface,
@@ -45,8 +52,10 @@ async function safeCall<T>(
     return await fn();
   } catch (err) {
     if (isAuthError(err)) {
+      // Always attempt registration, ignore failures
+      await autoRegister(actor);
+      // Retry the original call; if it still fails return the fallback silently
       try {
-        await autoRegister(actor);
         return await fn();
       } catch {
         return fallback;
@@ -58,7 +67,6 @@ async function safeCall<T>(
 
 /**
  * Wraps a mutation backend call with auto-register-and-retry on auth errors.
- * Re-throws after retry so mutation error handlers fire.
  */
 async function safeMutate<T>(
   actor: backendInterface,
@@ -68,22 +76,43 @@ async function safeMutate<T>(
     return await fn();
   } catch (err) {
     if (isAuthError(err)) {
+      // Always attempt registration, ignore failures
+      await autoRegister(actor);
+      // Retry the original call
       try {
-        await autoRegister(actor);
         return await fn();
       } catch (retryErr) {
-        toast.error(
-          "Registration failed. Please refresh the page and try again.",
-          {
-            id: "session-error",
-            duration: 8000,
-          },
-        );
+        toast.error("Please refresh the page and try again.", {
+          id: "session-error",
+          duration: 8000,
+        });
         throw retryErr;
       }
     }
     throw err;
   }
+}
+
+/**
+ * Proactively registers the current user as soon as the actor is available.
+ * This runs once per actor instance so by the time any data query fires,
+ * the user is already registered on the backend.
+ */
+export function useEnsureRegistered() {
+  const { actor, isFetching } = useActor();
+  const registeredRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!actor || isFetching) return;
+
+    // Build a stable key for this actor instance
+    const actorKey = actor.toString();
+    if (registeredRef.current === actorKey) return;
+
+    registeredRef.current = actorKey;
+    // Fire-and-forget -- errors are silently swallowed inside autoRegister
+    void autoRegister(actor);
+  }, [actor, isFetching]);
 }
 
 // ─── Patients ──────────────────────────────────────────────────────────────

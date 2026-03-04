@@ -8,7 +8,9 @@ import MixinAuthorization "authorization/MixinAuthorization";
 import AccessControl "authorization/access-control";
 import Nat "mo:core/Nat";
 import Int "mo:core/Int";
+import Migration "migration";
 
+(with migration = Migration.run)
 actor {
   let mutablePatientRecords = Map.empty<Text, Patient>();
   let mutableCaseSheets = Map.empty<Text, CaseSheet>();
@@ -113,19 +115,25 @@ actor {
     createdAt : Int;
   };
 
+  // Helper function to check if caller is authenticated (non-anonymous)
+  // Per CRITICAL requirement: any authenticated caller is allowed, anonymous are rejected
+  private func requireAuthenticated(caller : Principal) {
+    if (caller.isAnonymous()) {
+      Runtime.trap("Unauthorized: Anonymous users cannot access this resource");
+    };
+    // If not anonymous, caller is automatically treated as authenticated user
+    // No need to check if they're registered - auto-treat as #user
+  };
+
   // -- User Profile Management
 
   public query ({ caller }) func getCallerUserProfile() : async ?UserProfile {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can view profiles");
-    };
+    requireAuthenticated(caller);
     userProfiles.get(caller);
   };
 
   public query ({ caller }) func getUserProfile(user : Principal) : async ?UserProfile {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can view profiles");
-    };
+    requireAuthenticated(caller);
     // Users can only view their own profile, unless they are admins
     if (caller != user) {
       if (not AccessControl.isAdmin(accessControlState, caller)) {
@@ -136,18 +144,14 @@ actor {
   };
 
   public shared ({ caller }) func saveCallerUserProfile(profile : UserProfile) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can save profiles");
-    };
+    requireAuthenticated(caller);
     userProfiles.add(caller, profile);
   };
 
   // -- Patient Management
 
   public shared ({ caller }) func createPatient(patient : Patient) : async Text {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can create patients");
-    };
+    requireAuthenticated(caller);
     let id = nextPatientId.toText();
     let newPatient = { patient with id };
     mutablePatientRecords.add(id, newPatient);
@@ -156,9 +160,7 @@ actor {
   };
 
   public query ({ caller }) func getPatient(id : Text) : async Patient {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can view patient data");
-    };
+    requireAuthenticated(caller);
     switch (mutablePatientRecords.get(id)) {
       case (null) { Runtime.trap("Patient does not exist") };
       case (?patient) { patient };
@@ -166,23 +168,17 @@ actor {
   };
 
   public query ({ caller }) func getAllPatients() : async [Patient] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can view patients");
-    };
+    requireAuthenticated(caller);
     mutablePatientRecords.values().toArray();
   };
 
   public query ({ caller }) func getPatientsByYear(year : Nat) : async [Patient] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can view patients");
-    };
+    requireAuthenticated(caller);
     mutablePatientRecords.values().toArray().filter(func(p) { p.registrationYear == year });
   };
 
   public shared ({ caller }) func updatePatient(id : Text, patient : Patient) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can update patients");
-    };
+    requireAuthenticated(caller);
     switch (mutablePatientRecords.get(id)) {
       case (null) { Runtime.trap("Patient does not exist") };
       case (?_) {
@@ -192,9 +188,7 @@ actor {
   };
 
   public shared ({ caller }) func deletePatient(id : Text) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can delete patients");
-    };
+    requireAuthenticated(caller);
     let existed = mutablePatientRecords.containsKey(id);
     mutablePatientRecords.remove(id);
     if (not existed) {
@@ -205,9 +199,7 @@ actor {
   // -- CaseSheet Management
 
   public shared ({ caller }) func createCaseSheet(caseSheet : CaseSheet) : async Text {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can create case sheets");
-    };
+    requireAuthenticated(caller);
     let id = nextCaseSheetId.toText();
     let newCaseSheet = { caseSheet with id };
     mutableCaseSheets.add(id, newCaseSheet);
@@ -216,9 +208,7 @@ actor {
   };
 
   public query ({ caller }) func getCaseSheet(id : Text) : async CaseSheet {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can view case sheets");
-    };
+    requireAuthenticated(caller);
     switch (mutableCaseSheets.get(id)) {
       case (null) { Runtime.trap("Case sheet does not exist") };
       case (?caseSheet) { caseSheet };
@@ -226,16 +216,12 @@ actor {
   };
 
   public query ({ caller }) func getCaseSheetsByPatient(patientId : Text) : async [CaseSheet] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can view case sheets");
-    };
+    requireAuthenticated(caller);
     mutableCaseSheets.values().toArray().filter(func(c) { c.patientId == patientId });
   };
 
   public shared ({ caller }) func updateCaseSheet(id : Text, caseSheet : CaseSheet) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can update case sheets");
-    };
+    requireAuthenticated(caller);
     switch (mutableCaseSheets.get(id)) {
       case (null) { Runtime.trap("Case sheet does not exist") };
       case (?_) {
@@ -245,9 +231,7 @@ actor {
   };
 
   public shared ({ caller }) func deleteCaseSheet(id : Text) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can delete case sheets");
-    };
+    requireAuthenticated(caller);
     let existed = mutableCaseSheets.containsKey(id);
     mutableCaseSheets.remove(id);
     if (not existed) {
@@ -258,9 +242,7 @@ actor {
   // -- Prescription Management
 
   public shared ({ caller }) func createPrescription(prescription : Prescription) : async Text {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can create prescriptions");
-    };
+    requireAuthenticated(caller);
     let id = nextPrescriptionId.toText();
     let newPrescription = { prescription with id };
     mutablePrescriptions.add(id, newPrescription);
@@ -269,9 +251,7 @@ actor {
   };
 
   public query ({ caller }) func getPrescription(id : Text) : async Prescription {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can view prescriptions");
-    };
+    requireAuthenticated(caller);
     switch (mutablePrescriptions.get(id)) {
       case (null) { Runtime.trap("Prescription does not exist") };
       case (?prescription) { prescription };
@@ -279,16 +259,12 @@ actor {
   };
 
   public query ({ caller }) func getPrescriptionsByCaseSheet(caseSheetId : Text) : async [Prescription] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can view prescriptions");
-    };
+    requireAuthenticated(caller);
     mutablePrescriptions.values().toArray().filter(func(p) { p.caseSheetId == caseSheetId });
   };
 
   public shared ({ caller }) func updatePrescription(id : Text, prescription : Prescription) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can update prescriptions");
-    };
+    requireAuthenticated(caller);
     switch (mutablePrescriptions.get(id)) {
       case (null) { Runtime.trap("Prescription does not exist") };
       case (?_) {
@@ -298,9 +274,7 @@ actor {
   };
 
   public shared ({ caller }) func deletePrescription(id : Text) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can delete prescriptions");
-    };
+    requireAuthenticated(caller);
     let existed = mutablePrescriptions.containsKey(id);
     mutablePrescriptions.remove(id);
     if (not existed) {
@@ -311,9 +285,7 @@ actor {
   // -- FollowUp Management
 
   public shared ({ caller }) func createFollowUp(followUp : FollowUp) : async Text {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can create follow-ups");
-    };
+    requireAuthenticated(caller);
     let id = nextFollowUpId.toText();
     let newFollowUp = { followUp with id };
     mutableFollowUps.add(id, newFollowUp);
@@ -322,9 +294,7 @@ actor {
   };
 
   public query ({ caller }) func getFollowUp(id : Text) : async FollowUp {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can view follow-ups");
-    };
+    requireAuthenticated(caller);
     switch (mutableFollowUps.get(id)) {
       case (null) { Runtime.trap("Follow-up does not exist") };
       case (?followUp) { followUp };
@@ -332,16 +302,12 @@ actor {
   };
 
   public query ({ caller }) func getFollowUpsByCaseSheet(caseSheetId : Text) : async [FollowUp] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can view follow-ups");
-    };
+    requireAuthenticated(caller);
     mutableFollowUps.values().toArray().filter(func(f) { f.caseSheetId == caseSheetId });
   };
 
   public shared ({ caller }) func updateFollowUp(id : Text, followUp : FollowUp) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can update follow-ups");
-    };
+    requireAuthenticated(caller);
     switch (mutableFollowUps.get(id)) {
       case (null) { Runtime.trap("Follow-up does not exist") };
       case (?_) {
@@ -351,9 +317,7 @@ actor {
   };
 
   public shared ({ caller }) func deleteFollowUp(id : Text) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can delete follow-ups");
-    };
+    requireAuthenticated(caller);
     let existed = mutableFollowUps.containsKey(id);
     mutableFollowUps.remove(id);
     if (not existed) {
@@ -364,9 +328,7 @@ actor {
   // -- Appointment Management
 
   public shared ({ caller }) func createAppointment(appointment : Appointment) : async Text {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can create appointments");
-    };
+    requireAuthenticated(caller);
     let id = nextAppointmentId.toText();
     let newAppointment = { appointment with id };
     mutableAppointments.add(id, newAppointment);
@@ -375,9 +337,7 @@ actor {
   };
 
   public query ({ caller }) func getAppointment(id : Text) : async Appointment {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can view appointments");
-    };
+    requireAuthenticated(caller);
     switch (mutableAppointments.get(id)) {
       case (null) { Runtime.trap("Appointment does not exist") };
       case (?appointment) { appointment };
@@ -385,23 +345,17 @@ actor {
   };
 
   public query ({ caller }) func getAllAppointments() : async [Appointment] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can view appointments");
-    };
+    requireAuthenticated(caller);
     mutableAppointments.values().toArray();
   };
 
   public query ({ caller }) func getAppointmentsByDate(date : Text) : async [Appointment] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can view appointments");
-    };
+    requireAuthenticated(caller);
     mutableAppointments.values().toArray().filter(func(a) { a.date == date });
   };
 
   public shared ({ caller }) func updateAppointment(id : Text, appointment : Appointment) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can update appointments");
-    };
+    requireAuthenticated(caller);
     switch (mutableAppointments.get(id)) {
       case (null) { Runtime.trap("Appointment does not exist") };
       case (?_) {
@@ -411,9 +365,7 @@ actor {
   };
 
   public shared ({ caller }) func deleteAppointment(id : Text) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can delete appointments");
-    };
+    requireAuthenticated(caller);
     let existed = mutableAppointments.containsKey(id);
     mutableAppointments.remove(id);
     if (not existed) {
@@ -424,9 +376,7 @@ actor {
   // -- Memo Management
 
   public shared ({ caller }) func createMemo(memo : Memo) : async Text {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can create memos");
-    };
+    requireAuthenticated(caller);
     let id = nextMemoId.toText();
     let newMemo = { memo with id };
     mutableMemos.add(id, newMemo);
@@ -435,16 +385,12 @@ actor {
   };
 
   public query ({ caller }) func getAllMemos() : async [Memo] {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can view memos");
-    };
+    requireAuthenticated(caller);
     mutableMemos.values().toArray();
   };
 
   public shared ({ caller }) func updateMemo(id : Text, memo : Memo) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can update memos");
-    };
+    requireAuthenticated(caller);
     switch (mutableMemos.get(id)) {
       case (null) { Runtime.trap("Memo does not exist") };
       case (?_) {
@@ -454,9 +400,7 @@ actor {
   };
 
   public shared ({ caller }) func deleteMemo(id : Text) : async () {
-    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
-      Runtime.trap("Unauthorized: Only users can delete memos");
-    };
+    requireAuthenticated(caller);
     let existed = mutableMemos.containsKey(id);
     mutableMemos.remove(id);
     if (not existed) {
