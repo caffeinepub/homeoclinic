@@ -9,8 +9,6 @@ import AccessControl "authorization/access-control";
 import Nat "mo:core/Nat";
 import Int "mo:core/Int";
 
-
-
 actor {
   let mutablePatientRecords = Map.empty<Text, Patient>();
   let mutableCaseSheets = Map.empty<Text, CaseSheet>();

@@ -1,27 +1,22 @@
 # HomeoClinic
 
 ## Current State
-Full homeopathic clinical management app with patient registration, HMCC-format case sheets (14 sections), prescription table, follow-up table, 43+ remedy reference, remedy popup, and per-login data isolation.
+Full homeopathic clinical management app with patient management, case sheets (HMCC format), prescriptions with remedy suggestion popups, follow-ups, appointments, memos, remedy reference (43 polychrest remedies), and a light theme UI.
+
+The backend uses an authorization system where new users must be registered via `_initializeAccessControlWithSecret` before they can access any functions. The `getUserRole` function currently traps with "User is not registered" for any unknown principal, which blocks new users from registering patients if initialization has not completed or if there is any timing issue.
 
 ## Requested Changes (Diff)
 
 ### Add
-- A new read-only "Previous Prescriptions (All Visits)" accordion section (section 13) in the CaseSheet page that aggregates all prescriptions given to the patient across all their case sheets, displayed in a chronological table with columns: #, Date, Year, Remedy, Potency, Dosage, Frequency, Duration, Instructions.
-- Hooks `usePrescriptionsByCaseSheet`, `useCreatePrescription`, `useUpdatePrescription`, `useDeletePrescription` in `useQueries.ts`.
-- `PreviousPrescriptionsSection` and `PreviousPrescriptionsTable` components in CaseSheet.tsx.
-- `CaseSheetPrescriptionsLoader` render-less helper component to load prescriptions per case sheet without violating hooks rules.
+- Nothing new
 
 ### Modify
-- Old section 13 (Prescriptions) is renumbered to 14 (Current Prescription).
-- Old section 14 (Follow-ups) is renumbered to 15 (Follow-ups).
-- Main `CaseSheet` component now also fetches `useCasesByPatient` to supply all case sheets to the previous prescriptions panel.
+- Fix the access control so that any authenticated (non-anonymous) principal that is not yet registered is automatically registered as a `#user` role on their first call, instead of trapping. This eliminates the "User is not registered" error that prevents new patient registration.
 
 ### Remove
-- Nothing removed.
+- Nothing
 
 ## Implementation Plan
-1. Add prescription hooks to `useQueries.ts`.
-2. Add `PreviousPrescriptionsSection`, `CaseSheetPrescriptionsLoader`, `PreviousPrescriptionsTable` components to `CaseSheet.tsx`.
-3. Update accordion sections: insert new section 13 (prev prescriptions), renumber 13→14 (current Rx), 14→15 (follow-ups).
-4. Fetch `useCasesByPatient` in main `CaseSheet` component, pass to new section.
-5. Build and deploy.
+1. Regenerate backend with updated `getUserRole` logic: if principal is not found in userRoles map, auto-register them as `#user` and return `#user` instead of calling `Runtime.trap`.
+2. All other backend logic (patients, case sheets, prescriptions, follow-ups, appointments, memos, remedy reference) remains unchanged.
+3. No frontend changes needed.
