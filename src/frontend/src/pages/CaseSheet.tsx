@@ -9,24 +9,378 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { Link, useParams } from "@tanstack/react-router";
 import {
   ArrowLeft,
   ClipboardList,
   FileText,
+  Info,
   Loader2,
   Pill,
   Plus,
   Save,
   Trash2,
+  X,
 } from "lucide-react";
-import { motion } from "motion/react";
-import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import type { CaseSheet as BackendCaseSheet } from "../backend.d";
-import { useCase, usePatient, useUpdateCase } from "../hooks/useQueries";
+import type { RemedyData } from "../data/remedyDatabase";
+import { SEED_REMEDIES } from "../data/remedySeeds";
+import {
+  useCase,
+  useCasesByPatient,
+  usePatient,
+  usePrescriptionsByCaseSheet,
+  useUpdateCase,
+} from "../hooks/useQueries";
 import { formatDate, todayISO } from "../utils/helpers";
+
+// ─── Remedy lookup utility ────────────────────────────────────────────────────
+
+function findRemedy(name: string): RemedyData | null {
+  if (!name.trim()) return null;
+  const q = name.trim().toLowerCase();
+  return (
+    SEED_REMEDIES.find(
+      (r) => r.name.toLowerCase() === q || r.abbreviation.toLowerCase() === q,
+    ) ??
+    SEED_REMEDIES.find(
+      (r) =>
+        r.name.toLowerCase().includes(q) ||
+        r.abbreviation.toLowerCase().includes(q),
+    ) ??
+    null
+  );
+}
+
+function getRemedySuggestions(query: string): RemedyData[] {
+  if (!query.trim()) return [];
+  const q = query.trim().toLowerCase();
+  return SEED_REMEDIES.filter(
+    (r) =>
+      r.name.toLowerCase().includes(q) ||
+      r.abbreviation.toLowerCase().includes(q),
+  ).slice(0, 5);
+}
+
+// ─── Remedy Popup (compact reference card) ───────────────────────────────────
+
+const RELATION_LABELS_RX: {
+  key: keyof RemedyData["relationships"];
+  label: string;
+  color: string;
+}[] = [
+  { key: "complementary", label: "Complementary", color: "0.45 0.15 150" },
+  { key: "followsWell", label: "Follows Well", color: "0.45 0.14 193" },
+  { key: "followedBy", label: "Followed By", color: "0.45 0.15 260" },
+  { key: "antidotes", label: "Antidotes", color: "0.55 0.22 25" },
+  { key: "inimical", label: "Inimical", color: "0.50 0.18 45" },
+];
+
+function getMiasmColorRx(miasm: string): string {
+  const m = miasm.toLowerCase();
+  if (m.includes("psoric")) return "0.45 0.14 193";
+  if (m.includes("sycot")) return "0.45 0.15 150";
+  if (m.includes("syphil")) return "0.55 0.22 25";
+  if (m.includes("tuberc")) return "0.50 0.18 45";
+  return "0.45 0.15 260";
+}
+
+function RemedyPopup({
+  remedy,
+  onClose,
+}: {
+  remedy: RemedyData;
+  onClose: () => void;
+}) {
+  const color = getMiasmColorRx(remedy.miasmaticClassification);
+
+  // Close on Escape key
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") onClose();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ background: "rgba(0,0,0,0.5)" }}
+      role="presentation"
+      onClick={(e) => e.target === e.currentTarget && onClose()}
+      onKeyDown={(e) => e.key === "Escape" && onClose()}
+    >
+      <motion.div
+        data-ocid="prescription.remedy_detail.modal"
+        initial={{ opacity: 0, scale: 0.95, y: 16 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 16 }}
+        transition={{ duration: 0.18 }}
+        className="w-full max-w-xl max-h-[88vh] overflow-y-auto rounded-2xl border flex flex-col"
+        style={{
+          background: "oklch(1.0 0 0)",
+          borderColor: "oklch(0.88 0.010 240)",
+          boxShadow: "0 20px 60px oklch(0.15 0.010 240 / 0.18)",
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div
+          className="sticky top-0 flex items-start justify-between px-5 py-4 border-b z-10"
+          style={{
+            background: "oklch(1.0 0 0)",
+            borderColor: "oklch(0.90 0.008 240)",
+          }}
+        >
+          <div>
+            <div className="flex items-center gap-2 flex-wrap">
+              <span
+                className="font-display font-bold text-lg"
+                style={{ color: "oklch(0.15 0.010 240)" }}
+              >
+                {remedy.name}
+              </span>
+              <span
+                className="text-sm font-mono font-semibold"
+                style={{ color: `oklch(${color})` }}
+              >
+                {remedy.abbreviation}
+              </span>
+            </div>
+            <div className="mt-1">
+              <Badge
+                variant="outline"
+                className="text-xs"
+                style={{
+                  borderColor: `oklch(${color} / 0.35)`,
+                  color: `oklch(${color})`,
+                }}
+              >
+                {remedy.miasmaticClassification}
+              </Badge>
+            </div>
+            <p
+              className="text-xs mt-2 italic"
+              style={{ color: "oklch(0.50 0.012 240)" }}
+            >
+              Prescription Reference — Boericke &amp; Synoptic Key
+            </p>
+          </div>
+          <button
+            type="button"
+            data-ocid="prescription.remedy_detail.close_button"
+            onClick={onClose}
+            className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ml-3 mt-0.5 hover:opacity-80 transition-opacity"
+            style={{
+              background: "oklch(0.93 0.008 240)",
+              color: "oklch(0.40 0.010 240)",
+            }}
+            aria-label="Close remedy details"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="p-4 flex-1">
+          <Tabs defaultValue="keynotes">
+            <TabsList
+              className="mb-4 flex-wrap h-auto gap-1"
+              style={{ background: "oklch(0.94 0.007 240)" }}
+            >
+              {[
+                { value: "keynotes", label: "Keynotes" },
+                { value: "materia", label: "Materia Medica" },
+                { value: "synoptic", label: "Synoptic Key" },
+                { value: "rubrics", label: "Rubrics" },
+                { value: "relations", label: "Relationships" },
+              ].map((tab) => (
+                <TabsTrigger
+                  key={tab.value}
+                  value={tab.value}
+                  className="text-xs"
+                  data-ocid={`prescription.remedy_detail.${tab.value}.tab`}
+                >
+                  {tab.label}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+
+            <TabsContent value="keynotes">
+              <div className="space-y-3">
+                <div
+                  className="p-4 rounded-lg"
+                  style={{
+                    background: `oklch(${color} / 0.05)`,
+                    border: `1px solid oklch(${color} / 0.18)`,
+                  }}
+                >
+                  <div
+                    className="text-xs font-semibold uppercase tracking-widest mb-2"
+                    style={{ color: `oklch(${color})` }}
+                  >
+                    Keynotes &amp; Characteristics
+                  </div>
+                  <p
+                    className="text-sm leading-relaxed whitespace-pre-line"
+                    style={{ color: "oklch(0.20 0.010 240)" }}
+                  >
+                    {remedy.keynotes}
+                  </p>
+                </div>
+                {remedy.clinicalIndications && (
+                  <div
+                    className="p-3 rounded-lg"
+                    style={{
+                      background: "oklch(0.96 0.006 240)",
+                      border: "1px solid oklch(0.88 0.010 240)",
+                    }}
+                  >
+                    <div
+                      className="text-xs font-semibold uppercase tracking-widest mb-1.5"
+                      style={{ color: "oklch(0.45 0.14 193)" }}
+                    >
+                      Clinical Indications
+                    </div>
+                    <p
+                      className="text-sm leading-relaxed"
+                      style={{ color: "oklch(0.25 0.010 240)" }}
+                    >
+                      {remedy.clinicalIndications}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </TabsContent>
+
+            <TabsContent value="materia">
+              <div
+                className="p-4 rounded-lg"
+                style={{
+                  background: "oklch(0.96 0.006 240)",
+                  border: "1px solid oklch(0.88 0.010 240)",
+                }}
+              >
+                <div
+                  className="text-xs font-semibold uppercase tracking-widest mb-3"
+                  style={{ color: "oklch(0.45 0.14 193)" }}
+                >
+                  Materia Medica Summary (Boericke)
+                </div>
+                <p
+                  className="text-sm leading-relaxed whitespace-pre-line"
+                  style={{ color: "oklch(0.22 0.010 240)" }}
+                >
+                  {remedy.materiaMedicaSummary}
+                </p>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="synoptic">
+              <div
+                className="p-4 rounded-lg"
+                style={{
+                  background: "oklch(0.96 0.006 240)",
+                  border: "1px solid oklch(0.88 0.010 240)",
+                }}
+              >
+                <div
+                  className="text-xs font-semibold uppercase tracking-widest mb-3"
+                  style={{ color: "oklch(0.45 0.15 150)" }}
+                >
+                  Synoptic Key Highlights (Bhanja)
+                </div>
+                <p
+                  className="text-sm leading-relaxed whitespace-pre-line"
+                  style={{ color: "oklch(0.22 0.010 240)" }}
+                >
+                  {remedy.synopticKeyHighlights}
+                </p>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="rubrics">
+              <div
+                className="p-4 rounded-lg"
+                style={{
+                  background: "oklch(0.96 0.006 240)",
+                  border: "1px solid oklch(0.88 0.010 240)",
+                }}
+              >
+                <div
+                  className="text-xs font-semibold uppercase tracking-widest mb-3"
+                  style={{ color: "oklch(0.50 0.14 90)" }}
+                >
+                  Key Repertory Rubrics
+                </div>
+                <div className="space-y-1.5">
+                  {remedy.rubrics.split(";").map((r) => (
+                    <div
+                      key={r.trim() || r}
+                      className="text-xs px-2 py-1.5 rounded font-mono"
+                      style={{
+                        background: "oklch(0.91 0.008 240)",
+                        color: "oklch(0.28 0.010 240)",
+                      }}
+                    >
+                      {r.trim()}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="relations">
+              <div className="space-y-2.5">
+                {RELATION_LABELS_RX.map(
+                  ({ key, label, color: relColor }) =>
+                    remedy.relationships[key] && (
+                      <div
+                        key={key}
+                        className="p-3 rounded-lg"
+                        style={{
+                          background: `oklch(${relColor} / 0.05)`,
+                          border: `1px solid oklch(${relColor} / 0.18)`,
+                        }}
+                      >
+                        <div
+                          className="text-xs font-semibold uppercase tracking-widest mb-2"
+                          style={{ color: `oklch(${relColor})` }}
+                        >
+                          {label}
+                        </div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {remedy.relationships[key].split(",").map((r) => (
+                            <span
+                              key={r.trim()}
+                              className="text-xs px-2 py-0.5 rounded-full"
+                              style={{
+                                background: `oklch(${relColor} / 0.08)`,
+                                color: `oklch(${relColor})`,
+                                border: `1px solid oklch(${relColor} / 0.25)`,
+                              }}
+                            >
+                              {r.trim()}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    ),
+                )}
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
 
 // ─── Local row types (NOT from backend) ──────────────────────────────────────
 
@@ -546,6 +900,267 @@ function ExaminationTable({
   );
 }
 
+// ─── Previous Prescriptions (read-only cross-case view) ──────────────────────
+
+interface FlatPrescription extends PrescriptionRow {
+  caseSheetId: string;
+  caseYear: string;
+}
+
+function PreviousPrescriptionsSection({
+  currentCaseSheetId,
+  allCaseSheets,
+}: {
+  patientId: string;
+  currentCaseSheetId: string;
+  allCaseSheets: BackendCaseSheet[];
+}) {
+  // Fetch prescriptions for each case sheet via individual queries
+  // We'll use a helper inner component per case sheet so hooks are stable
+  const [allPrescriptions, setAllPrescriptions] = useState<FlatPrescription[]>(
+    [],
+  );
+  const [popupRemedy, setPopupRemedy] = useState<RemedyData | null>(null);
+
+  return (
+    <div className="space-y-3">
+      {allCaseSheets.map((cs) => (
+        <CaseSheetPrescriptionsLoader
+          key={cs.id}
+          caseSheet={cs}
+          currentCaseSheetId={currentCaseSheetId}
+          onLoaded={(rows) => {
+            setAllPrescriptions((prev) => {
+              // Replace existing entries for this case sheet
+              const filtered = prev.filter((p) => p.caseSheetId !== cs.id);
+              return [...filtered, ...rows];
+            });
+          }}
+        />
+      ))}
+      <PreviousPrescriptionsTable
+        prescriptions={allPrescriptions}
+        onShowRemedy={setPopupRemedy}
+      />
+      <AnimatePresence>
+        {popupRemedy && (
+          <RemedyPopup
+            remedy={popupRemedy}
+            onClose={() => setPopupRemedy(null)}
+          />
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function CaseSheetPrescriptionsLoader({
+  caseSheet,
+  onLoaded,
+}: {
+  caseSheet: BackendCaseSheet;
+  currentCaseSheetId: string;
+  onLoaded: (rows: FlatPrescription[]) => void;
+}) {
+  const { data: prescriptions } = usePrescriptionsByCaseSheet(caseSheet.id);
+  const onLoadedRef = useRef(onLoaded);
+  onLoadedRef.current = onLoaded;
+
+  useEffect(() => {
+    if (!prescriptions) return;
+    const flat: FlatPrescription[] = prescriptions.flatMap((p) => {
+      const rows = parsePrescriptionRows(p.rows);
+      return rows.map((r) => ({
+        ...r,
+        caseSheetId: caseSheet.id,
+        caseYear: caseSheet.year?.toString() ?? "",
+      }));
+    });
+    onLoadedRef.current(flat);
+  }, [prescriptions, caseSheet.id, caseSheet.year]);
+
+  return null;
+}
+
+function PreviousPrescriptionsTable({
+  prescriptions,
+  onShowRemedy,
+}: {
+  prescriptions: FlatPrescription[];
+  onShowRemedy: (r: RemedyData) => void;
+}) {
+  if (prescriptions.length === 0) {
+    return (
+      <div
+        data-ocid="case.prev_prescriptions.empty_state"
+        className="rounded-lg border px-4 py-6 text-center text-sm italic"
+        style={{
+          borderColor: "oklch(0.88 0.010 240)",
+          color: "oklch(0.55 0.010 240)",
+          background: "oklch(0.98 0.003 240)",
+        }}
+      >
+        No previous prescriptions recorded for this patient yet.
+      </div>
+    );
+  }
+
+  // Sort by date descending
+  const sorted = [...prescriptions].sort((a, b) => {
+    if (!a.date && !b.date) return 0;
+    if (!a.date) return 1;
+    if (!b.date) return -1;
+    return b.date.localeCompare(a.date);
+  });
+
+  const cols = [
+    "Date",
+    "Year",
+    "Remedy",
+    "Potency",
+    "Dosage",
+    "Frequency",
+    "Duration",
+    "Instructions",
+  ];
+
+  return (
+    <div className="clinical-form-wrapper">
+      <div
+        className="clinical-section-header"
+        style={{
+          background: "oklch(0.45 0.14 150 / 0.08)",
+          color: "oklch(0.30 0.12 150)",
+          borderBottom: "1px solid oklch(0.45 0.14 150 / 0.18)",
+        }}
+      >
+        Previous Prescriptions — Complete History
+      </div>
+      <div style={{ overflowX: "auto" }}>
+        <table
+          className="clinical-form-table"
+          data-ocid="case.prev_prescriptions.table"
+        >
+          <thead>
+            <tr>
+              <th style={{ width: "30px" }}>#</th>
+              {cols.map((c) => (
+                <th key={c}>{c}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {sorted.map((rx, i) => {
+              const savedRemedy = findRemedy(rx.remedy);
+              return (
+                <tr
+                  key={`prev-${rx.caseSheetId}-${rx.date}-${rx.remedy}-${i}`}
+                  data-ocid={`case.prev_prescription.item.${i + 1}`}
+                  style={{
+                    background:
+                      i % 2 === 0
+                        ? "oklch(0.99 0.002 240)"
+                        : "oklch(0.97 0.004 240)",
+                  }}
+                >
+                  <td
+                    style={{
+                      textAlign: "center",
+                      fontWeight: 600,
+                      color: "#1e3a5f",
+                    }}
+                  >
+                    {i + 1}
+                  </td>
+                  <td style={{ whiteSpace: "nowrap" }}>
+                    {rx.date ? formatDate(rx.date) : "—"}
+                  </td>
+                  <td>
+                    <span
+                      className="text-xs px-1.5 py-0.5 rounded font-semibold"
+                      style={{
+                        background: "oklch(0.45 0.14 150 / 0.10)",
+                        color: "oklch(0.30 0.12 150)",
+                        border: "1px solid oklch(0.45 0.14 150 / 0.25)",
+                      }}
+                    >
+                      {rx.caseYear}
+                    </span>
+                  </td>
+                  <td
+                    style={{
+                      fontWeight: 700,
+                      color: "#1e3a5f",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {savedRemedy ? (
+                      <button
+                        type="button"
+                        data-ocid={`case.prev_prescription.remedy_info.button.${i + 1}`}
+                        onClick={() => onShowRemedy(savedRemedy)}
+                        title={`View details for ${rx.remedy}`}
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "4px",
+                          color: "oklch(0.38 0.14 193)",
+                          fontWeight: 700,
+                          textDecoration: "underline",
+                          textDecorationStyle: "dotted",
+                          textUnderlineOffset: "3px",
+                          background: "none",
+                          border: "none",
+                          cursor: "pointer",
+                          padding: 0,
+                          fontSize: "inherit",
+                        }}
+                      >
+                        {rx.remedy}
+                        <Info
+                          size={11}
+                          style={{
+                            color: "oklch(0.55 0.12 193)",
+                            flexShrink: 0,
+                          }}
+                        />
+                      </button>
+                    ) : (
+                      rx.remedy || "—"
+                    )}
+                  </td>
+                  <td>
+                    {rx.potency ? (
+                      <Badge
+                        variant="outline"
+                        style={{
+                          borderColor: "#1e3a5f",
+                          color: "#1e3a5f",
+                          fontSize: "0.72rem",
+                        }}
+                      >
+                        {rx.potency}
+                      </Badge>
+                    ) : (
+                      "—"
+                    )}
+                  </td>
+                  <td>{rx.dosage || "—"}</td>
+                  <td>{rx.frequency || "—"}</td>
+                  <td>{rx.duration || "—"}</td>
+                  <td style={{ maxWidth: "140px", wordBreak: "break-word" }}>
+                    {rx.instructions || "—"}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
 // ─── Prescription Table (inline) ──────────────────────────────────────────────
 
 function PrescriptionTable({
@@ -556,6 +1171,13 @@ function PrescriptionTable({
   onUpdate: (list: PrescriptionRow[]) => void;
 }) {
   const [newRow, setNewRow] = useState<PrescriptionRow>({ ...EMPTY_RX_ROW });
+  const [popupRemedy, setPopupRemedy] = useState<RemedyData | null>(null);
+  const [showAutocomplete, setShowAutocomplete] = useState(false);
+  const autocompleteRef = useRef<HTMLDivElement>(null);
+  const remedyInputRef = useRef<HTMLInputElement>(null);
+
+  const suggestions = getRemedySuggestions(newRow.remedy);
+  const matchedRemedy = findRemedy(newRow.remedy);
 
   function updateNew(key: keyof PrescriptionRow, val: string) {
     setNewRow((p) => ({ ...p, [key]: val }));
@@ -568,11 +1190,18 @@ function PrescriptionTable({
     }
     onUpdate([...prescriptions, { ...newRow }]);
     setNewRow({ ...EMPTY_RX_ROW });
+    setShowAutocomplete(false);
     toast.success("Prescription added");
   }
 
   function deleteRow(i: number) {
     onUpdate(prescriptions.filter((_, idx) => idx !== i));
+  }
+
+  function selectSuggestion(remedy: RemedyData) {
+    setNewRow((p) => ({ ...p, remedy: remedy.name }));
+    setShowAutocomplete(false);
+    remedyInputRef.current?.focus();
   }
 
   const cols = [
@@ -586,181 +1215,365 @@ function PrescriptionTable({
   ];
 
   return (
-    <div className="clinical-form-wrapper">
-      <div className="clinical-section-header">Prescription Record</div>
-      <div style={{ overflowX: "auto" }}>
-        <table className="clinical-form-table">
-          <thead>
-            <tr>
-              <th style={{ width: "30px" }}>#</th>
-              {cols.map((c) => (
-                <th key={c}>{c}</th>
-              ))}
-              <th style={{ width: "40px" }}>Del</th>
-            </tr>
-          </thead>
-          <tbody>
-            {prescriptions.length === 0 ? (
-              <tr data-ocid="case.prescriptions.empty_state">
-                <td
-                  colSpan={cols.length + 2}
-                  style={{
-                    textAlign: "center",
-                    padding: "16px",
-                    color: "#6b7280",
-                    fontStyle: "italic",
-                  }}
-                >
-                  No prescriptions yet — fill in the row below and click Add
-                </td>
+    <>
+      <div className="clinical-form-wrapper">
+        <div className="clinical-section-header">Prescription Record</div>
+        <div style={{ overflowX: "auto" }}>
+          <table className="clinical-form-table">
+            <thead>
+              <tr>
+                <th style={{ width: "30px" }}>#</th>
+                {cols.map((c) => (
+                  <th key={c}>{c}</th>
+                ))}
+                <th style={{ width: "40px" }}>Del</th>
               </tr>
-            ) : (
-              prescriptions.map((rx, i) => (
-                <tr
-                  key={`${rx.date}-${rx.remedy}-${i}`}
-                  data-ocid={`case.prescription.item.${i + 1}`}
-                >
+            </thead>
+            <tbody>
+              {prescriptions.length === 0 ? (
+                <tr data-ocid="case.prescriptions.empty_state">
                   <td
+                    colSpan={cols.length + 2}
                     style={{
                       textAlign: "center",
-                      fontWeight: 600,
-                      color: "#1e3a5f",
+                      padding: "16px",
+                      color: "#6b7280",
+                      fontStyle: "italic",
                     }}
                   >
-                    {i + 1}
-                  </td>
-                  <td>{rx.date ? formatDate(rx.date) : ""}</td>
-                  <td style={{ fontWeight: 600, color: "#1e3a5f" }}>
-                    {rx.remedy}
-                  </td>
-                  <td>
-                    <Badge
-                      variant="outline"
-                      style={{
-                        borderColor: "#1e3a5f",
-                        color: "#1e3a5f",
-                        fontSize: "0.72rem",
-                      }}
-                    >
-                      {rx.potency}
-                    </Badge>
-                  </td>
-                  <td>{rx.dosage}</td>
-                  <td>{rx.frequency}</td>
-                  <td>{rx.duration}</td>
-                  <td style={{ maxWidth: "140px", wordBreak: "break-word" }}>
-                    {rx.instructions}
-                  </td>
-                  <td style={{ textAlign: "center" }}>
-                    <button
-                      type="button"
-                      data-ocid={`case.prescription.delete_button.${i + 1}`}
-                      onClick={() => deleteRow(i)}
-                      style={{ color: "#c0392b", padding: "2px 4px" }}
-                    >
-                      <Trash2 size={13} />
-                    </button>
+                    No prescriptions yet — fill in the row below and click Add
                   </td>
                 </tr>
-              ))
-            )}
-            {/* New row */}
-            <tr style={{ background: "#f0f5fb" }}>
-              <td
-                style={{
-                  textAlign: "center",
-                  color: "#9ca3af",
-                  fontSize: "0.72rem",
-                }}
-              >
-                +
-              </td>
-              <td>
-                <input
-                  type="date"
-                  value={newRow.date}
-                  onChange={(e) => updateNew("date", e.target.value)}
-                  data-ocid="case.prescription.new.date.input"
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  value={newRow.remedy}
-                  onChange={(e) => updateNew("remedy", e.target.value)}
-                  placeholder="Remedy *"
-                  data-ocid="case.prescription.new.remedy.input"
-                  style={{ fontWeight: 600 }}
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  value={newRow.potency}
-                  onChange={(e) => updateNew("potency", e.target.value)}
-                  placeholder="e.g. 30C"
-                  data-ocid="case.prescription.new.potency.input"
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  value={newRow.dosage}
-                  onChange={(e) => updateNew("dosage", e.target.value)}
-                  placeholder="4 pills"
-                  data-ocid="case.prescription.new.dosage.input"
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  value={newRow.frequency}
-                  onChange={(e) => updateNew("frequency", e.target.value)}
-                  placeholder="TDS / OD"
-                  data-ocid="case.prescription.new.frequency.input"
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  value={newRow.duration}
-                  onChange={(e) => updateNew("duration", e.target.value)}
-                  placeholder="7 days"
-                  data-ocid="case.prescription.new.duration.input"
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  value={newRow.instructions}
-                  onChange={(e) => updateNew("instructions", e.target.value)}
-                  placeholder="Instructions"
-                  data-ocid="case.prescription.new.instructions.input"
-                />
-              </td>
-              <td style={{ textAlign: "center" }}>
-                <button
-                  type="button"
-                  data-ocid="case.prescription.add_row.button"
-                  onClick={commitNew}
-                  title="Add prescription"
+              ) : (
+                prescriptions.map((rx, i) => {
+                  const savedRemedy = findRemedy(rx.remedy);
+                  return (
+                    <tr
+                      key={`${rx.date}-${rx.remedy}-${i}`}
+                      data-ocid={`case.prescription.item.${i + 1}`}
+                    >
+                      <td
+                        style={{
+                          textAlign: "center",
+                          fontWeight: 600,
+                          color: "#1e3a5f",
+                        }}
+                      >
+                        {i + 1}
+                      </td>
+                      <td>{rx.date ? formatDate(rx.date) : ""}</td>
+                      <td
+                        style={{
+                          fontWeight: 600,
+                          color: "#1e3a5f",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        {savedRemedy ? (
+                          <button
+                            type="button"
+                            data-ocid={`case.prescription.remedy_info.button.${i + 1}`}
+                            onClick={() => setPopupRemedy(savedRemedy)}
+                            title={`View details for ${rx.remedy}`}
+                            style={{
+                              display: "inline-flex",
+                              alignItems: "center",
+                              gap: "4px",
+                              color: "oklch(0.38 0.14 193)",
+                              fontWeight: 700,
+                              textDecoration: "underline",
+                              textDecorationStyle: "dotted",
+                              textUnderlineOffset: "3px",
+                              background: "none",
+                              border: "none",
+                              cursor: "pointer",
+                              padding: 0,
+                              fontSize: "inherit",
+                            }}
+                          >
+                            {rx.remedy}
+                            <Info
+                              size={11}
+                              style={{
+                                color: "oklch(0.55 0.12 193)",
+                                flexShrink: 0,
+                              }}
+                            />
+                          </button>
+                        ) : (
+                          rx.remedy
+                        )}
+                      </td>
+                      <td>
+                        <Badge
+                          variant="outline"
+                          style={{
+                            borderColor: "#1e3a5f",
+                            color: "#1e3a5f",
+                            fontSize: "0.72rem",
+                          }}
+                        >
+                          {rx.potency}
+                        </Badge>
+                      </td>
+                      <td>{rx.dosage}</td>
+                      <td>{rx.frequency}</td>
+                      <td>{rx.duration}</td>
+                      <td
+                        style={{ maxWidth: "140px", wordBreak: "break-word" }}
+                      >
+                        {rx.instructions}
+                      </td>
+                      <td style={{ textAlign: "center" }}>
+                        <button
+                          type="button"
+                          data-ocid={`case.prescription.delete_button.${i + 1}`}
+                          onClick={() => deleteRow(i)}
+                          style={{ color: "#c0392b", padding: "2px 4px" }}
+                        >
+                          <Trash2 size={13} />
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+              {/* New row */}
+              <tr style={{ background: "#f0f5fb" }}>
+                <td
                   style={{
-                    background: "#1e3a5f",
-                    color: "#fff",
-                    borderRadius: "3px",
-                    padding: "3px 7px",
+                    textAlign: "center",
+                    color: "#9ca3af",
                     fontSize: "0.72rem",
-                    fontWeight: 700,
                   }}
                 >
-                  Add
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                  +
+                </td>
+                <td>
+                  <input
+                    type="date"
+                    value={newRow.date}
+                    onChange={(e) => updateNew("date", e.target.value)}
+                    data-ocid="case.prescription.new.date.input"
+                  />
+                </td>
+                <td style={{ position: "relative", minWidth: "160px" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "4px",
+                    }}
+                  >
+                    <input
+                      ref={remedyInputRef}
+                      type="text"
+                      value={newRow.remedy}
+                      onChange={(e) => {
+                        updateNew("remedy", e.target.value);
+                        setShowAutocomplete(true);
+                      }}
+                      onFocus={() => setShowAutocomplete(true)}
+                      onBlur={() =>
+                        setTimeout(() => setShowAutocomplete(false), 180)
+                      }
+                      placeholder="Remedy *"
+                      data-ocid="case.prescription.new.remedy.input"
+                      style={{ fontWeight: 600, flex: 1, minWidth: 0 }}
+                      autoComplete="off"
+                    />
+                    {matchedRemedy && (
+                      <button
+                        type="button"
+                        data-ocid="prescription.remedy.info.button"
+                        title={`View details: ${matchedRemedy.name}`}
+                        onClick={() => setPopupRemedy(matchedRemedy)}
+                        style={{
+                          flexShrink: 0,
+                          background: "oklch(0.45 0.14 193 / 0.10)",
+                          border: "1px solid oklch(0.45 0.14 193 / 0.30)",
+                          borderRadius: "4px",
+                          padding: "3px 5px",
+                          cursor: "pointer",
+                          color: "oklch(0.38 0.14 193)",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <Info size={13} />
+                      </button>
+                    )}
+                  </div>
+                  {/* Autocomplete dropdown */}
+                  {showAutocomplete && suggestions.length > 0 && (
+                    <div
+                      ref={autocompleteRef}
+                      data-ocid="prescription.remedy.autocomplete.popover"
+                      style={{
+                        position: "absolute",
+                        top: "100%",
+                        left: 0,
+                        right: 0,
+                        zIndex: 100,
+                        background: "oklch(1.0 0 0)",
+                        border: "1px solid oklch(0.85 0.010 240)",
+                        borderRadius: "8px",
+                        boxShadow: "0 6px 24px oklch(0.15 0.010 240 / 0.12)",
+                        overflow: "hidden",
+                        marginTop: "2px",
+                      }}
+                    >
+                      {suggestions.map((remedy, i) => (
+                        <button
+                          key={remedy.abbreviation}
+                          type="button"
+                          data-ocid={`prescription.remedy.suggestion.${i + 1}`}
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                            selectSuggestion(remedy);
+                          }}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "8px",
+                            width: "100%",
+                            padding: "8px 12px",
+                            textAlign: "left",
+                            background: "none",
+                            border: "none",
+                            borderBottom:
+                              i < suggestions.length - 1
+                                ? "1px solid oklch(0.93 0.006 240)"
+                                : "none",
+                            cursor: "pointer",
+                            fontSize: "0.82rem",
+                          }}
+                          onMouseEnter={(e) => {
+                            (
+                              e.currentTarget as HTMLButtonElement
+                            ).style.background = "oklch(0.96 0.008 240)";
+                          }}
+                          onMouseLeave={(e) => {
+                            (
+                              e.currentTarget as HTMLButtonElement
+                            ).style.background = "none";
+                          }}
+                        >
+                          <span
+                            style={{
+                              fontWeight: 700,
+                              color: "oklch(0.20 0.010 240)",
+                              flex: 1,
+                            }}
+                          >
+                            {remedy.name}
+                          </span>
+                          <span
+                            style={{
+                              fontFamily: "monospace",
+                              fontSize: "0.75rem",
+                              color: "oklch(0.55 0.012 240)",
+                            }}
+                          >
+                            {remedy.abbreviation}
+                          </span>
+                          <span
+                            style={{
+                              fontSize: "0.70rem",
+                              padding: "1px 6px",
+                              borderRadius: "99px",
+                              background: "oklch(0.45 0.14 193 / 0.10)",
+                              color: "oklch(0.38 0.14 193)",
+                              border: "1px solid oklch(0.45 0.14 193 / 0.25)",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
+                            {remedy.miasmaticClassification.split(/[\s,+]/)[0]}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    value={newRow.potency}
+                    onChange={(e) => updateNew("potency", e.target.value)}
+                    placeholder="e.g. 30C"
+                    data-ocid="case.prescription.new.potency.input"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    value={newRow.dosage}
+                    onChange={(e) => updateNew("dosage", e.target.value)}
+                    placeholder="4 pills"
+                    data-ocid="case.prescription.new.dosage.input"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    value={newRow.frequency}
+                    onChange={(e) => updateNew("frequency", e.target.value)}
+                    placeholder="TDS / OD"
+                    data-ocid="case.prescription.new.frequency.input"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    value={newRow.duration}
+                    onChange={(e) => updateNew("duration", e.target.value)}
+                    placeholder="7 days"
+                    data-ocid="case.prescription.new.duration.input"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    value={newRow.instructions}
+                    onChange={(e) => updateNew("instructions", e.target.value)}
+                    placeholder="Instructions"
+                    data-ocid="case.prescription.new.instructions.input"
+                  />
+                </td>
+                <td style={{ textAlign: "center" }}>
+                  <button
+                    type="button"
+                    data-ocid="case.prescription.add_row.button"
+                    onClick={commitNew}
+                    title="Add prescription"
+                    style={{
+                      background: "#1e3a5f",
+                      color: "#fff",
+                      borderRadius: "3px",
+                      padding: "3px 7px",
+                      fontSize: "0.72rem",
+                      fontWeight: 700,
+                    }}
+                  >
+                    Add
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+
+      {/* Remedy Detail Popup */}
+      <AnimatePresence>
+        {popupRemedy && (
+          <RemedyPopup
+            remedy={popupRemedy}
+            onClose={() => setPopupRemedy(null)}
+          />
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 
@@ -1063,6 +1876,9 @@ export function CaseSheet() {
   const { id } = useParams({ from: "/cases/$id" });
   const { data: caseData, isLoading } = useCase(id);
   const { data: patient } = usePatient(caseData?.patientId ?? "");
+  const { data: allCaseSheets = [] } = useCasesByPatient(
+    caseData?.patientId ?? "",
+  );
   const updateCase = useUpdateCase();
 
   // Simple text fields (hpi, pastHistory, familyHistory, mentalGenerals, physicalGenerals, investigations, miasmaticAnalysis, totality, repertorialFindings)
@@ -1271,6 +2087,7 @@ export function CaseSheet() {
             "miasmatic",
             "totality",
             "repertory",
+            "prevPrescriptions",
             "prescriptions",
             "followups",
           ]}
@@ -1635,7 +2452,40 @@ Simillimum:`}
             </AccordionContent>
           </AccordionItem>
 
-          {/* 13. Prescriptions — TABLE */}
+          {/* 13. Previous Prescriptions — READ-ONLY HISTORY TABLE */}
+          <AccordionItem
+            value="prevPrescriptions"
+            className="rounded-lg border overflow-hidden"
+            style={{
+              ...ACCORDION_ITEM_STYLE,
+              borderColor: "oklch(0.45 0.14 150 / 0.35)",
+            }}
+          >
+            <AccordionTrigger
+              className="px-4 py-3 hover:no-underline font-semibold text-sm"
+              style={{ color: "oklch(0.18 0.010 240)" }}
+            >
+              <span className="flex items-center gap-2">
+                <SectionNum n={13} />
+                Previous Prescriptions (All Visits)
+                <ClipboardList
+                  className="w-3.5 h-3.5 ml-1"
+                  style={{ color: "oklch(0.45 0.14 150)" }}
+                />
+              </span>
+            </AccordionTrigger>
+            <AccordionContent className="px-4 pb-4">
+              {caseData && (
+                <PreviousPrescriptionsSection
+                  patientId={caseData.patientId}
+                  currentCaseSheetId={caseData.id}
+                  allCaseSheets={allCaseSheets}
+                />
+              )}
+            </AccordionContent>
+          </AccordionItem>
+
+          {/* 14. Current Prescriptions — TABLE */}
           <AccordionItem
             value="prescriptions"
             className="rounded-lg border overflow-hidden"
@@ -1646,8 +2496,8 @@ Simillimum:`}
               style={{ color: "oklch(0.18 0.010 240)" }}
             >
               <span className="flex items-center gap-2">
-                <SectionNum n={13} />
-                Prescriptions ({prescriptionRows.length})
+                <SectionNum n={14} />
+                Current Prescription ({prescriptionRows.length})
                 <Pill
                   className="w-3.5 h-3.5 ml-1"
                   style={{ color: "oklch(0.45 0.14 193)" }}
@@ -1662,7 +2512,7 @@ Simillimum:`}
             </AccordionContent>
           </AccordionItem>
 
-          {/* 14. Follow-ups — TABLE */}
+          {/* 15. Follow-ups — TABLE */}
           <AccordionItem
             value="followups"
             className="rounded-lg border overflow-hidden"
@@ -1673,7 +2523,7 @@ Simillimum:`}
               style={{ color: "oklch(0.18 0.010 240)" }}
             >
               <span className="flex items-center gap-2">
-                <SectionNum n={14} />
+                <SectionNum n={15} />
                 Follow-ups ({followUpRows.length})
                 <FileText
                   className="w-3.5 h-3.5 ml-1"

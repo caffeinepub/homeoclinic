@@ -1,33 +1,27 @@
 # HomeoClinic
 
 ## Current State
-
-Full homeopathic clinic management app with:
-- Patient registration, year-wise filtering, search
-- Full case sheet (14 sections), prescriptions, follow-ups
-- Remedy reference with Boericke/Synoptic Key data and relationship charts
-- Appointments log, memo pad, dashboard
-
-**Bug**: `registerPatient`, `updatePatient`, and `deletePatient` backend functions require `#admin` permission. This means a logged-in user cannot register patients because they are assigned `#user` role, not `#admin`. The result is an "Unauthorized" error when trying to register a patient.
+Full homeopathic clinical management app with patient registration, HMCC-format case sheets (14 sections), prescription table, follow-up table, 43+ remedy reference, remedy popup, and per-login data isolation.
 
 ## Requested Changes (Diff)
 
 ### Add
-- Nothing new
+- A new read-only "Previous Prescriptions (All Visits)" accordion section (section 13) in the CaseSheet page that aggregates all prescriptions given to the patient across all their case sheets, displayed in a chronological table with columns: #, Date, Year, Remedy, Potency, Dosage, Frequency, Duration, Instructions.
+- Hooks `usePrescriptionsByCaseSheet`, `useCreatePrescription`, `useUpdatePrescription`, `useDeletePrescription` in `useQueries.ts`.
+- `PreviousPrescriptionsSection` and `PreviousPrescriptionsTable` components in CaseSheet.tsx.
+- `CaseSheetPrescriptionsLoader` render-less helper component to load prescriptions per case sheet without violating hooks rules.
 
 ### Modify
-- `registerPatient`: change permission check from `#admin` to `#user` so any logged-in user can register patients
-- `updatePatient`: change permission check from `#admin` to `#user`
-- `deletePatient`: change permission check from `#admin` to `#user`
-- Keep `addRemedy`, `updateRemedy`, `deleteRemedy` as admin-only (reference data management)
+- Old section 13 (Prescriptions) is renumbered to 14 (Current Prescription).
+- Old section 14 (Follow-ups) is renumbered to 15 (Follow-ups).
+- Main `CaseSheet` component now also fetches `useCasesByPatient` to supply all case sheets to the previous prescriptions panel.
 
 ### Remove
-- Nothing
+- Nothing removed.
 
 ## Implementation Plan
-
-1. Regenerate backend Motoko with corrected permission levels:
-   - Patient CRUD (register, update, delete): `#user` permission
-   - Remedy CRUD (add, update, delete): `#admin` permission (unchanged)
-   - All other operations unchanged
-2. No frontend changes needed -- the frontend code is already correct
+1. Add prescription hooks to `useQueries.ts`.
+2. Add `PreviousPrescriptionsSection`, `CaseSheetPrescriptionsLoader`, `PreviousPrescriptionsTable` components to `CaseSheet.tsx`.
+3. Update accordion sections: insert new section 13 (prev prescriptions), renumber 13→14 (current Rx), 14→15 (follow-ups).
+4. Fetch `useCasesByPatient` in main `CaseSheet` component, pass to new section.
+5. Build and deploy.

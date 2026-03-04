@@ -1,5 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { Appointment, CaseSheet, Memo, Patient } from "../backend.d";
+import type {
+  Appointment,
+  CaseSheet,
+  Memo,
+  Patient,
+  Prescription,
+} from "../backend.d";
 import { useActor } from "./useActor";
 
 // ─── Patients ──────────────────────────────────────────────────────────────
@@ -157,6 +163,71 @@ export function useDeleteCase() {
     },
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ["cases"] });
+    },
+  });
+}
+
+// ─── Prescriptions ─────────────────────────────────────────────────────────
+
+export function usePrescriptionsByCaseSheet(caseSheetId: string) {
+  const { actor, isFetching } = useActor();
+  return useQuery<Prescription[]>({
+    queryKey: ["prescriptions", "case", caseSheetId],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.getPrescriptionsByCaseSheet(caseSheetId);
+    },
+    enabled: !!actor && !isFetching && !!caseSheetId,
+  });
+}
+
+export function useCreatePrescription() {
+  const { actor } = useActor();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (prescription: Prescription) => {
+      if (!actor) throw new Error("Not ready");
+      return actor.createPrescription(prescription);
+    },
+    onSuccess: (_d, prescription) => {
+      void qc.invalidateQueries({
+        queryKey: ["prescriptions", "case", prescription.caseSheetId],
+      });
+    },
+  });
+}
+
+export function useUpdatePrescription() {
+  const { actor } = useActor();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      prescription,
+    }: { id: string; prescription: Prescription }) => {
+      if (!actor) throw new Error("Not ready");
+      return actor.updatePrescription(id, prescription);
+    },
+    onSuccess: (_d, { prescription }) => {
+      void qc.invalidateQueries({
+        queryKey: ["prescriptions", "case", prescription.caseSheetId],
+      });
+    },
+  });
+}
+
+export function useDeletePrescription() {
+  const { actor } = useActor();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id }: { id: string; caseSheetId: string }) => {
+      if (!actor) throw new Error("Not ready");
+      return actor.deletePrescription(id);
+    },
+    onSuccess: (_d, { caseSheetId }) => {
+      void qc.invalidateQueries({
+        queryKey: ["prescriptions", "case", caseSheetId],
+      });
     },
   });
 }
