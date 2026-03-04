@@ -33,11 +33,16 @@ import { SEED_REMEDIES } from "../data/remedySeeds";
 import {
   useCase,
   useCasesByPatient,
+  useCreateFollowUp,
+  useCreatePrescription,
+  useFollowUpsByCaseSheet,
   usePatient,
   usePrescriptionsByCaseSheet,
   useUpdateCase,
+  useUpdateFollowUp,
+  useUpdatePrescription,
 } from "../hooks/useQueries";
-import { formatDate, todayISO } from "../utils/helpers";
+import { formatDate, generateId, todayISO } from "../utils/helpers";
 
 // ─── Remedy lookup utility ────────────────────────────────────────────────────
 
@@ -1880,6 +1885,14 @@ export function CaseSheet() {
     caseData?.patientId ?? "",
   );
   const updateCase = useUpdateCase();
+  const createPrescription = useCreatePrescription();
+  const updatePrescription = useUpdatePrescription();
+  const createFollowUp = useCreateFollowUp();
+  const updateFollowUp = useUpdateFollowUp();
+
+  // Load existing prescriptions and follow-ups for this case sheet
+  const { data: savedPrescriptions } = usePrescriptionsByCaseSheet(id);
+  const { data: savedFollowUps } = useFollowUpsByCaseSheet(id);
 
   // Simple text fields (hpi, pastHistory, familyHistory, mentalGenerals, physicalGenerals, investigations, miasmaticAnalysis, totality, repertorialFindings)
   const [hpi, setHpi] = useState("");
@@ -1921,18 +1934,42 @@ export function CaseSheet() {
       setComplaintRows(parseComplaintRows(caseData.chiefComplaint));
       setPersonalHistory(parsePersonalHistory(caseData.personalHistory));
       setExamination(parseExamination(caseData.examinationFindings));
-      // Prescriptions and follow-ups are stored in separate backend records
-      // but for the case sheet display we keep them in local state seeded from
-      // the chiefComplaint field isn't used here — they come from separate calls
-      // For now we reset them; saving will serialize them back
-      setPrescriptionRows(parsePrescriptionRows(""));
-      setFollowUpRows(parseFollowUpRows(""));
     }
   }, [caseData]);
+
+  // Load prescriptions from backend when they become available
+  useEffect(() => {
+    if (savedPrescriptions !== undefined) {
+      if (savedPrescriptions.length > 0) {
+        // Merge all rows from all prescription records for this case sheet
+        const allRows: PrescriptionRow[] = savedPrescriptions.flatMap((p) =>
+          parsePrescriptionRows(p.rows),
+        );
+        setPrescriptionRows(allRows);
+      } else {
+        setPrescriptionRows([]);
+      }
+    }
+  }, [savedPrescriptions]);
+
+  // Load follow-ups from backend when they become available
+  useEffect(() => {
+    if (savedFollowUps !== undefined) {
+      if (savedFollowUps.length > 0) {
+        const allRows: FollowUpRow[] = savedFollowUps.flatMap((f) =>
+          parseFollowUpRows(f.rows),
+        );
+        setFollowUpRows(allRows);
+      } else {
+        setFollowUpRows([]);
+      }
+    }
+  }, [savedFollowUps]);
 
   async function handleSave() {
     if (!caseData) return;
     try {
+      // 1. Save the main case sheet fields
       const payload: BackendCaseSheet = {
         ...caseData,
         hpi,
@@ -1950,6 +1987,49 @@ export function CaseSheet() {
         updatedAt: BigInt(Date.now()),
       };
       await updateCase.mutateAsync({ id: caseData.id, caseData: payload });
+
+      // 2. Save prescriptions to backend
+      const rxJson = JSON.stringify(prescriptionRows);
+      if (savedPrescriptions && savedPrescriptions.length > 0) {
+        // Update the first prescription record (all rows stored in one record)
+        await updatePrescription.mutateAsync({
+          id: savedPrescriptions[0].id,
+          prescription: {
+            id: savedPrescriptions[0].id,
+            caseSheetId: caseData.id,
+            rows: rxJson,
+          },
+        });
+        // Delete any extra prescription records (shouldn't normally exist)
+        // We only keep the first one going forward
+      } else {
+        // Create a new prescription record
+        await createPrescription.mutateAsync({
+          id: generateId(),
+          caseSheetId: caseData.id,
+          rows: rxJson,
+        });
+      }
+
+      // 3. Save follow-ups to backend
+      const fuJson = JSON.stringify(followUpRows);
+      if (savedFollowUps && savedFollowUps.length > 0) {
+        await updateFollowUp.mutateAsync({
+          id: savedFollowUps[0].id,
+          followUp: {
+            id: savedFollowUps[0].id,
+            caseSheetId: caseData.id,
+            rows: fuJson,
+          },
+        });
+      } else {
+        await createFollowUp.mutateAsync({
+          id: generateId(),
+          caseSheetId: caseData.id,
+          rows: fuJson,
+        });
+      }
+
       toast.success("Case sheet saved successfully");
     } catch (err) {
       console.error(err);

@@ -1,18 +1,22 @@
 import { Button } from "@/components/ui/button";
 import { Link, useRouter } from "@tanstack/react-router";
 import {
+  AlertTriangle,
   CalendarDays,
   FlaskConical,
   LayoutDashboard,
+  Loader2,
   LogOut,
   Menu,
+  RefreshCw,
   Stethoscope,
   StickyNote,
   Users,
   X,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useActor } from "../hooks/useActor";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
 
 const NAV_ITEMS = [
@@ -166,6 +170,204 @@ function Sidebar({ onClose }: { onClose?: () => void }) {
   );
 }
 
+type InitStatus = "idle" | "checking" | "initializing" | "ready" | "error";
+
+function useAccountInit() {
+  const { actor, isFetching } = useActor();
+  const [status, setStatus] = useState<InitStatus>("idle");
+  const [errorMsg, setErrorMsg] = useState<string>("");
+
+  const runInit = useCallback(async () => {
+    if (!actor || isFetching) return;
+    setStatus("checking");
+    try {
+      await actor.getCallerUserRole();
+      setStatus("ready");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      const isNotRegistered =
+        msg.toLowerCase().includes("not registered") ||
+        msg.toLowerCase().includes("unauthorized") ||
+        msg.toLowerCase().includes("user not found");
+      if (isNotRegistered) {
+        setStatus("initializing");
+        try {
+          // Cast to access the init method that exists at runtime but is not in the public d.ts
+          const actorAny = actor as unknown as {
+            _initializeAccessControlWithSecret: (
+              secret: string,
+            ) => Promise<void>;
+          };
+          await actorAny._initializeAccessControlWithSecret("");
+          // Short pause to let the backend settle, then reload
+          await new Promise((r) => setTimeout(r, 1200));
+          window.location.reload();
+        } catch (initErr) {
+          const initMsg =
+            initErr instanceof Error ? initErr.message : String(initErr);
+          setErrorMsg(initMsg);
+          setStatus("error");
+        }
+      } else {
+        // Some other error — treat as ready so we don't block the UI
+        setStatus("ready");
+      }
+    }
+  }, [actor, isFetching]);
+
+  useEffect(() => {
+    if (actor && !isFetching && status === "idle") {
+      void runInit();
+    }
+  }, [actor, isFetching, status, runInit]);
+
+  return { status, errorMsg, retry: runInit };
+}
+
+function AccountInitOverlay() {
+  const { status, errorMsg, retry } = useAccountInit();
+
+  if (status === "ready" || status === "idle") return null;
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        key="init-overlay"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-[9999] flex items-center justify-center"
+        style={{ background: "oklch(0.08 0.008 240 / 0.92)" }}
+      >
+        <motion.div
+          initial={{ scale: 0.92, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.92, opacity: 0 }}
+          transition={{ type: "spring", damping: 25, stiffness: 300 }}
+          className="flex flex-col items-center gap-5 px-8 py-8 rounded-2xl border max-w-sm w-full text-center"
+          style={{
+            background: "oklch(0.13 0.008 240)",
+            borderColor: "oklch(0.22 0.010 240)",
+          }}
+        >
+          <div
+            className="w-12 h-12 rounded-full flex items-center justify-center"
+            style={{ background: "oklch(0.72 0.14 193 / 0.15)" }}
+          >
+            {status === "error" ? (
+              <AlertTriangle
+                className="w-6 h-6"
+                style={{ color: "oklch(0.70 0.18 35)" }}
+              />
+            ) : (
+              <Stethoscope
+                className="w-6 h-6"
+                style={{ color: "oklch(0.72 0.14 193)" }}
+              />
+            )}
+          </div>
+
+          {status === "checking" && (
+            <>
+              <div>
+                <p
+                  className="text-sm font-semibold mb-1"
+                  style={{ color: "oklch(0.93 0.008 240)" }}
+                >
+                  Verifying your session
+                </p>
+                <p
+                  className="text-xs"
+                  style={{ color: "oklch(0.50 0.008 240)" }}
+                >
+                  Please wait a moment...
+                </p>
+              </div>
+              <Loader2
+                className="w-5 h-5 animate-spin"
+                style={{ color: "oklch(0.72 0.14 193)" }}
+              />
+            </>
+          )}
+
+          {status === "initializing" && (
+            <>
+              <div>
+                <p
+                  className="text-sm font-semibold mb-1"
+                  style={{ color: "oklch(0.93 0.008 240)" }}
+                >
+                  Setting up your account
+                </p>
+                <p
+                  className="text-xs"
+                  style={{ color: "oklch(0.50 0.008 240)" }}
+                >
+                  First-time setup in progress. This takes just a moment...
+                </p>
+              </div>
+              <Loader2
+                className="w-5 h-5 animate-spin"
+                style={{ color: "oklch(0.72 0.14 193)" }}
+              />
+            </>
+          )}
+
+          {status === "error" && (
+            <>
+              <div>
+                <p
+                  className="text-sm font-semibold mb-1"
+                  style={{ color: "oklch(0.70 0.18 35)" }}
+                >
+                  Account setup failed
+                </p>
+                <p
+                  className="text-xs mb-1"
+                  style={{ color: "oklch(0.50 0.008 240)" }}
+                >
+                  {errorMsg || "Could not initialize your session."}
+                </p>
+                <p
+                  className="text-xs"
+                  style={{ color: "oklch(0.45 0.008 240)" }}
+                >
+                  Please try again or refresh the page.
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  size="sm"
+                  onClick={() => void retry()}
+                  className="gap-1.5"
+                  data-ocid="init.retry.button"
+                  style={{
+                    background: "oklch(0.72 0.14 193 / 0.15)",
+                    color: "oklch(0.72 0.14 193)",
+                    border: "1px solid oklch(0.72 0.14 193 / 0.3)",
+                  }}
+                >
+                  <RefreshCw className="w-3.5 h-3.5" />
+                  Retry
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  data-ocid="init.reload.button"
+                  onClick={() => window.location.reload()}
+                  style={{ color: "oklch(0.50 0.008 240)" }}
+                >
+                  Reload page
+                </Button>
+              </div>
+            </>
+          )}
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -243,6 +445,9 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         {/* Page content */}
         <main className="flex-1 overflow-auto">{children}</main>
       </div>
+
+      {/* Account initialization overlay */}
+      <AccountInitOverlay />
     </div>
   );
 }

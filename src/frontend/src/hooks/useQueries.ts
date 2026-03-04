@@ -1,12 +1,90 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import type {
   Appointment,
   CaseSheet,
+  FollowUp,
   Memo,
   Patient,
   Prescription,
+  backendInterface,
 } from "../backend.d";
 import { useActor } from "./useActor";
+
+/** Returns true if the error is an access-control / not-registered error */
+function isAuthError(err: unknown): boolean {
+  const msg = (err instanceof Error ? err.message : String(err)).toLowerCase();
+  return (
+    msg.includes("not registered") ||
+    msg.includes("unauthorized") ||
+    msg.includes("user not found") ||
+    msg.includes("access denied") ||
+    msg.includes("caller is not")
+  );
+}
+
+/** Auto-registers the caller by calling _initializeAccessControlWithSecret */
+async function autoRegister(actor: backendInterface): Promise<void> {
+  const a = actor as backendInterface & {
+    _initializeAccessControlWithSecret: (token: string) => Promise<void>;
+  };
+  await a._initializeAccessControlWithSecret("");
+}
+
+/**
+ * Wraps a backend call with auto-register-and-retry on auth errors.
+ * For queries: returns fallback if retry also fails (silent recovery).
+ * For mutations: re-throws after retry so callers can show errors.
+ */
+async function safeCall<T>(
+  actor: backendInterface,
+  fn: () => Promise<T>,
+  fallback: T,
+): Promise<T> {
+  try {
+    return await fn();
+  } catch (err) {
+    if (isAuthError(err)) {
+      try {
+        await autoRegister(actor);
+        return await fn();
+      } catch {
+        return fallback;
+      }
+    }
+    throw err;
+  }
+}
+
+/**
+ * Wraps a mutation backend call with auto-register-and-retry on auth errors.
+ * Re-throws after retry so mutation error handlers fire.
+ */
+async function safeMutate<T>(
+  actor: backendInterface,
+  fn: () => Promise<T>,
+): Promise<T> {
+  try {
+    return await fn();
+  } catch (err) {
+    if (isAuthError(err)) {
+      try {
+        await autoRegister(actor);
+        return await fn();
+      } catch (retryErr) {
+        toast.error(
+          "Registration failed. Please refresh the page and try again.",
+          {
+            id: "session-error",
+            duration: 8000,
+          },
+        );
+        throw retryErr;
+      }
+    }
+    throw err;
+  }
+}
 
 // ─── Patients ──────────────────────────────────────────────────────────────
 
@@ -16,7 +94,7 @@ export function useAllPatients() {
     queryKey: ["patients"],
     queryFn: async () => {
       if (!actor) return [];
-      return actor.getAllPatients();
+      return safeCall(actor, () => actor.getAllPatients(), []);
     },
     enabled: !!actor && !isFetching,
   });
@@ -28,7 +106,15 @@ export function usePatient(id: string) {
     queryKey: ["patient", id],
     queryFn: async () => {
       if (!actor) throw new Error("Not ready");
-      return actor.getPatient(id);
+      try {
+        return await actor.getPatient(id);
+      } catch (err) {
+        if (isAuthError(err)) {
+          await autoRegister(actor);
+          return await actor.getPatient(id);
+        }
+        throw err;
+      }
     },
     enabled: !!actor && !isFetching && !!id,
   });
@@ -40,7 +126,7 @@ export function useSearchPatients(name: string) {
     queryKey: ["patients", "search", name],
     queryFn: async () => {
       if (!actor) return [];
-      const all = await actor.getAllPatients();
+      const all = await safeCall(actor, () => actor.getAllPatients(), []);
       if (!name.trim()) return all;
       return all.filter((p) =>
         p.name.toLowerCase().includes(name.toLowerCase()),
@@ -56,7 +142,7 @@ export function useRegisterPatient() {
   return useMutation({
     mutationFn: async (patient: Patient) => {
       if (!actor) throw new Error("Not ready");
-      await actor.createPatient(patient);
+      await safeMutate(actor, () => actor.createPatient(patient));
     },
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ["patients"] });
@@ -70,7 +156,7 @@ export function useUpdatePatient() {
   return useMutation({
     mutationFn: async ({ id, patient }: { id: string; patient: Patient }) => {
       if (!actor) throw new Error("Not ready");
-      await actor.updatePatient(id, patient);
+      await safeMutate(actor, () => actor.updatePatient(id, patient));
     },
     onSuccess: (_d, { id }) => {
       void qc.invalidateQueries({ queryKey: ["patients"] });
@@ -85,7 +171,7 @@ export function useDeletePatient() {
   return useMutation({
     mutationFn: async (id: string) => {
       if (!actor) throw new Error("Not ready");
-      await actor.deletePatient(id);
+      await safeMutate(actor, () => actor.deletePatient(id));
     },
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ["patients"] });
@@ -101,7 +187,7 @@ export function useCasesByPatient(patientId: string) {
     queryKey: ["cases", "patient", patientId],
     queryFn: async () => {
       if (!actor) return [];
-      return actor.getCaseSheetsByPatient(patientId);
+      return safeCall(actor, () => actor.getCaseSheetsByPatient(patientId), []);
     },
     enabled: !!actor && !isFetching && !!patientId,
   });
@@ -113,7 +199,15 @@ export function useCase(id: string) {
     queryKey: ["case", id],
     queryFn: async () => {
       if (!actor) throw new Error("Not ready");
-      return actor.getCaseSheet(id);
+      try {
+        return await actor.getCaseSheet(id);
+      } catch (err) {
+        if (isAuthError(err)) {
+          await autoRegister(actor);
+          return await actor.getCaseSheet(id);
+        }
+        throw err;
+      }
     },
     enabled: !!actor && !isFetching && !!id,
   });
@@ -125,7 +219,7 @@ export function useCreateCase() {
   return useMutation({
     mutationFn: async (caseData: CaseSheet) => {
       if (!actor) throw new Error("Not ready");
-      await actor.createCaseSheet(caseData);
+      await safeMutate(actor, () => actor.createCaseSheet(caseData));
     },
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ["cases"] });
@@ -142,7 +236,7 @@ export function useUpdateCase() {
       caseData,
     }: { id: string; caseData: CaseSheet }) => {
       if (!actor) throw new Error("Not ready");
-      await actor.updateCaseSheet(id, caseData);
+      await safeMutate(actor, () => actor.updateCaseSheet(id, caseData));
     },
     onSuccess: (_d, { id, caseData }) => {
       void qc.invalidateQueries({ queryKey: ["case", id] });
@@ -159,7 +253,7 @@ export function useDeleteCase() {
   return useMutation({
     mutationFn: async (id: string) => {
       if (!actor) throw new Error("Not ready");
-      await actor.deleteCaseSheet(id);
+      await safeMutate(actor, () => actor.deleteCaseSheet(id));
     },
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ["cases"] });
@@ -175,7 +269,11 @@ export function usePrescriptionsByCaseSheet(caseSheetId: string) {
     queryKey: ["prescriptions", "case", caseSheetId],
     queryFn: async () => {
       if (!actor) return [];
-      return actor.getPrescriptionsByCaseSheet(caseSheetId);
+      return safeCall(
+        actor,
+        () => actor.getPrescriptionsByCaseSheet(caseSheetId),
+        [],
+      );
     },
     enabled: !!actor && !isFetching && !!caseSheetId,
   });
@@ -187,7 +285,7 @@ export function useCreatePrescription() {
   return useMutation({
     mutationFn: async (prescription: Prescription) => {
       if (!actor) throw new Error("Not ready");
-      return actor.createPrescription(prescription);
+      return safeMutate(actor, () => actor.createPrescription(prescription));
     },
     onSuccess: (_d, prescription) => {
       void qc.invalidateQueries({
@@ -206,7 +304,9 @@ export function useUpdatePrescription() {
       prescription,
     }: { id: string; prescription: Prescription }) => {
       if (!actor) throw new Error("Not ready");
-      return actor.updatePrescription(id, prescription);
+      return safeMutate(actor, () =>
+        actor.updatePrescription(id, prescription),
+      );
     },
     onSuccess: (_d, { prescription }) => {
       void qc.invalidateQueries({
@@ -222,7 +322,7 @@ export function useDeletePrescription() {
   return useMutation({
     mutationFn: async ({ id }: { id: string; caseSheetId: string }) => {
       if (!actor) throw new Error("Not ready");
-      return actor.deletePrescription(id);
+      return safeMutate(actor, () => actor.deletePrescription(id));
     },
     onSuccess: (_d, { caseSheetId }) => {
       void qc.invalidateQueries({
@@ -240,7 +340,7 @@ export function useAllAppointments() {
     queryKey: ["appointments"],
     queryFn: async () => {
       if (!actor) return [];
-      return actor.getAllAppointments();
+      return safeCall(actor, () => actor.getAllAppointments(), []);
     },
     enabled: !!actor && !isFetching,
   });
@@ -252,7 +352,7 @@ export function useAppointmentsByDate(date: string) {
     queryKey: ["appointments", "date", date],
     queryFn: async () => {
       if (!actor) return [];
-      return actor.getAppointmentsByDate(date);
+      return safeCall(actor, () => actor.getAppointmentsByDate(date), []);
     },
     enabled: !!actor && !isFetching && !!date,
   });
@@ -264,7 +364,7 @@ export function useAddAppointment() {
   return useMutation({
     mutationFn: async (appointment: Appointment) => {
       if (!actor) throw new Error("Not ready");
-      await actor.createAppointment(appointment);
+      await safeMutate(actor, () => actor.createAppointment(appointment));
     },
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ["appointments"] });
@@ -281,7 +381,7 @@ export function useUpdateAppointment() {
       appointment,
     }: { id: string; appointment: Appointment }) => {
       if (!actor) throw new Error("Not ready");
-      await actor.updateAppointment(id, appointment);
+      await safeMutate(actor, () => actor.updateAppointment(id, appointment));
     },
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ["appointments"] });
@@ -295,10 +395,63 @@ export function useDeleteAppointment() {
   return useMutation({
     mutationFn: async (id: string) => {
       if (!actor) throw new Error("Not ready");
-      await actor.deleteAppointment(id);
+      await safeMutate(actor, () => actor.deleteAppointment(id));
     },
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ["appointments"] });
+    },
+  });
+}
+
+// ─── Follow-Ups ────────────────────────────────────────────────────────────
+
+export function useFollowUpsByCaseSheet(caseSheetId: string) {
+  const { actor, isFetching } = useActor();
+  return useQuery<FollowUp[]>({
+    queryKey: ["followups", "case", caseSheetId],
+    queryFn: async () => {
+      if (!actor) return [];
+      return safeCall(
+        actor,
+        () => actor.getFollowUpsByCaseSheet(caseSheetId),
+        [],
+      );
+    },
+    enabled: !!actor && !isFetching && !!caseSheetId,
+  });
+}
+
+export function useCreateFollowUp() {
+  const { actor } = useActor();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (followUp: FollowUp) => {
+      if (!actor) throw new Error("Not ready");
+      return safeMutate(actor, () => actor.createFollowUp(followUp));
+    },
+    onSuccess: (_d, followUp) => {
+      void qc.invalidateQueries({
+        queryKey: ["followups", "case", followUp.caseSheetId],
+      });
+    },
+  });
+}
+
+export function useUpdateFollowUp() {
+  const { actor } = useActor();
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      followUp,
+    }: { id: string; followUp: FollowUp }) => {
+      if (!actor) throw new Error("Not ready");
+      return safeMutate(actor, () => actor.updateFollowUp(id, followUp));
+    },
+    onSuccess: (_d, { followUp }) => {
+      void qc.invalidateQueries({
+        queryKey: ["followups", "case", followUp.caseSheetId],
+      });
     },
   });
 }
@@ -311,7 +464,7 @@ export function useAllMemos() {
     queryKey: ["memos"],
     queryFn: async () => {
       if (!actor) return [];
-      return actor.getAllMemos();
+      return safeCall(actor, () => actor.getAllMemos(), []);
     },
     enabled: !!actor && !isFetching,
   });
@@ -323,7 +476,7 @@ export function useAddMemo() {
   return useMutation({
     mutationFn: async (memo: Memo) => {
       if (!actor) throw new Error("Not ready");
-      await actor.createMemo(memo);
+      await safeMutate(actor, () => actor.createMemo(memo));
     },
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ["memos"] });
@@ -337,7 +490,7 @@ export function useUpdateMemo() {
   return useMutation({
     mutationFn: async ({ id, memo }: { id: string; memo: Memo }) => {
       if (!actor) throw new Error("Not ready");
-      await actor.updateMemo(id, memo);
+      await safeMutate(actor, () => actor.updateMemo(id, memo));
     },
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ["memos"] });
@@ -351,7 +504,7 @@ export function useDeleteMemo() {
   return useMutation({
     mutationFn: async (id: string) => {
       if (!actor) throw new Error("Not ready");
-      await actor.deleteMemo(id);
+      await safeMutate(actor, () => actor.deleteMemo(id));
     },
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ["memos"] });

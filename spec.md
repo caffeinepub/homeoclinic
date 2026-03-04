@@ -1,9 +1,9 @@
 # HomeoClinic
 
 ## Current State
-Full homeopathic clinical management app with patient management, case sheets (HMCC format), prescriptions with remedy suggestion popups, follow-ups, appointments, memos, remedy reference (43 polychrest remedies), and a light theme UI.
+Full-stack homeopathic clinical management app with patient registration, HMCC-format case sheets, prescriptions with remedy suggestion popups, follow-ups, 43+ polychrest remedy reference, appointments, memo pad, and dashboard.
 
-The backend uses an authorization system where new users must be registered via `_initializeAccessControlWithSecret` before they can access any functions. The `getUserRole` function currently traps with "User is not registered" for any unknown principal, which blocks new users from registering patients if initialization has not completed or if there is any timing issue.
+Critical bug: The authorization component uses `Runtime.trap("User is not registered")` for any new login, blocking all users from doing anything.
 
 ## Requested Changes (Diff)
 
@@ -11,12 +11,13 @@ The backend uses an authorization system where new users must be registered via 
 - Nothing new
 
 ### Modify
-- Fix the access control so that any authenticated (non-anonymous) principal that is not yet registered is automatically registered as a `#user` role on their first call, instead of trapping. This eliminates the "User is not registered" error that prevents new patient registration.
+- Remove the authorization component entirely. Replace all permission checks with a simple anonymous-user check: only block `caller.isAnonymous()`. Any authenticated principal (non-anonymous) can do everything.
 
 ### Remove
-- Nothing
+- All `AccessControl.hasPermission(...)` guards replaced with simple `if (caller.isAnonymous()) { Runtime.trap("Must be logged in") }` checks.
+- No more `include MixinAuthorization` or `AccessControl` imports.
 
 ## Implementation Plan
-1. Regenerate backend with updated `getUserRole` logic: if principal is not found in userRoles map, auto-register them as `#user` and return `#user` instead of calling `Runtime.trap`.
-2. All other backend logic (patients, case sheets, prescriptions, follow-ups, appointments, memos, remedy reference) remains unchanged.
+1. Regenerate backend WITHOUT the authorization component. Every endpoint just checks `caller.isAnonymous()` and traps if true. All authenticated callers get full access.
+2. Keep all existing data models and endpoints identical (Patient, CaseSheet, Prescription, FollowUp, Appointment, Memo).
 3. No frontend changes needed.
