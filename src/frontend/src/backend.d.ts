@@ -7,72 +7,52 @@ export interface None {
     __kind__: "None";
 }
 export type Option<T> = Some<T> | None;
-export interface Remedy {
-    rubrics: string;
-    name: string;
-    keynotes: string;
-    synopticKeyHighlights: string;
-    abbreviation: string;
-    clinicalIndications: string;
-    materiaMedicaSummary: string;
-    relationships: RemedyRelationships;
-    miasmaticClassification: string;
-}
-export interface Case {
+export interface CaseSheet {
     id: string;
+    hpi: string;
     pastHistory: string;
     patientId: string;
+    createdAt: bigint;
     year: bigint;
     personalHistory: string;
     physicalGenerals: string;
-    history: string;
-    examination: string;
+    examinationFindings: string;
     totality: string;
     miasmaticAnalysis: string;
+    updatedAt: bigint;
     mentalGenerals: string;
     familyHistory: string;
-    followUps: Array<FollowUp>;
-    repertoiralFindings: string;
-    prescriptions: Array<Prescription>;
+    repertorialFindings: string;
     investigations: string;
     chiefComplaint: string;
 }
 export interface Memo {
     id: string;
     content: string;
-    date: string;
-}
-export interface RemedyRelationships {
-    antidotes: string;
-    inimical: string;
-    complementary: string;
-    followsWell: string;
-    followedBy: string;
+    createdAt: bigint;
 }
 export interface FollowUp {
-    visitNumber: bigint;
-    prescription?: Prescription;
-    date: string;
-    feedback: string;
-    symptoms: string;
-    changes: string;
-    observations: string;
+    id: string;
+    rows: string;
+    caseSheetId: string;
 }
 export interface Appointment {
     id: string;
-    patientId: string;
+    status: string;
     date: string;
-    visitType: string;
-    notes: string;
+    time: string;
+    patientName: string;
+    reason: string;
 }
 export interface Prescription {
-    remedy: string;
-    duration: string;
-    dosage: string;
-    date: string;
-    instructions: string;
-    potency: string;
-    frequency: string;
+    id: string;
+    rows: string;
+    caseSheetId: string;
+}
+export interface UserProfile {
+    name: string;
+    role: string;
+    specialization?: string;
 }
 export interface Patient {
     id: string;
@@ -81,16 +61,8 @@ export interface Patient {
     occupation: string;
     contact: string;
     name: string;
-    year: bigint;
     address: string;
-    registrationDate: string;
-    religion: string;
-    maritalStatus: string;
-}
-export interface UserProfile {
-    name: string;
-    role: string;
-    specialization?: string;
+    registrationYear: bigint;
 }
 export enum UserRole {
     admin = "admin",
@@ -98,38 +70,41 @@ export enum UserRole {
     guest = "guest"
 }
 export interface backendInterface {
-    addAppointment(appointment: Appointment): Promise<void>;
-    addMemo(memo: Memo): Promise<void>;
-    addRemedy(remedy: Remedy): Promise<void>;
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
-    createCase(caseData: Case): Promise<void>;
+    createAppointment(appointment: Appointment): Promise<string>;
+    createCaseSheet(caseSheet: CaseSheet): Promise<string>;
+    createFollowUp(followUp: FollowUp): Promise<string>;
+    createMemo(memo: Memo): Promise<string>;
+    createPatient(patient: Patient): Promise<string>;
+    createPrescription(prescription: Prescription): Promise<string>;
     deleteAppointment(id: string): Promise<void>;
-    deleteCase(id: string): Promise<void>;
+    deleteCaseSheet(id: string): Promise<void>;
+    deleteFollowUp(id: string): Promise<void>;
     deleteMemo(id: string): Promise<void>;
     deletePatient(id: string): Promise<void>;
-    deleteRemedy(abbreviation: string): Promise<void>;
+    deletePrescription(id: string): Promise<void>;
     getAllAppointments(): Promise<Array<Appointment>>;
     getAllMemos(): Promise<Array<Memo>>;
     getAllPatients(): Promise<Array<Patient>>;
-    getAllRemedies(): Promise<Array<Remedy>>;
     getAppointment(id: string): Promise<Appointment>;
     getAppointmentsByDate(date: string): Promise<Array<Appointment>>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
-    getCase(id: string): Promise<Case>;
-    getCasesByPatient(patientId: string): Promise<Array<Case>>;
-    getMemo(id: string): Promise<Memo>;
+    getCaseSheet(id: string): Promise<CaseSheet>;
+    getCaseSheetsByPatient(patientId: string): Promise<Array<CaseSheet>>;
+    getFollowUp(id: string): Promise<FollowUp>;
+    getFollowUpsByCaseSheet(caseSheetId: string): Promise<Array<FollowUp>>;
     getPatient(id: string): Promise<Patient>;
-    getRemedy(abbreviation: string): Promise<Remedy>;
+    getPatientsByYear(year: bigint): Promise<Array<Patient>>;
+    getPrescription(id: string): Promise<Prescription>;
+    getPrescriptionsByCaseSheet(caseSheetId: string): Promise<Array<Prescription>>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
     isCallerAdmin(): Promise<boolean>;
-    registerPatient(patient: Patient): Promise<void>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
-    searchPatientsByName(name: string): Promise<Array<Patient>>;
-    searchRemediesByName(name: string): Promise<Array<Remedy>>;
     updateAppointment(id: string, appointment: Appointment): Promise<void>;
-    updateCase(id: string, caseData: Case): Promise<void>;
+    updateCaseSheet(id: string, caseSheet: CaseSheet): Promise<void>;
+    updateFollowUp(id: string, followUp: FollowUp): Promise<void>;
     updateMemo(id: string, memo: Memo): Promise<void>;
     updatePatient(id: string, patient: Patient): Promise<void>;
-    updateRemedy(abbreviation: string, remedy: Remedy): Promise<void>;
+    updatePrescription(id: string, prescription: Prescription): Promise<void>;
 }

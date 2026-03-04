@@ -172,7 +172,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div
       className="flex h-screen overflow-hidden"
-      style={{ background: "oklch(0.16 0.008 240)" }}
+      style={{ background: "oklch(0.97 0.004 240)" }}
     >
       {/* Desktop sidebar */}
       <aside
@@ -214,8 +214,8 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         <header
           className="lg:hidden flex items-center gap-3 px-4 h-14 border-b flex-shrink-0"
           style={{
-            borderColor: "oklch(0.22 0.010 240)",
-            background: "oklch(0.16 0.008 240)",
+            borderColor: "oklch(0.88 0.010 240)",
+            background: "oklch(0.97 0.004 240)",
           }}
         >
           <Button
@@ -229,9 +229,12 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
           <div className="flex items-center gap-2">
             <Stethoscope
               className="w-4 h-4"
-              style={{ color: "oklch(0.72 0.14 193)" }}
+              style={{ color: "oklch(0.45 0.14 193)" }}
             />
-            <span className="text-sm font-display font-semibold">
+            <span
+              className="text-sm font-display font-semibold"
+              style={{ color: "oklch(0.15 0.010 240)" }}
+            >
               HomeoClinic
             </span>
           </div>

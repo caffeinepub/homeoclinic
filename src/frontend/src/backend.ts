@@ -89,72 +89,52 @@ export class ExternalBlob {
         return this;
     }
 }
-export interface Remedy {
-    rubrics: string;
-    name: string;
-    keynotes: string;
-    synopticKeyHighlights: string;
-    abbreviation: string;
-    clinicalIndications: string;
-    materiaMedicaSummary: string;
-    relationships: RemedyRelationships;
-    miasmaticClassification: string;
-}
-export interface Case {
+export interface CaseSheet {
     id: string;
+    hpi: string;
     pastHistory: string;
     patientId: string;
+    createdAt: bigint;
     year: bigint;
     personalHistory: string;
     physicalGenerals: string;
-    history: string;
-    examination: string;
+    examinationFindings: string;
     totality: string;
     miasmaticAnalysis: string;
+    updatedAt: bigint;
     mentalGenerals: string;
     familyHistory: string;
-    followUps: Array<FollowUp>;
-    repertoiralFindings: string;
-    prescriptions: Array<Prescription>;
+    repertorialFindings: string;
     investigations: string;
     chiefComplaint: string;
 }
 export interface Memo {
     id: string;
     content: string;
-    date: string;
-}
-export interface RemedyRelationships {
-    antidotes: string;
-    inimical: string;
-    complementary: string;
-    followsWell: string;
-    followedBy: string;
+    createdAt: bigint;
 }
 export interface FollowUp {
-    visitNumber: bigint;
-    prescription?: Prescription;
-    date: string;
-    feedback: string;
-    symptoms: string;
-    changes: string;
-    observations: string;
+    id: string;
+    rows: string;
+    caseSheetId: string;
 }
 export interface Appointment {
     id: string;
-    patientId: string;
+    status: string;
     date: string;
-    visitType: string;
-    notes: string;
+    time: string;
+    patientName: string;
+    reason: string;
 }
 export interface Prescription {
-    remedy: string;
-    duration: string;
-    dosage: string;
-    date: string;
-    instructions: string;
-    potency: string;
-    frequency: string;
+    id: string;
+    rows: string;
+    caseSheetId: string;
+}
+export interface UserProfile {
+    name: string;
+    role: string;
+    specialization?: string;
 }
 export interface Patient {
     id: string;
@@ -163,16 +143,8 @@ export interface Patient {
     occupation: string;
     contact: string;
     name: string;
-    year: bigint;
     address: string;
-    registrationDate: string;
-    religion: string;
-    maritalStatus: string;
-}
-export interface UserProfile {
-    name: string;
-    role: string;
-    specialization?: string;
+    registrationYear: bigint;
 }
 export enum UserRole {
     admin = "admin",
@@ -181,42 +153,45 @@ export enum UserRole {
 }
 export interface backendInterface {
     _initializeAccessControlWithSecret(userSecret: string): Promise<void>;
-    addAppointment(appointment: Appointment): Promise<void>;
-    addMemo(memo: Memo): Promise<void>;
-    addRemedy(remedy: Remedy): Promise<void>;
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
-    createCase(caseData: Case): Promise<void>;
+    createAppointment(appointment: Appointment): Promise<string>;
+    createCaseSheet(caseSheet: CaseSheet): Promise<string>;
+    createFollowUp(followUp: FollowUp): Promise<string>;
+    createMemo(memo: Memo): Promise<string>;
+    createPatient(patient: Patient): Promise<string>;
+    createPrescription(prescription: Prescription): Promise<string>;
     deleteAppointment(id: string): Promise<void>;
-    deleteCase(id: string): Promise<void>;
+    deleteCaseSheet(id: string): Promise<void>;
+    deleteFollowUp(id: string): Promise<void>;
     deleteMemo(id: string): Promise<void>;
     deletePatient(id: string): Promise<void>;
-    deleteRemedy(abbreviation: string): Promise<void>;
+    deletePrescription(id: string): Promise<void>;
     getAllAppointments(): Promise<Array<Appointment>>;
     getAllMemos(): Promise<Array<Memo>>;
     getAllPatients(): Promise<Array<Patient>>;
-    getAllRemedies(): Promise<Array<Remedy>>;
     getAppointment(id: string): Promise<Appointment>;
     getAppointmentsByDate(date: string): Promise<Array<Appointment>>;
     getCallerUserProfile(): Promise<UserProfile | null>;
     getCallerUserRole(): Promise<UserRole>;
-    getCase(id: string): Promise<Case>;
-    getCasesByPatient(patientId: string): Promise<Array<Case>>;
-    getMemo(id: string): Promise<Memo>;
+    getCaseSheet(id: string): Promise<CaseSheet>;
+    getCaseSheetsByPatient(patientId: string): Promise<Array<CaseSheet>>;
+    getFollowUp(id: string): Promise<FollowUp>;
+    getFollowUpsByCaseSheet(caseSheetId: string): Promise<Array<FollowUp>>;
     getPatient(id: string): Promise<Patient>;
-    getRemedy(abbreviation: string): Promise<Remedy>;
+    getPatientsByYear(year: bigint): Promise<Array<Patient>>;
+    getPrescription(id: string): Promise<Prescription>;
+    getPrescriptionsByCaseSheet(caseSheetId: string): Promise<Array<Prescription>>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
     isCallerAdmin(): Promise<boolean>;
-    registerPatient(patient: Patient): Promise<void>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
-    searchPatientsByName(name: string): Promise<Array<Patient>>;
-    searchRemediesByName(name: string): Promise<Array<Remedy>>;
     updateAppointment(id: string, appointment: Appointment): Promise<void>;
-    updateCase(id: string, caseData: Case): Promise<void>;
+    updateCaseSheet(id: string, caseSheet: CaseSheet): Promise<void>;
+    updateFollowUp(id: string, followUp: FollowUp): Promise<void>;
     updateMemo(id: string, memo: Memo): Promise<void>;
     updatePatient(id: string, patient: Patient): Promise<void>;
-    updateRemedy(abbreviation: string, remedy: Remedy): Promise<void>;
+    updatePrescription(id: string, prescription: Prescription): Promise<void>;
 }
-import type { Case as _Case, FollowUp as _FollowUp, Prescription as _Prescription, UserProfile as _UserProfile, UserRole as _UserRole } from "./declarations/backend.did.d.ts";
+import type { UserProfile as _UserProfile, UserRole as _UserRole } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
     async _initializeAccessControlWithSecret(arg0: string): Promise<void> {
@@ -230,48 +205,6 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor._initializeAccessControlWithSecret(arg0);
-            return result;
-        }
-    }
-    async addAppointment(arg0: Appointment): Promise<void> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.addAppointment(arg0);
-                return result;
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.addAppointment(arg0);
-            return result;
-        }
-    }
-    async addMemo(arg0: Memo): Promise<void> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.addMemo(arg0);
-                return result;
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.addMemo(arg0);
-            return result;
-        }
-    }
-    async addRemedy(arg0: Remedy): Promise<void> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.addRemedy(arg0);
-                return result;
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.addRemedy(arg0);
             return result;
         }
     }
@@ -289,17 +222,87 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async createCase(arg0: Case): Promise<void> {
+    async createAppointment(arg0: Appointment): Promise<string> {
         if (this.processError) {
             try {
-                const result = await this.actor.createCase(to_candid_Case_n3(this._uploadFile, this._downloadFile, arg0));
+                const result = await this.actor.createAppointment(arg0);
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.createCase(to_candid_Case_n3(this._uploadFile, this._downloadFile, arg0));
+            const result = await this.actor.createAppointment(arg0);
+            return result;
+        }
+    }
+    async createCaseSheet(arg0: CaseSheet): Promise<string> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.createCaseSheet(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.createCaseSheet(arg0);
+            return result;
+        }
+    }
+    async createFollowUp(arg0: FollowUp): Promise<string> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.createFollowUp(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.createFollowUp(arg0);
+            return result;
+        }
+    }
+    async createMemo(arg0: Memo): Promise<string> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.createMemo(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.createMemo(arg0);
+            return result;
+        }
+    }
+    async createPatient(arg0: Patient): Promise<string> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.createPatient(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.createPatient(arg0);
+            return result;
+        }
+    }
+    async createPrescription(arg0: Prescription): Promise<string> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.createPrescription(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.createPrescription(arg0);
             return result;
         }
     }
@@ -317,17 +320,31 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async deleteCase(arg0: string): Promise<void> {
+    async deleteCaseSheet(arg0: string): Promise<void> {
         if (this.processError) {
             try {
-                const result = await this.actor.deleteCase(arg0);
+                const result = await this.actor.deleteCaseSheet(arg0);
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.deleteCase(arg0);
+            const result = await this.actor.deleteCaseSheet(arg0);
+            return result;
+        }
+    }
+    async deleteFollowUp(arg0: string): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.deleteFollowUp(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.deleteFollowUp(arg0);
             return result;
         }
     }
@@ -359,17 +376,17 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async deleteRemedy(arg0: string): Promise<void> {
+    async deletePrescription(arg0: string): Promise<void> {
         if (this.processError) {
             try {
-                const result = await this.actor.deleteRemedy(arg0);
+                const result = await this.actor.deletePrescription(arg0);
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.deleteRemedy(arg0);
+            const result = await this.actor.deletePrescription(arg0);
             return result;
         }
     }
@@ -415,20 +432,6 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async getAllRemedies(): Promise<Array<Remedy>> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.getAllRemedies();
-                return result;
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.getAllRemedies();
-            return result;
-        }
-    }
     async getAppointment(arg0: string): Promise<Appointment> {
         if (this.processError) {
             try {
@@ -461,69 +464,83 @@ export class Backend implements backendInterface {
         if (this.processError) {
             try {
                 const result = await this.actor.getCallerUserProfile();
-                return from_candid_opt_n8(this._uploadFile, this._downloadFile, result);
+                return from_candid_opt_n3(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.getCallerUserProfile();
-            return from_candid_opt_n8(this._uploadFile, this._downloadFile, result);
+            return from_candid_opt_n3(this._uploadFile, this._downloadFile, result);
         }
     }
     async getCallerUserRole(): Promise<UserRole> {
         if (this.processError) {
             try {
                 const result = await this.actor.getCallerUserRole();
-                return from_candid_UserRole_n12(this._uploadFile, this._downloadFile, result);
+                return from_candid_UserRole_n7(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.getCallerUserRole();
-            return from_candid_UserRole_n12(this._uploadFile, this._downloadFile, result);
+            return from_candid_UserRole_n7(this._uploadFile, this._downloadFile, result);
         }
     }
-    async getCase(arg0: string): Promise<Case> {
+    async getCaseSheet(arg0: string): Promise<CaseSheet> {
         if (this.processError) {
             try {
-                const result = await this.actor.getCase(arg0);
-                return from_candid_Case_n14(this._uploadFile, this._downloadFile, result);
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.getCase(arg0);
-            return from_candid_Case_n14(this._uploadFile, this._downloadFile, result);
-        }
-    }
-    async getCasesByPatient(arg0: string): Promise<Array<Case>> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.getCasesByPatient(arg0);
-                return from_candid_vec_n20(this._uploadFile, this._downloadFile, result);
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.getCasesByPatient(arg0);
-            return from_candid_vec_n20(this._uploadFile, this._downloadFile, result);
-        }
-    }
-    async getMemo(arg0: string): Promise<Memo> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.getMemo(arg0);
+                const result = await this.actor.getCaseSheet(arg0);
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.getMemo(arg0);
+            const result = await this.actor.getCaseSheet(arg0);
+            return result;
+        }
+    }
+    async getCaseSheetsByPatient(arg0: string): Promise<Array<CaseSheet>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getCaseSheetsByPatient(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getCaseSheetsByPatient(arg0);
+            return result;
+        }
+    }
+    async getFollowUp(arg0: string): Promise<FollowUp> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getFollowUp(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getFollowUp(arg0);
+            return result;
+        }
+    }
+    async getFollowUpsByCaseSheet(arg0: string): Promise<Array<FollowUp>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getFollowUpsByCaseSheet(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getFollowUpsByCaseSheet(arg0);
             return result;
         }
     }
@@ -541,17 +558,45 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async getRemedy(arg0: string): Promise<Remedy> {
+    async getPatientsByYear(arg0: bigint): Promise<Array<Patient>> {
         if (this.processError) {
             try {
-                const result = await this.actor.getRemedy(arg0);
+                const result = await this.actor.getPatientsByYear(arg0);
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.getRemedy(arg0);
+            const result = await this.actor.getPatientsByYear(arg0);
+            return result;
+        }
+    }
+    async getPrescription(arg0: string): Promise<Prescription> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getPrescription(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getPrescription(arg0);
+            return result;
+        }
+    }
+    async getPrescriptionsByCaseSheet(arg0: string): Promise<Array<Prescription>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getPrescriptionsByCaseSheet(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getPrescriptionsByCaseSheet(arg0);
             return result;
         }
     }
@@ -559,14 +604,14 @@ export class Backend implements backendInterface {
         if (this.processError) {
             try {
                 const result = await this.actor.getUserProfile(arg0);
-                return from_candid_opt_n8(this._uploadFile, this._downloadFile, result);
+                return from_candid_opt_n3(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.getUserProfile(arg0);
-            return from_candid_opt_n8(this._uploadFile, this._downloadFile, result);
+            return from_candid_opt_n3(this._uploadFile, this._downloadFile, result);
         }
     }
     async isCallerAdmin(): Promise<boolean> {
@@ -583,59 +628,17 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async registerPatient(arg0: Patient): Promise<void> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.registerPatient(arg0);
-                return result;
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.registerPatient(arg0);
-            return result;
-        }
-    }
     async saveCallerUserProfile(arg0: UserProfile): Promise<void> {
         if (this.processError) {
             try {
-                const result = await this.actor.saveCallerUserProfile(to_candid_UserProfile_n21(this._uploadFile, this._downloadFile, arg0));
+                const result = await this.actor.saveCallerUserProfile(to_candid_UserProfile_n9(this._uploadFile, this._downloadFile, arg0));
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.saveCallerUserProfile(to_candid_UserProfile_n21(this._uploadFile, this._downloadFile, arg0));
-            return result;
-        }
-    }
-    async searchPatientsByName(arg0: string): Promise<Array<Patient>> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.searchPatientsByName(arg0);
-                return result;
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.searchPatientsByName(arg0);
-            return result;
-        }
-    }
-    async searchRemediesByName(arg0: string): Promise<Array<Remedy>> {
-        if (this.processError) {
-            try {
-                const result = await this.actor.searchRemediesByName(arg0);
-                return result;
-            } catch (e) {
-                this.processError(e);
-                throw new Error("unreachable");
-            }
-        } else {
-            const result = await this.actor.searchRemediesByName(arg0);
+            const result = await this.actor.saveCallerUserProfile(to_candid_UserProfile_n9(this._uploadFile, this._downloadFile, arg0));
             return result;
         }
     }
@@ -653,17 +656,31 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async updateCase(arg0: string, arg1: Case): Promise<void> {
+    async updateCaseSheet(arg0: string, arg1: CaseSheet): Promise<void> {
         if (this.processError) {
             try {
-                const result = await this.actor.updateCase(arg0, to_candid_Case_n3(this._uploadFile, this._downloadFile, arg1));
+                const result = await this.actor.updateCaseSheet(arg0, arg1);
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.updateCase(arg0, to_candid_Case_n3(this._uploadFile, this._downloadFile, arg1));
+            const result = await this.actor.updateCaseSheet(arg0, arg1);
+            return result;
+        }
+    }
+    async updateFollowUp(arg0: string, arg1: FollowUp): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.updateFollowUp(arg0, arg1);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.updateFollowUp(arg0, arg1);
             return result;
         }
     }
@@ -695,43 +712,34 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async updateRemedy(arg0: string, arg1: Remedy): Promise<void> {
+    async updatePrescription(arg0: string, arg1: Prescription): Promise<void> {
         if (this.processError) {
             try {
-                const result = await this.actor.updateRemedy(arg0, arg1);
+                const result = await this.actor.updatePrescription(arg0, arg1);
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.updateRemedy(arg0, arg1);
+            const result = await this.actor.updatePrescription(arg0, arg1);
             return result;
         }
     }
 }
-function from_candid_Case_n14(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _Case): Case {
-    return from_candid_record_n15(_uploadFile, _downloadFile, value);
+function from_candid_UserProfile_n4(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _UserProfile): UserProfile {
+    return from_candid_record_n5(_uploadFile, _downloadFile, value);
 }
-function from_candid_FollowUp_n17(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _FollowUp): FollowUp {
-    return from_candid_record_n18(_uploadFile, _downloadFile, value);
+function from_candid_UserRole_n7(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _UserRole): UserRole {
+    return from_candid_variant_n8(_uploadFile, _downloadFile, value);
 }
-function from_candid_UserProfile_n9(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _UserProfile): UserProfile {
-    return from_candid_record_n10(_uploadFile, _downloadFile, value);
+function from_candid_opt_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_UserProfile]): UserProfile | null {
+    return value.length === 0 ? null : from_candid_UserProfile_n4(_uploadFile, _downloadFile, value[0]);
 }
-function from_candid_UserRole_n12(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _UserRole): UserRole {
-    return from_candid_variant_n13(_uploadFile, _downloadFile, value);
-}
-function from_candid_opt_n11(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [string]): string | null {
+function from_candid_opt_n6(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [string]): string | null {
     return value.length === 0 ? null : value[0];
 }
-function from_candid_opt_n19(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_Prescription]): Prescription | null {
-    return value.length === 0 ? null : value[0];
-}
-function from_candid_opt_n8(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_UserProfile]): UserProfile | null {
-    return value.length === 0 ? null : from_candid_UserProfile_n9(_uploadFile, _downloadFile, value[0]);
-}
-function from_candid_record_n10(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+function from_candid_record_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
     name: string;
     role: string;
     specialization: [] | [string];
@@ -743,94 +751,10 @@ function from_candid_record_n10(_uploadFile: (file: ExternalBlob) => Promise<Uin
     return {
         name: value.name,
         role: value.role,
-        specialization: record_opt_to_undefined(from_candid_opt_n11(_uploadFile, _downloadFile, value.specialization))
+        specialization: record_opt_to_undefined(from_candid_opt_n6(_uploadFile, _downloadFile, value.specialization))
     };
 }
-function from_candid_record_n15(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
-    id: string;
-    pastHistory: string;
-    patientId: string;
-    year: bigint;
-    personalHistory: string;
-    physicalGenerals: string;
-    history: string;
-    examination: string;
-    totality: string;
-    miasmaticAnalysis: string;
-    mentalGenerals: string;
-    familyHistory: string;
-    followUps: Array<_FollowUp>;
-    repertoiralFindings: string;
-    prescriptions: Array<_Prescription>;
-    investigations: string;
-    chiefComplaint: string;
-}): {
-    id: string;
-    pastHistory: string;
-    patientId: string;
-    year: bigint;
-    personalHistory: string;
-    physicalGenerals: string;
-    history: string;
-    examination: string;
-    totality: string;
-    miasmaticAnalysis: string;
-    mentalGenerals: string;
-    familyHistory: string;
-    followUps: Array<FollowUp>;
-    repertoiralFindings: string;
-    prescriptions: Array<Prescription>;
-    investigations: string;
-    chiefComplaint: string;
-} {
-    return {
-        id: value.id,
-        pastHistory: value.pastHistory,
-        patientId: value.patientId,
-        year: value.year,
-        personalHistory: value.personalHistory,
-        physicalGenerals: value.physicalGenerals,
-        history: value.history,
-        examination: value.examination,
-        totality: value.totality,
-        miasmaticAnalysis: value.miasmaticAnalysis,
-        mentalGenerals: value.mentalGenerals,
-        familyHistory: value.familyHistory,
-        followUps: from_candid_vec_n16(_uploadFile, _downloadFile, value.followUps),
-        repertoiralFindings: value.repertoiralFindings,
-        prescriptions: value.prescriptions,
-        investigations: value.investigations,
-        chiefComplaint: value.chiefComplaint
-    };
-}
-function from_candid_record_n18(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
-    visitNumber: bigint;
-    prescription: [] | [_Prescription];
-    date: string;
-    feedback: string;
-    symptoms: string;
-    changes: string;
-    observations: string;
-}): {
-    visitNumber: bigint;
-    prescription?: Prescription;
-    date: string;
-    feedback: string;
-    symptoms: string;
-    changes: string;
-    observations: string;
-} {
-    return {
-        visitNumber: value.visitNumber,
-        prescription: record_opt_to_undefined(from_candid_opt_n19(_uploadFile, _downloadFile, value.prescription)),
-        date: value.date,
-        feedback: value.feedback,
-        symptoms: value.symptoms,
-        changes: value.changes,
-        observations: value.observations
-    };
-}
-function from_candid_variant_n13(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+function from_candid_variant_n8(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
     admin: null;
 } | {
     user: null;
@@ -839,25 +763,13 @@ function from_candid_variant_n13(_uploadFile: (file: ExternalBlob) => Promise<Ui
 }): UserRole {
     return "admin" in value ? UserRole.admin : "user" in value ? UserRole.user : "guest" in value ? UserRole.guest : value;
 }
-function from_candid_vec_n16(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<_FollowUp>): Array<FollowUp> {
-    return value.map((x)=>from_candid_FollowUp_n17(_uploadFile, _downloadFile, x));
-}
-function from_candid_vec_n20(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<_Case>): Array<Case> {
-    return value.map((x)=>from_candid_Case_n14(_uploadFile, _downloadFile, x));
-}
-function to_candid_Case_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Case): _Case {
-    return to_candid_record_n4(_uploadFile, _downloadFile, value);
-}
-function to_candid_FollowUp_n6(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: FollowUp): _FollowUp {
-    return to_candid_record_n7(_uploadFile, _downloadFile, value);
-}
-function to_candid_UserProfile_n21(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: UserProfile): _UserProfile {
-    return to_candid_record_n22(_uploadFile, _downloadFile, value);
+function to_candid_UserProfile_n9(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: UserProfile): _UserProfile {
+    return to_candid_record_n10(_uploadFile, _downloadFile, value);
 }
 function to_candid_UserRole_n1(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: UserRole): _UserRole {
     return to_candid_variant_n2(_uploadFile, _downloadFile, value);
 }
-function to_candid_record_n22(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+function to_candid_record_n10(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
     name: string;
     role: string;
     specialization?: string;
@@ -870,90 +782,6 @@ function to_candid_record_n22(_uploadFile: (file: ExternalBlob) => Promise<Uint8
         name: value.name,
         role: value.role,
         specialization: value.specialization ? candid_some(value.specialization) : candid_none()
-    };
-}
-function to_candid_record_n4(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
-    id: string;
-    pastHistory: string;
-    patientId: string;
-    year: bigint;
-    personalHistory: string;
-    physicalGenerals: string;
-    history: string;
-    examination: string;
-    totality: string;
-    miasmaticAnalysis: string;
-    mentalGenerals: string;
-    familyHistory: string;
-    followUps: Array<FollowUp>;
-    repertoiralFindings: string;
-    prescriptions: Array<Prescription>;
-    investigations: string;
-    chiefComplaint: string;
-}): {
-    id: string;
-    pastHistory: string;
-    patientId: string;
-    year: bigint;
-    personalHistory: string;
-    physicalGenerals: string;
-    history: string;
-    examination: string;
-    totality: string;
-    miasmaticAnalysis: string;
-    mentalGenerals: string;
-    familyHistory: string;
-    followUps: Array<_FollowUp>;
-    repertoiralFindings: string;
-    prescriptions: Array<_Prescription>;
-    investigations: string;
-    chiefComplaint: string;
-} {
-    return {
-        id: value.id,
-        pastHistory: value.pastHistory,
-        patientId: value.patientId,
-        year: value.year,
-        personalHistory: value.personalHistory,
-        physicalGenerals: value.physicalGenerals,
-        history: value.history,
-        examination: value.examination,
-        totality: value.totality,
-        miasmaticAnalysis: value.miasmaticAnalysis,
-        mentalGenerals: value.mentalGenerals,
-        familyHistory: value.familyHistory,
-        followUps: to_candid_vec_n5(_uploadFile, _downloadFile, value.followUps),
-        repertoiralFindings: value.repertoiralFindings,
-        prescriptions: value.prescriptions,
-        investigations: value.investigations,
-        chiefComplaint: value.chiefComplaint
-    };
-}
-function to_candid_record_n7(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
-    visitNumber: bigint;
-    prescription?: Prescription;
-    date: string;
-    feedback: string;
-    symptoms: string;
-    changes: string;
-    observations: string;
-}): {
-    visitNumber: bigint;
-    prescription: [] | [_Prescription];
-    date: string;
-    feedback: string;
-    symptoms: string;
-    changes: string;
-    observations: string;
-} {
-    return {
-        visitNumber: value.visitNumber,
-        prescription: value.prescription ? candid_some(value.prescription) : candid_none(),
-        date: value.date,
-        feedback: value.feedback,
-        symptoms: value.symptoms,
-        changes: value.changes,
-        observations: value.observations
     };
 }
 function to_candid_variant_n2(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: UserRole): {
@@ -970,9 +798,6 @@ function to_candid_variant_n2(_uploadFile: (file: ExternalBlob) => Promise<Uint8
     } : value == UserRole.guest ? {
         guest: null
     } : value;
-}
-function to_candid_vec_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<FollowUp>): Array<_FollowUp> {
-    return value.map((x)=>to_candid_FollowUp_n6(_uploadFile, _downloadFile, x));
 }
 export interface CreateActorOptions {
     agent?: Agent;

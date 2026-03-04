@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type { Appointment, Case, Memo, Patient, Remedy } from "../backend.d";
+import type { Appointment, CaseSheet, Memo, Patient } from "../backend.d";
 import { useActor } from "./useActor";
 
 // ─── Patients ──────────────────────────────────────────────────────────────
@@ -34,8 +34,11 @@ export function useSearchPatients(name: string) {
     queryKey: ["patients", "search", name],
     queryFn: async () => {
       if (!actor) return [];
-      if (!name.trim()) return actor.getAllPatients();
-      return actor.searchPatientsByName(name);
+      const all = await actor.getAllPatients();
+      if (!name.trim()) return all;
+      return all.filter((p) =>
+        p.name.toLowerCase().includes(name.toLowerCase()),
+      );
     },
     enabled: !!actor && !isFetching,
   });
@@ -47,7 +50,7 @@ export function useRegisterPatient() {
   return useMutation({
     mutationFn: async (patient: Patient) => {
       if (!actor) throw new Error("Not ready");
-      await actor.registerPatient(patient);
+      await actor.createPatient(patient);
     },
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ["patients"] });
@@ -84,15 +87,15 @@ export function useDeletePatient() {
   });
 }
 
-// ─── Cases ─────────────────────────────────────────────────────────────────
+// ─── Case Sheets ────────────────────────────────────────────────────────────
 
 export function useCasesByPatient(patientId: string) {
   const { actor, isFetching } = useActor();
-  return useQuery<Case[]>({
+  return useQuery<CaseSheet[]>({
     queryKey: ["cases", "patient", patientId],
     queryFn: async () => {
       if (!actor) return [];
-      return actor.getCasesByPatient(patientId);
+      return actor.getCaseSheetsByPatient(patientId);
     },
     enabled: !!actor && !isFetching && !!patientId,
   });
@@ -100,11 +103,11 @@ export function useCasesByPatient(patientId: string) {
 
 export function useCase(id: string) {
   const { actor, isFetching } = useActor();
-  return useQuery<Case>({
+  return useQuery<CaseSheet>({
     queryKey: ["case", id],
     queryFn: async () => {
       if (!actor) throw new Error("Not ready");
-      return actor.getCase(id);
+      return actor.getCaseSheet(id);
     },
     enabled: !!actor && !isFetching && !!id,
   });
@@ -114,9 +117,9 @@ export function useCreateCase() {
   const { actor } = useActor();
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async (caseData: Case) => {
+    mutationFn: async (caseData: CaseSheet) => {
       if (!actor) throw new Error("Not ready");
-      await actor.createCase(caseData);
+      await actor.createCaseSheet(caseData);
     },
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ["cases"] });
@@ -128,9 +131,12 @@ export function useUpdateCase() {
   const { actor } = useActor();
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, caseData }: { id: string; caseData: Case }) => {
+    mutationFn: async ({
+      id,
+      caseData,
+    }: { id: string; caseData: CaseSheet }) => {
       if (!actor) throw new Error("Not ready");
-      await actor.updateCase(id, caseData);
+      await actor.updateCaseSheet(id, caseData);
     },
     onSuccess: (_d, { id, caseData }) => {
       void qc.invalidateQueries({ queryKey: ["case", id] });
@@ -147,7 +153,7 @@ export function useDeleteCase() {
   return useMutation({
     mutationFn: async (id: string) => {
       if (!actor) throw new Error("Not ready");
-      await actor.deleteCase(id);
+      await actor.deleteCaseSheet(id);
     },
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ["cases"] });
@@ -187,7 +193,7 @@ export function useAddAppointment() {
   return useMutation({
     mutationFn: async (appointment: Appointment) => {
       if (!actor) throw new Error("Not ready");
-      await actor.addAppointment(appointment);
+      await actor.createAppointment(appointment);
     },
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ["appointments"] });
@@ -246,7 +252,7 @@ export function useAddMemo() {
   return useMutation({
     mutationFn: async (memo: Memo) => {
       if (!actor) throw new Error("Not ready");
-      await actor.addMemo(memo);
+      await actor.createMemo(memo);
     },
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ["memos"] });
@@ -278,78 +284,6 @@ export function useDeleteMemo() {
     },
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ["memos"] });
-    },
-  });
-}
-
-// ─── Remedies ──────────────────────────────────────────────────────────────
-
-export function useAllRemedies() {
-  const { actor, isFetching } = useActor();
-  return useQuery<Remedy[]>({
-    queryKey: ["remedies"],
-    queryFn: async () => {
-      if (!actor) return [];
-      return actor.getAllRemedies();
-    },
-    enabled: !!actor && !isFetching,
-  });
-}
-
-export function useSearchRemedies(name: string) {
-  const { actor, isFetching } = useActor();
-  return useQuery<Remedy[]>({
-    queryKey: ["remedies", "search", name],
-    queryFn: async () => {
-      if (!actor) return [];
-      if (!name.trim()) return actor.getAllRemedies();
-      return actor.searchRemediesByName(name);
-    },
-    enabled: !!actor && !isFetching,
-  });
-}
-
-export function useAddRemedy() {
-  const { actor } = useActor();
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: async (remedy: Remedy) => {
-      if (!actor) throw new Error("Not ready");
-      await actor.addRemedy(remedy);
-    },
-    onSuccess: () => {
-      void qc.invalidateQueries({ queryKey: ["remedies"] });
-    },
-  });
-}
-
-export function useUpdateRemedy() {
-  const { actor } = useActor();
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: async ({
-      abbreviation,
-      remedy,
-    }: { abbreviation: string; remedy: Remedy }) => {
-      if (!actor) throw new Error("Not ready");
-      await actor.updateRemedy(abbreviation, remedy);
-    },
-    onSuccess: () => {
-      void qc.invalidateQueries({ queryKey: ["remedies"] });
-    },
-  });
-}
-
-export function useDeleteRemedy() {
-  const { actor } = useActor();
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: async (abbreviation: string) => {
-      if (!actor) throw new Error("Not ready");
-      await actor.deleteRemedy(abbreviation);
-    },
-    onSuccess: () => {
-      void qc.invalidateQueries({ queryKey: ["remedies"] });
     },
   });
 }

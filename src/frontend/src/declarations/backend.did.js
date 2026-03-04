@@ -8,77 +8,47 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
-export const Appointment = IDL.Record({
-  'id' : IDL.Text,
-  'patientId' : IDL.Text,
-  'date' : IDL.Text,
-  'visitType' : IDL.Text,
-  'notes' : IDL.Text,
-});
-export const Memo = IDL.Record({
-  'id' : IDL.Text,
-  'content' : IDL.Text,
-  'date' : IDL.Text,
-});
-export const RemedyRelationships = IDL.Record({
-  'antidotes' : IDL.Text,
-  'inimical' : IDL.Text,
-  'complementary' : IDL.Text,
-  'followsWell' : IDL.Text,
-  'followedBy' : IDL.Text,
-});
-export const Remedy = IDL.Record({
-  'rubrics' : IDL.Text,
-  'name' : IDL.Text,
-  'keynotes' : IDL.Text,
-  'synopticKeyHighlights' : IDL.Text,
-  'abbreviation' : IDL.Text,
-  'clinicalIndications' : IDL.Text,
-  'materiaMedicaSummary' : IDL.Text,
-  'relationships' : RemedyRelationships,
-  'miasmaticClassification' : IDL.Text,
-});
 export const UserRole = IDL.Variant({
   'admin' : IDL.Null,
   'user' : IDL.Null,
   'guest' : IDL.Null,
 });
-export const Prescription = IDL.Record({
-  'remedy' : IDL.Text,
-  'duration' : IDL.Text,
-  'dosage' : IDL.Text,
-  'date' : IDL.Text,
-  'instructions' : IDL.Text,
-  'potency' : IDL.Text,
-  'frequency' : IDL.Text,
-});
-export const FollowUp = IDL.Record({
-  'visitNumber' : IDL.Nat,
-  'prescription' : IDL.Opt(Prescription),
-  'date' : IDL.Text,
-  'feedback' : IDL.Text,
-  'symptoms' : IDL.Text,
-  'changes' : IDL.Text,
-  'observations' : IDL.Text,
-});
-export const Case = IDL.Record({
+export const Appointment = IDL.Record({
   'id' : IDL.Text,
+  'status' : IDL.Text,
+  'date' : IDL.Text,
+  'time' : IDL.Text,
+  'patientName' : IDL.Text,
+  'reason' : IDL.Text,
+});
+export const CaseSheet = IDL.Record({
+  'id' : IDL.Text,
+  'hpi' : IDL.Text,
   'pastHistory' : IDL.Text,
   'patientId' : IDL.Text,
+  'createdAt' : IDL.Int,
   'year' : IDL.Nat,
   'personalHistory' : IDL.Text,
   'physicalGenerals' : IDL.Text,
-  'history' : IDL.Text,
-  'examination' : IDL.Text,
+  'examinationFindings' : IDL.Text,
   'totality' : IDL.Text,
   'miasmaticAnalysis' : IDL.Text,
+  'updatedAt' : IDL.Int,
   'mentalGenerals' : IDL.Text,
   'familyHistory' : IDL.Text,
-  'followUps' : IDL.Vec(FollowUp),
-  'repertoiralFindings' : IDL.Text,
-  'prescriptions' : IDL.Vec(Prescription),
+  'repertorialFindings' : IDL.Text,
   'investigations' : IDL.Text,
   'chiefComplaint' : IDL.Text,
+});
+export const FollowUp = IDL.Record({
+  'id' : IDL.Text,
+  'rows' : IDL.Text,
+  'caseSheetId' : IDL.Text,
+});
+export const Memo = IDL.Record({
+  'id' : IDL.Text,
+  'content' : IDL.Text,
+  'createdAt' : IDL.Int,
 });
 export const Patient = IDL.Record({
   'id' : IDL.Text,
@@ -87,11 +57,13 @@ export const Patient = IDL.Record({
   'occupation' : IDL.Text,
   'contact' : IDL.Text,
   'name' : IDL.Text,
-  'year' : IDL.Nat,
   'address' : IDL.Text,
-  'registrationDate' : IDL.Text,
-  'religion' : IDL.Text,
-  'maritalStatus' : IDL.Text,
+  'registrationYear' : IDL.Nat,
+});
+export const Prescription = IDL.Record({
+  'id' : IDL.Text,
+  'rows' : IDL.Text,
+  'caseSheetId' : IDL.Text,
 });
 export const UserProfile = IDL.Record({
   'name' : IDL.Text,
@@ -101,20 +73,22 @@ export const UserProfile = IDL.Record({
 
 export const idlService = IDL.Service({
   '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
-  'addAppointment' : IDL.Func([Appointment], [], []),
-  'addMemo' : IDL.Func([Memo], [], []),
-  'addRemedy' : IDL.Func([Remedy], [], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
-  'createCase' : IDL.Func([Case], [], []),
+  'createAppointment' : IDL.Func([Appointment], [IDL.Text], []),
+  'createCaseSheet' : IDL.Func([CaseSheet], [IDL.Text], []),
+  'createFollowUp' : IDL.Func([FollowUp], [IDL.Text], []),
+  'createMemo' : IDL.Func([Memo], [IDL.Text], []),
+  'createPatient' : IDL.Func([Patient], [IDL.Text], []),
+  'createPrescription' : IDL.Func([Prescription], [IDL.Text], []),
   'deleteAppointment' : IDL.Func([IDL.Text], [], []),
-  'deleteCase' : IDL.Func([IDL.Text], [], []),
+  'deleteCaseSheet' : IDL.Func([IDL.Text], [], []),
+  'deleteFollowUp' : IDL.Func([IDL.Text], [], []),
   'deleteMemo' : IDL.Func([IDL.Text], [], []),
   'deletePatient' : IDL.Func([IDL.Text], [], []),
-  'deleteRemedy' : IDL.Func([IDL.Text], [], []),
+  'deletePrescription' : IDL.Func([IDL.Text], [], []),
   'getAllAppointments' : IDL.Func([], [IDL.Vec(Appointment)], ['query']),
   'getAllMemos' : IDL.Func([], [IDL.Vec(Memo)], ['query']),
   'getAllPatients' : IDL.Func([], [IDL.Vec(Patient)], ['query']),
-  'getAllRemedies' : IDL.Func([], [IDL.Vec(Remedy)], ['query']),
   'getAppointment' : IDL.Func([IDL.Text], [Appointment], ['query']),
   'getAppointmentsByDate' : IDL.Func(
       [IDL.Text],
@@ -123,102 +97,85 @@ export const idlService = IDL.Service({
     ),
   'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
   'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
-  'getCase' : IDL.Func([IDL.Text], [Case], ['query']),
-  'getCasesByPatient' : IDL.Func([IDL.Text], [IDL.Vec(Case)], ['query']),
-  'getMemo' : IDL.Func([IDL.Text], [Memo], ['query']),
+  'getCaseSheet' : IDL.Func([IDL.Text], [CaseSheet], ['query']),
+  'getCaseSheetsByPatient' : IDL.Func(
+      [IDL.Text],
+      [IDL.Vec(CaseSheet)],
+      ['query'],
+    ),
+  'getFollowUp' : IDL.Func([IDL.Text], [FollowUp], ['query']),
+  'getFollowUpsByCaseSheet' : IDL.Func(
+      [IDL.Text],
+      [IDL.Vec(FollowUp)],
+      ['query'],
+    ),
   'getPatient' : IDL.Func([IDL.Text], [Patient], ['query']),
-  'getRemedy' : IDL.Func([IDL.Text], [Remedy], ['query']),
+  'getPatientsByYear' : IDL.Func([IDL.Nat], [IDL.Vec(Patient)], ['query']),
+  'getPrescription' : IDL.Func([IDL.Text], [Prescription], ['query']),
+  'getPrescriptionsByCaseSheet' : IDL.Func(
+      [IDL.Text],
+      [IDL.Vec(Prescription)],
+      ['query'],
+    ),
   'getUserProfile' : IDL.Func(
       [IDL.Principal],
       [IDL.Opt(UserProfile)],
       ['query'],
     ),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
-  'registerPatient' : IDL.Func([Patient], [], []),
   'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
-  'searchPatientsByName' : IDL.Func([IDL.Text], [IDL.Vec(Patient)], ['query']),
-  'searchRemediesByName' : IDL.Func([IDL.Text], [IDL.Vec(Remedy)], ['query']),
   'updateAppointment' : IDL.Func([IDL.Text, Appointment], [], []),
-  'updateCase' : IDL.Func([IDL.Text, Case], [], []),
+  'updateCaseSheet' : IDL.Func([IDL.Text, CaseSheet], [], []),
+  'updateFollowUp' : IDL.Func([IDL.Text, FollowUp], [], []),
   'updateMemo' : IDL.Func([IDL.Text, Memo], [], []),
   'updatePatient' : IDL.Func([IDL.Text, Patient], [], []),
-  'updateRemedy' : IDL.Func([IDL.Text, Remedy], [], []),
+  'updatePrescription' : IDL.Func([IDL.Text, Prescription], [], []),
 });
 
 export const idlInitArgs = [];
 
 export const idlFactory = ({ IDL }) => {
-  const Appointment = IDL.Record({
-    'id' : IDL.Text,
-    'patientId' : IDL.Text,
-    'date' : IDL.Text,
-    'visitType' : IDL.Text,
-    'notes' : IDL.Text,
-  });
-  const Memo = IDL.Record({
-    'id' : IDL.Text,
-    'content' : IDL.Text,
-    'date' : IDL.Text,
-  });
-  const RemedyRelationships = IDL.Record({
-    'antidotes' : IDL.Text,
-    'inimical' : IDL.Text,
-    'complementary' : IDL.Text,
-    'followsWell' : IDL.Text,
-    'followedBy' : IDL.Text,
-  });
-  const Remedy = IDL.Record({
-    'rubrics' : IDL.Text,
-    'name' : IDL.Text,
-    'keynotes' : IDL.Text,
-    'synopticKeyHighlights' : IDL.Text,
-    'abbreviation' : IDL.Text,
-    'clinicalIndications' : IDL.Text,
-    'materiaMedicaSummary' : IDL.Text,
-    'relationships' : RemedyRelationships,
-    'miasmaticClassification' : IDL.Text,
-  });
   const UserRole = IDL.Variant({
     'admin' : IDL.Null,
     'user' : IDL.Null,
     'guest' : IDL.Null,
   });
-  const Prescription = IDL.Record({
-    'remedy' : IDL.Text,
-    'duration' : IDL.Text,
-    'dosage' : IDL.Text,
-    'date' : IDL.Text,
-    'instructions' : IDL.Text,
-    'potency' : IDL.Text,
-    'frequency' : IDL.Text,
-  });
-  const FollowUp = IDL.Record({
-    'visitNumber' : IDL.Nat,
-    'prescription' : IDL.Opt(Prescription),
-    'date' : IDL.Text,
-    'feedback' : IDL.Text,
-    'symptoms' : IDL.Text,
-    'changes' : IDL.Text,
-    'observations' : IDL.Text,
-  });
-  const Case = IDL.Record({
+  const Appointment = IDL.Record({
     'id' : IDL.Text,
+    'status' : IDL.Text,
+    'date' : IDL.Text,
+    'time' : IDL.Text,
+    'patientName' : IDL.Text,
+    'reason' : IDL.Text,
+  });
+  const CaseSheet = IDL.Record({
+    'id' : IDL.Text,
+    'hpi' : IDL.Text,
     'pastHistory' : IDL.Text,
     'patientId' : IDL.Text,
+    'createdAt' : IDL.Int,
     'year' : IDL.Nat,
     'personalHistory' : IDL.Text,
     'physicalGenerals' : IDL.Text,
-    'history' : IDL.Text,
-    'examination' : IDL.Text,
+    'examinationFindings' : IDL.Text,
     'totality' : IDL.Text,
     'miasmaticAnalysis' : IDL.Text,
+    'updatedAt' : IDL.Int,
     'mentalGenerals' : IDL.Text,
     'familyHistory' : IDL.Text,
-    'followUps' : IDL.Vec(FollowUp),
-    'repertoiralFindings' : IDL.Text,
-    'prescriptions' : IDL.Vec(Prescription),
+    'repertorialFindings' : IDL.Text,
     'investigations' : IDL.Text,
     'chiefComplaint' : IDL.Text,
+  });
+  const FollowUp = IDL.Record({
+    'id' : IDL.Text,
+    'rows' : IDL.Text,
+    'caseSheetId' : IDL.Text,
+  });
+  const Memo = IDL.Record({
+    'id' : IDL.Text,
+    'content' : IDL.Text,
+    'createdAt' : IDL.Int,
   });
   const Patient = IDL.Record({
     'id' : IDL.Text,
@@ -227,11 +184,13 @@ export const idlFactory = ({ IDL }) => {
     'occupation' : IDL.Text,
     'contact' : IDL.Text,
     'name' : IDL.Text,
-    'year' : IDL.Nat,
     'address' : IDL.Text,
-    'registrationDate' : IDL.Text,
-    'religion' : IDL.Text,
-    'maritalStatus' : IDL.Text,
+    'registrationYear' : IDL.Nat,
+  });
+  const Prescription = IDL.Record({
+    'id' : IDL.Text,
+    'rows' : IDL.Text,
+    'caseSheetId' : IDL.Text,
   });
   const UserProfile = IDL.Record({
     'name' : IDL.Text,
@@ -241,20 +200,22 @@ export const idlFactory = ({ IDL }) => {
   
   return IDL.Service({
     '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
-    'addAppointment' : IDL.Func([Appointment], [], []),
-    'addMemo' : IDL.Func([Memo], [], []),
-    'addRemedy' : IDL.Func([Remedy], [], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
-    'createCase' : IDL.Func([Case], [], []),
+    'createAppointment' : IDL.Func([Appointment], [IDL.Text], []),
+    'createCaseSheet' : IDL.Func([CaseSheet], [IDL.Text], []),
+    'createFollowUp' : IDL.Func([FollowUp], [IDL.Text], []),
+    'createMemo' : IDL.Func([Memo], [IDL.Text], []),
+    'createPatient' : IDL.Func([Patient], [IDL.Text], []),
+    'createPrescription' : IDL.Func([Prescription], [IDL.Text], []),
     'deleteAppointment' : IDL.Func([IDL.Text], [], []),
-    'deleteCase' : IDL.Func([IDL.Text], [], []),
+    'deleteCaseSheet' : IDL.Func([IDL.Text], [], []),
+    'deleteFollowUp' : IDL.Func([IDL.Text], [], []),
     'deleteMemo' : IDL.Func([IDL.Text], [], []),
     'deletePatient' : IDL.Func([IDL.Text], [], []),
-    'deleteRemedy' : IDL.Func([IDL.Text], [], []),
+    'deletePrescription' : IDL.Func([IDL.Text], [], []),
     'getAllAppointments' : IDL.Func([], [IDL.Vec(Appointment)], ['query']),
     'getAllMemos' : IDL.Func([], [IDL.Vec(Memo)], ['query']),
     'getAllPatients' : IDL.Func([], [IDL.Vec(Patient)], ['query']),
-    'getAllRemedies' : IDL.Func([], [IDL.Vec(Remedy)], ['query']),
     'getAppointment' : IDL.Func([IDL.Text], [Appointment], ['query']),
     'getAppointmentsByDate' : IDL.Func(
         [IDL.Text],
@@ -263,30 +224,39 @@ export const idlFactory = ({ IDL }) => {
       ),
     'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
     'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
-    'getCase' : IDL.Func([IDL.Text], [Case], ['query']),
-    'getCasesByPatient' : IDL.Func([IDL.Text], [IDL.Vec(Case)], ['query']),
-    'getMemo' : IDL.Func([IDL.Text], [Memo], ['query']),
+    'getCaseSheet' : IDL.Func([IDL.Text], [CaseSheet], ['query']),
+    'getCaseSheetsByPatient' : IDL.Func(
+        [IDL.Text],
+        [IDL.Vec(CaseSheet)],
+        ['query'],
+      ),
+    'getFollowUp' : IDL.Func([IDL.Text], [FollowUp], ['query']),
+    'getFollowUpsByCaseSheet' : IDL.Func(
+        [IDL.Text],
+        [IDL.Vec(FollowUp)],
+        ['query'],
+      ),
     'getPatient' : IDL.Func([IDL.Text], [Patient], ['query']),
-    'getRemedy' : IDL.Func([IDL.Text], [Remedy], ['query']),
+    'getPatientsByYear' : IDL.Func([IDL.Nat], [IDL.Vec(Patient)], ['query']),
+    'getPrescription' : IDL.Func([IDL.Text], [Prescription], ['query']),
+    'getPrescriptionsByCaseSheet' : IDL.Func(
+        [IDL.Text],
+        [IDL.Vec(Prescription)],
+        ['query'],
+      ),
     'getUserProfile' : IDL.Func(
         [IDL.Principal],
         [IDL.Opt(UserProfile)],
         ['query'],
       ),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
-    'registerPatient' : IDL.Func([Patient], [], []),
     'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
-    'searchPatientsByName' : IDL.Func(
-        [IDL.Text],
-        [IDL.Vec(Patient)],
-        ['query'],
-      ),
-    'searchRemediesByName' : IDL.Func([IDL.Text], [IDL.Vec(Remedy)], ['query']),
     'updateAppointment' : IDL.Func([IDL.Text, Appointment], [], []),
-    'updateCase' : IDL.Func([IDL.Text, Case], [], []),
+    'updateCaseSheet' : IDL.Func([IDL.Text, CaseSheet], [], []),
+    'updateFollowUp' : IDL.Func([IDL.Text, FollowUp], [], []),
     'updateMemo' : IDL.Func([IDL.Text, Memo], [], []),
     'updatePatient' : IDL.Func([IDL.Text, Patient], [], []),
-    'updateRemedy' : IDL.Func([IDL.Text, Remedy], [], []),
+    'updatePrescription' : IDL.Func([IDL.Text, Prescription], [], []),
   });
 };
 

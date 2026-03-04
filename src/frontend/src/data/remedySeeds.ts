@@ -1,6 +1,6 @@
-import type { Remedy } from "../backend.d";
+import type { RemedyData } from "./remedyDatabase";
 
-export const SEED_REMEDIES: Remedy[] = [
+export const SEED_REMEDIES: RemedyData[] = [
   {
     name: "Sulphur",
     abbreviation: "Sul",
@@ -220,6 +220,116 @@ export const SEED_REMEDIES: Remedy[] = [
       inimical: "Argentum Nitricum",
       followsWell: "Apis, Ignatia, Kali Mur, Phosphorus, Sepia",
       followedBy: "Apis, Calcarea, Lycopodium, Sepia, Sulphur",
+    },
+  },
+  {
+    name: "Aconitum Napellus",
+    abbreviation: "Acon",
+    miasmaticClassification: "Psoric (Acute)",
+    keynotes:
+      "Sudden, violent onset of illness — always sudden. Fear of death — predicts the hour of death. Acute inflammatory conditions with high fever, dry burning heat, great thirst for cold water. Restlessness and anxiety. Worse at night and from cold wind. Caused by fright, dry cold wind, or sudden exposure.",
+    materiaMedicaSummary:
+      "Aconitum Napellus is the premier acute remedy for the very first stage of any acute illness. The onset is sudden — within hours of exposure. There is intense fear and anxiety with full, bounding pulse. Skin: dry, hot, no perspiration. Mind: great fear of death, predicts the time of death; restlessness; the patient cannot rest in any position. Croup: first-stage hoarse cough from cold night air. Fever: high, dry, burning heat, intense thirst for cold water. Eyes: red, inflamed, from cold or injury. After fright: convulsions, paralysis, emotional shock. Aggravated: night (especially midnight), cold wind, tobacco, music, lying on affected side. Ameliorated: open air, rest, sweating.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Sudden and violent — illness comes on quickly and intensely. 2) Fearfulness — fear of death, predicts own death time. 3) Restlessness with anguish. 4) Ailments from fright, dry cold wind, or shock. 5) Thirst for large quantities of cold water in fever. 6) No perspiration with burning fever. 7) Must be used in the first stage — not useful once perspiration begins.",
+    clinicalIndications:
+      "First stage of fevers. Croup. Acute conjunctivitis. Shock from fright. Palpitations from fear. Neuralgia from cold. Urine retention from fright. Restless insomnia from anxiety.",
+    rubrics:
+      "MIND — FEAR — death, of; GENERALS — ONSET — sudden; GENERALS — FEVER — dry heat; MIND — RESTLESSNESS — anxious; GENERALS — CAUSATION — fright",
+    relationships: {
+      complementary: "Sulphur, Coffea",
+      antidotes: "Camphor, Coffee, Vinegar, Wine",
+      inimical: "None significant",
+      followsWell: "Belladonna, Bryonia, Spongia",
+      followedBy: "Belladonna, Bryonia, Sulphur",
+    },
+  },
+  {
+    name: "Sepia",
+    abbreviation: "Sep",
+    miasmaticClassification: "Psoric + Sycotic",
+    keynotes:
+      "Bearing down sensation in pelvis as if everything would fall out. Indifference to loved ones — to husband, children. Chilly yet worse from heat of room. Better from vigorous exercise, dancing. Irritable, wants solitude. Yellowish saddle across nose. Ball sensation in inner parts.",
+    materiaMedicaSummary:
+      "Sepia is the great female remedy made from cuttlefish ink. The Sepia woman is worn out, indifferent, and irritable. Bearing down pelvic sensation — must cross legs to prevent protrusion. Mind: indifference to family whom she loves; weeps when telling symptoms; dreads being alone but dislikes company. Skin: yellow complexion, yellowish patches on face, saddle across nose. Menses: late, scanty, or suppressed. Leucorrhea: yellowish-green, offensive. Prolapse of uterus. Liver: engorged, congested. Aggravated: cold air, before menses, evening, consolation. Ameliorated: vigorous exercise, warmth of bed, drawing up limbs, sleep.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Bearing down pelvic sensation — must cross legs. 2) Indifference to loved ones — her own family. 3) Yellow saddle across nose. 4) Chilly, worse cold but worse in warm room too. 5) Better from vigorous exercise. 6) Weeps when describing complaints. 7) Flushes of heat during menopause.",
+    clinicalIndications:
+      "Uterine prolapse. Dysmenorrhea. Menopause. Leucorrhea. Hepatic complaints. Constipation. Skin affections — eczema, ringworm. Depression with indifference. Morning sickness in pregnancy.",
+    rubrics:
+      "FEMALE — BEARING DOWN; MIND — INDIFFERENCE — loved ones; FACE — DISCOLORATION — yellow, saddle; GENERALS — EXERCISE — vigorous, ameliorates; MIND — WEEPING — telling symptoms",
+    relationships: {
+      complementary: "Nat Mur, Nux Vomica",
+      antidotes: "Aconite, Antimonium Crudum, Rhus Tox",
+      inimical: "Bryonia, Lachesis, Pulsatilla",
+      followsWell: "Natrum Mur, Pulsatilla, Phosphorus",
+      followedBy: "Natrum Mur, Sulphur",
+    },
+  },
+  {
+    name: "Silicea",
+    abbreviation: "Sil",
+    miasmaticClassification: "Tubercular + Psoric",
+    keynotes:
+      "Lack of vital heat. Chilly, sensitive to cold drafts. Suppuration — promotes expulsion of foreign bodies. Offensive perspiration of feet. Lack of confidence, yielding, obstinate when aroused. Slow in healing. Delicate, fine-featured constitution. Brittle, ingrowing nails.",
+    materiaMedicaSummary:
+      "Silicea (pure flint) is a deep constitutional remedy for poor assimilation and suppuration. The Silicea patient is refined, delicate, and lacks stamina. Every injury suppurates; slow healing. Mind: yielding, timid, lacks self-confidence; yet obstinate with fixed ideas. Glands: indurated, suppurating lymph nodes. Skin: keloids, unhealthy skin, every wound suppurates. Bone: caries, fistulae, abscesses at roots of teeth. Perspiration: offensive, on feet and axillae. Head: sweaty head during sleep. Constipation: stool recedes when partially expelled ('bashful stool'). Aggravated: cold, uncovering, drafts, exertion. Ameliorated: warmth, wrapping head, summer.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Excessive offensive perspiration of feet. 2) Bashful stool — recedes when partially expelled. 3) Suppuration with fistulous openings. 4) Promotes expulsion of foreign bodies — splinters, bones. 5) Lack of grit — mentally and physically. 6) Ingrowing toenails. 7) Keloid formations.",
+    clinicalIndications:
+      "Recurrent boils and abscesses. Fistulae. Sinusitis. Chronic ear discharge. Bone caries. Keloids. Ingrowing nails. Lack of stamina. Nutritional deficiencies. Expulsion of foreign bodies.",
+    rubrics:
+      "GENERALS — PERSPIRATION — offensive; RECTUM — CONSTIPATION — recedes, stool; GENERALS — COLD — sensitive to; MIND — CONFIDENCE — lack of self; SKIN — SUPPURATION",
+    relationships: {
+      complementary: "Pulsatilla, Thuja, Sanicula",
+      antidotes: "Camphor, Fluoricum Acidum, Hepar Sulph",
+      inimical: "Mercury (do not use before Mercury)",
+      followsWell: "Calcarea Carb, Calc Phos, Pulsatilla",
+      followedBy: "Calc Carb, Graphites, Hepar Sulph, Sulphur",
+    },
+  },
+  {
+    name: "Rhus Toxicodendron",
+    abbreviation: "Rhus-t",
+    miasmaticClassification: "Sycotic",
+    keynotes:
+      "Worse on first motion, better continued motion. Worse rest, better movement. Triangular red tip of tongue. Worse from cold and damp. Restlessness — must keep moving. Tearing pains in muscles and joints. Stiffness worse in cold damp weather.",
+    materiaMedicaSummary:
+      "Rhus Tox is the great remedy for rheumatic and musculoskeletal complaints. Initial motion is agonizing — patient limps and groans on getting up, but as movement continues, the pain eases. Skin: urticaria, vesicular eruptions (like poison ivy contact), intense itching. Joints: hot, painful, stiff, worse in damp cold. Ligaments and tendons: strains and sprains. Typhoid: the restless typhoid — cannot lie still, tosses. Mental restlessness mirrors physical. Red triangular tip of tongue. Aggravated: rest, cold, damp, night, beginning motion. Ameliorated: continued motion, warmth, dry weather, changing position.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Worse rest, better continued motion — the great keynote. 2) Triangular red tip of tongue. 3) Worse cold and damp — the season of aggravation. 4) Vesicular skin eruptions with intense itching. 5) Restlessness — compelled to move constantly. 6) Ligament and tendon complaints from overstraining. 7) Stiffness of joints worse beginning motion.",
+    clinicalIndications:
+      "Rheumatism. Sprains and strains. Lumbago. Sciatica. Typhoid. Herpes zoster. Urticaria. Cellulitis. Bell's palsy. Chickenpox.",
+    rubrics:
+      "GENERALS — MOTION — beginning, agg; GENERALS — MOTION — continued, ameliorates; GENERALS — WEATHER — wet, agg; TONGUE — RED, tip; GENERALS — REST — agg",
+    relationships: {
+      complementary: "Bryonia, Calcarea Carb, Phytolacca",
+      antidotes: "Apis, Belladonna, Bryonia, Coffea, Croton Tig",
+      inimical: "None significant",
+      followsWell: "Arnica, Bryonia, Calc Carb",
+      followedBy: "Calc Carb, Phytolacca, Sulphur",
+    },
+  },
+  {
+    name: "Ignatia Amara",
+    abbreviation: "Ign",
+    miasmaticClassification: "Psoric",
+    keynotes:
+      "Acute grief, disappointed love. Contradictory and paradoxical symptoms. Sighing, sobbing. Lump in throat (globus hystericus). Silent grief — cannot express it. Involuntary sighing. Changeable moods rapidly alternating. Worse from tobacco smoke.",
+    materiaMedicaSummary:
+      "Ignatia is the acute grief remedy par excellence. Made from St. Ignatius bean. The patient is sensitive, nervous, and highly emotional. Contradictory symptoms: sore throat better swallowing solids; empty feeling not relieved by eating; fever without thirst; cough worse from coughing. Convulsions from grief or fright. Headache: as if a nail driven in, better lying on it. Cramping pains. Hiccough. Involuntary sighing. Mind: rapid alternation of moods — laughing to weeping. History of loss or disappointment. Aggravated: grief, fright, tobacco, coffee, strong smells, consolation. Ameliorated: change of position, lying on painful side, solitude, eating.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Acute grief — recent bereavement or disappointed love. 2) Contradictory and paradoxical symptoms throughout. 3) Globus hystericus — sensation of lump in throat. 4) Silent, introspective grief — does not want to talk. 5) Sighing and sobbing involuntarily. 6) Rapidly changing moods. 7) Sensitive to tobacco smoke.",
+    clinicalIndications:
+      "Grief reactions. Hysteria. Conversion disorders. Headache from grief. Insomnia after emotional shock. Hiccough. Globus hystericus. Convulsions in children from fright.",
+    rubrics:
+      "MIND — GRIEF; MIND — SIGHING; THROAT — LUMP, sensation of; GENERALS — AILMENTS FROM — grief; MIND — MOODS — changeable",
+    relationships: {
+      complementary: "Nat Mur",
+      antidotes: "Pulsatilla, Cocculus",
+      inimical: "Coffea, Nux Vomica (do not alternate)",
+      followsWell: "Aconite, Chamomilla, Nux Vomica",
+      followedBy: "Natrum Mur, Sepia, Zincum",
     },
   },
 ];

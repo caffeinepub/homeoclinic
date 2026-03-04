@@ -24,62 +24,62 @@ import {
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import { toast } from "sonner";
-import type { Remedy } from "../backend.d";
+import type { RemedyData } from "../data/remedyDatabase";
 import { SEED_REMEDIES } from "../data/remedySeeds";
-import {
-  useAddRemedy,
-  useAllRemedies,
-  useDeleteRemedy,
-} from "../hooks/useQueries";
 import { generateId } from "../utils/helpers";
 
+// Remedies are local-only (not stored in the backend). generateId is used for
+// local deduplication when user adds custom remedies in the current session.
+void generateId; // suppress unused warning — kept for potential future use
+
 const MIASM_COLORS: Record<string, string> = {
-  Psoric: "0.72 0.14 193",
-  Sycotic: "0.78 0.12 160",
-  Syphilitic: "0.62 0.20 25",
-  Acute: "0.82 0.12 90",
+  Psoric: "0.45 0.14 193",
+  Sycotic: "0.45 0.15 150",
+  Syphilitic: "0.55 0.22 25",
+  Acute: "0.50 0.14 90",
 };
 
 function getMiasmColor(miasm: string): string {
   for (const [key, val] of Object.entries(MIASM_COLORS)) {
     if (miasm.toLowerCase().includes(key.toLowerCase())) return val;
   }
-  return "0.60 0.15 260";
+  return "0.45 0.15 260";
 }
 
 const RELATION_LABELS: {
-  key: keyof Remedy["relationships"];
+  key: keyof RemedyData["relationships"];
   label: string;
   color: string;
 }[] = [
-  { key: "complementary", label: "Complementary", color: "0.78 0.12 160" },
-  { key: "followsWell", label: "Follows Well", color: "0.72 0.14 193" },
-  { key: "followedBy", label: "Followed By", color: "0.60 0.15 260" },
-  { key: "antidotes", label: "Antidotes", color: "0.62 0.20 25" },
-  { key: "inimical", label: "Inimical", color: "0.65 0.18 45" },
+  { key: "complementary", label: "Complementary", color: "0.45 0.15 150" },
+  { key: "followsWell", label: "Follows Well", color: "0.45 0.14 193" },
+  { key: "followedBy", label: "Followed By", color: "0.45 0.15 260" },
+  { key: "antidotes", label: "Antidotes", color: "0.55 0.22 25" },
+  { key: "inimical", label: "Inimical", color: "0.50 0.18 45" },
 ];
 
 function RemedyCard({
   remedy,
   onClick,
-}: { remedy: Remedy; onClick: () => void }) {
+}: { remedy: RemedyData; onClick: () => void }) {
   const color = getMiasmColor(remedy.miasmaticClassification);
   return (
     <motion.button
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
-      className="w-full text-left p-4 rounded-lg border transition-colors"
+      className="w-full text-left p-4 rounded-lg border transition-all"
       style={{
-        background: "oklch(0.20 0.010 240)",
-        borderColor: "oklch(0.28 0.012 240)",
+        background: "oklch(1.0 0 0)",
+        borderColor: "oklch(0.88 0.010 240)",
+        boxShadow: "0 1px 3px oklch(0.15 0.010 240 / 0.04)",
       }}
     >
       <div className="flex items-start justify-between mb-2">
         <div>
           <div
             className="font-display font-bold text-base"
-            style={{ color: "oklch(0.93 0.008 240)" }}
+            style={{ color: "oklch(0.15 0.010 240)" }}
           >
             {remedy.name}
           </div>
@@ -92,14 +92,14 @@ function RemedyCard({
         </div>
         <ChevronRight
           className="w-4 h-4 mt-0.5"
-          style={{ color: "oklch(0.45 0.008 240)" }}
+          style={{ color: "oklch(0.65 0.008 240)" }}
         />
       </div>
       <Badge
         variant="outline"
         className="text-xs mb-2"
         style={{
-          borderColor: `oklch(${color} / 0.4)`,
+          borderColor: `oklch(${color} / 0.35)`,
           color: `oklch(${color})`,
         }}
       >
@@ -107,7 +107,7 @@ function RemedyCard({
       </Badge>
       <p
         className="text-xs line-clamp-2"
-        style={{ color: "oklch(0.55 0.010 240)" }}
+        style={{ color: "oklch(0.50 0.012 240)" }}
       >
         {remedy.keynotes}
       </p>
@@ -118,13 +118,13 @@ function RemedyCard({
 function RemedyDetail({
   remedy,
   onClose,
-}: { remedy: Remedy; onClose: () => void }) {
+}: { remedy: RemedyData; onClose: () => void }) {
   const color = getMiasmColor(remedy.miasmaticClassification);
 
   return (
     <div
       className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4"
-      style={{ background: "rgba(0,0,0,0.7)" }}
+      style={{ background: "rgba(0,0,0,0.45)" }}
       role="presentation"
       onClick={(e) => e.target === e.currentTarget && onClose()}
       onKeyDown={(e) => e.key === "Escape" && onClose()}
@@ -135,8 +135,9 @@ function RemedyDetail({
         exit={{ opacity: 0, y: 40 }}
         className="w-full sm:max-w-2xl max-h-[92vh] overflow-y-auto rounded-t-2xl sm:rounded-2xl border"
         style={{
-          background: "oklch(0.18 0.010 240)",
-          borderColor: "oklch(0.28 0.012 240)",
+          background: "oklch(1.0 0 0)",
+          borderColor: "oklch(0.88 0.010 240)",
+          boxShadow: "0 16px 48px oklch(0.15 0.010 240 / 0.15)",
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -144,8 +145,8 @@ function RemedyDetail({
         <div
           className="sticky top-0 flex items-center justify-between px-5 py-4 border-b"
           style={{
-            background: "oklch(0.18 0.010 240)",
-            borderColor: "oklch(0.26 0.012 240)",
+            background: "oklch(1.0 0 0)",
+            borderColor: "oklch(0.90 0.008 240)",
           }}
         >
           <div>
@@ -153,7 +154,7 @@ function RemedyDetail({
               <div>
                 <h2
                   className="text-xl font-display font-bold"
-                  style={{ color: "oklch(0.93 0.008 240)" }}
+                  style={{ color: "oklch(0.15 0.010 240)" }}
                 >
                   {remedy.name}
                 </h2>
@@ -168,7 +169,7 @@ function RemedyDetail({
                     variant="outline"
                     className="text-xs"
                     style={{
-                      borderColor: `oklch(${color} / 0.4)`,
+                      borderColor: `oklch(${color} / 0.35)`,
                       color: `oklch(${color})`,
                     }}
                   >
@@ -184,8 +185,8 @@ function RemedyDetail({
             data-ocid="remedy_detail.close_button"
             className="w-8 h-8 rounded-lg flex items-center justify-center"
             style={{
-              background: "oklch(0.24 0.012 240)",
-              color: "oklch(0.60 0.010 240)",
+              background: "oklch(0.93 0.008 240)",
+              color: "oklch(0.40 0.010 240)",
             }}
           >
             <X className="w-4 h-4" />
@@ -197,7 +198,7 @@ function RemedyDetail({
           <Tabs defaultValue="keynotes">
             <TabsList
               className="mb-4 flex-wrap h-auto"
-              style={{ background: "oklch(0.22 0.012 240)" }}
+              style={{ background: "oklch(0.93 0.008 240)" }}
             >
               <TabsTrigger
                 value="keynotes"
@@ -236,8 +237,8 @@ function RemedyDetail({
                 <div
                   className="p-4 rounded-lg"
                   style={{
-                    background: `oklch(${color} / 0.07)`,
-                    border: `1px solid oklch(${color} / 0.2)`,
+                    background: `oklch(${color} / 0.05)`,
+                    border: `1px solid oklch(${color} / 0.18)`,
                   }}
                 >
                   <div
@@ -248,7 +249,7 @@ function RemedyDetail({
                   </div>
                   <p
                     className="text-sm leading-relaxed whitespace-pre-line"
-                    style={{ color: "oklch(0.88 0.008 240)" }}
+                    style={{ color: "oklch(0.20 0.010 240)" }}
                   >
                     {remedy.keynotes}
                   </p>
@@ -257,19 +258,19 @@ function RemedyDetail({
                   <div
                     className="p-4 rounded-lg"
                     style={{
-                      background: "oklch(0.22 0.012 240)",
-                      border: "1px solid oklch(0.28 0.012 240)",
+                      background: "oklch(0.96 0.006 240)",
+                      border: "1px solid oklch(0.88 0.010 240)",
                     }}
                   >
                     <div
                       className="text-xs font-semibold uppercase tracking-widest mb-2"
-                      style={{ color: "oklch(0.72 0.14 193)" }}
+                      style={{ color: "oklch(0.45 0.14 193)" }}
                     >
                       Clinical Indications
                     </div>
                     <p
                       className="text-sm leading-relaxed"
-                      style={{ color: "oklch(0.80 0.008 240)" }}
+                      style={{ color: "oklch(0.25 0.010 240)" }}
                     >
                       {remedy.clinicalIndications}
                     </p>
@@ -282,19 +283,19 @@ function RemedyDetail({
               <div
                 className="p-4 rounded-lg"
                 style={{
-                  background: "oklch(0.22 0.012 240)",
-                  border: "1px solid oklch(0.28 0.012 240)",
+                  background: "oklch(0.96 0.006 240)",
+                  border: "1px solid oklch(0.88 0.010 240)",
                 }}
               >
                 <div
                   className="text-xs font-semibold uppercase tracking-widest mb-3"
-                  style={{ color: "oklch(0.72 0.14 193)" }}
+                  style={{ color: "oklch(0.45 0.14 193)" }}
                 >
                   Materia Medica Summary (Boericke)
                 </div>
                 <p
                   className="text-sm leading-relaxed whitespace-pre-line"
-                  style={{ color: "oklch(0.80 0.008 240)" }}
+                  style={{ color: "oklch(0.22 0.010 240)" }}
                 >
                   {remedy.materiaMedicaSummary}
                 </p>
@@ -305,19 +306,19 @@ function RemedyDetail({
               <div
                 className="p-4 rounded-lg"
                 style={{
-                  background: "oklch(0.22 0.012 240)",
-                  border: "1px solid oklch(0.28 0.012 240)",
+                  background: "oklch(0.96 0.006 240)",
+                  border: "1px solid oklch(0.88 0.010 240)",
                 }}
               >
                 <div
                   className="text-xs font-semibold uppercase tracking-widest mb-3"
-                  style={{ color: "oklch(0.78 0.12 160)" }}
+                  style={{ color: "oklch(0.45 0.15 150)" }}
                 >
                   Synoptic Key Highlights (Bhanja)
                 </div>
                 <p
                   className="text-sm leading-relaxed whitespace-pre-line"
-                  style={{ color: "oklch(0.80 0.008 240)" }}
+                  style={{ color: "oklch(0.22 0.010 240)" }}
                 >
                   {remedy.synopticKeyHighlights}
                 </p>
@@ -328,24 +329,24 @@ function RemedyDetail({
               <div
                 className="p-4 rounded-lg"
                 style={{
-                  background: "oklch(0.22 0.012 240)",
-                  border: "1px solid oklch(0.28 0.012 240)",
+                  background: "oklch(0.96 0.006 240)",
+                  border: "1px solid oklch(0.88 0.010 240)",
                 }}
               >
                 <div
                   className="text-xs font-semibold uppercase tracking-widest mb-3"
-                  style={{ color: "oklch(0.82 0.12 90)" }}
+                  style={{ color: "oklch(0.50 0.14 90)" }}
                 >
                   Key Repertory Rubrics
                 </div>
                 <div className="space-y-1.5">
                   {remedy.rubrics.split(";").map((r) => (
                     <div
-                      key={r}
+                      key={r.trim() || r}
                       className="text-xs px-2 py-1.5 rounded font-mono"
                       style={{
-                        background: "oklch(0.26 0.012 240)",
-                        color: "oklch(0.78 0.008 240)",
+                        background: "oklch(0.91 0.008 240)",
+                        color: "oklch(0.28 0.010 240)",
                       }}
                     >
                       {r.trim()}
@@ -364,8 +365,8 @@ function RemedyDetail({
                         key={key}
                         className="p-4 rounded-lg"
                         style={{
-                          background: `oklch(${relColor} / 0.06)`,
-                          border: `1px solid oklch(${relColor} / 0.2)`,
+                          background: `oklch(${relColor} / 0.05)`,
+                          border: `1px solid oklch(${relColor} / 0.18)`,
                         }}
                       >
                         <div
@@ -377,12 +378,12 @@ function RemedyDetail({
                         <div className="flex flex-wrap gap-1.5">
                           {remedy.relationships[key].split(",").map((r) => (
                             <span
-                              key={r}
+                              key={r.trim() || r}
                               className="text-xs px-2 py-0.5 rounded-full"
                               style={{
-                                background: `oklch(${relColor} / 0.12)`,
+                                background: `oklch(${relColor} / 0.08)`,
                                 color: `oklch(${relColor})`,
-                                border: `1px solid oklch(${relColor} / 0.3)`,
+                                border: `1px solid oklch(${relColor} / 0.25)`,
                               }}
                             >
                               {r.trim()}
@@ -401,7 +402,7 @@ function RemedyDetail({
   );
 }
 
-const EMPTY_REMEDY: Remedy = {
+const EMPTY_REMEDY: RemedyData = {
   name: "",
   abbreviation: "",
   miasmaticClassification: "",
@@ -420,23 +421,23 @@ const EMPTY_REMEDY: Remedy = {
 };
 
 export function Remedies() {
-  const { data: backendRemedies, isLoading } = useAllRemedies();
-  const addRemedy = useAddRemedy();
-  useDeleteRemedy(); // Available for future use - keep hook call for consistency
+  // Remedies are stored locally only (no backend).
+  // User-added remedies persist only for the session.
+  const [userRemedies, setUserRemedies] = useState<RemedyData[]>([]);
+  const [isLoading] = useState(false);
 
   const [search, setSearch] = useState("");
-  const [selected, setSelected] = useState<Remedy | null>(null);
+  const [selected, setSelected] = useState<RemedyData | null>(null);
   const [addOpen, setAddOpen] = useState(false);
-  const [newRemedy, setNewRemedy] = useState<Remedy>({ ...EMPTY_REMEDY });
+  const [newRemedy, setNewRemedy] = useState<RemedyData>({ ...EMPTY_REMEDY });
+  const [isSaving, setIsSaving] = useState(false);
 
-  // Combine seed + backend, backend takes priority by abbreviation
-  const backendAbbrs = new Set(
-    (backendRemedies ?? []).map((r) => r.abbreviation),
-  );
+  // Combine seed + user-added remedies, user remedies take priority by abbreviation
+  const userAbbrs = new Set(userRemedies.map((r) => r.abbreviation));
   const seedFiltered = SEED_REMEDIES.filter(
-    (r) => !backendAbbrs.has(r.abbreviation),
+    (r) => !userAbbrs.has(r.abbreviation),
   );
-  const allRemedies = [...(backendRemedies ?? []), ...seedFiltered];
+  const allRemedies = [...userRemedies, ...seedFiltered];
 
   const filtered = allRemedies.filter(
     (r) =>
@@ -450,13 +451,16 @@ export function Remedies() {
       toast.error("Name and abbreviation are required");
       return;
     }
+    setIsSaving(true);
     try {
-      await addRemedy.mutateAsync(newRemedy);
+      setUserRemedies((prev) => [...prev, { ...newRemedy }]);
       toast.success("Remedy added");
       setAddOpen(false);
       setNewRemedy({ ...EMPTY_REMEDY });
     } catch {
       toast.error("Failed to add remedy");
+    } finally {
+      setIsSaving(false);
     }
   }
 
@@ -472,18 +476,18 @@ export function Remedies() {
           <div className="flex items-center gap-2 mb-1">
             <FlaskConical
               className="w-4 h-4"
-              style={{ color: "oklch(0.72 0.14 193)" }}
+              style={{ color: "oklch(0.45 0.14 193)" }}
             />
             <span
               className="text-xs font-semibold uppercase tracking-widest"
-              style={{ color: "oklch(0.72 0.14 193)" }}
+              style={{ color: "oklch(0.45 0.14 193)" }}
             >
               Remedy Reference
             </span>
           </div>
           <h1
             className="text-2xl font-display font-bold tracking-tight"
-            style={{ color: "oklch(0.93 0.008 240)" }}
+            style={{ color: "oklch(0.15 0.010 240)" }}
           >
             Materia Medica & Relationships
           </h1>
@@ -495,8 +499,8 @@ export function Remedies() {
               data-ocid="remedies.add.open_modal_button"
               className="gap-2 h-9"
               style={{
-                background: "oklch(0.72 0.14 193)",
-                color: "oklch(0.13 0.012 240)",
+                background: "oklch(0.45 0.14 193)",
+                color: "oklch(0.99 0 0)",
               }}
             >
               <Plus className="w-4 h-4" />
@@ -507,14 +511,14 @@ export function Remedies() {
             data-ocid="remedies.add.dialog"
             className="max-w-2xl max-h-[90vh] overflow-y-auto"
             style={{
-              background: "oklch(0.18 0.010 240)",
-              borderColor: "oklch(0.28 0.012 240)",
+              background: "oklch(1.0 0 0)",
+              borderColor: "oklch(0.88 0.010 240)",
             }}
           >
             <DialogHeader>
               <DialogTitle
                 className="font-display"
-                style={{ color: "oklch(0.93 0.008 240)" }}
+                style={{ color: "oklch(0.15 0.010 240)" }}
               >
                 Add New Remedy
               </DialogTitle>
@@ -524,7 +528,7 @@ export function Remedies() {
                 <div className="space-y-1.5">
                   <Label
                     className="text-xs"
-                    style={{ color: "oklch(0.60 0.010 240)" }}
+                    style={{ color: "oklch(0.40 0.010 240)" }}
                   >
                     Name *
                   </Label>
@@ -536,16 +540,16 @@ export function Remedies() {
                     data-ocid="remedies.add.name.input"
                     placeholder="e.g., Sulphur"
                     style={{
-                      background: "oklch(0.22 0.012 240)",
-                      borderColor: "oklch(0.30 0.012 240)",
-                      color: "oklch(0.93 0.008 240)",
+                      background: "oklch(0.96 0.006 240)",
+                      borderColor: "oklch(0.88 0.010 240)",
+                      color: "oklch(0.15 0.010 240)",
                     }}
                   />
                 </div>
                 <div className="space-y-1.5">
                   <Label
                     className="text-xs"
-                    style={{ color: "oklch(0.60 0.010 240)" }}
+                    style={{ color: "oklch(0.40 0.010 240)" }}
                   >
                     Abbreviation *
                   </Label>
@@ -560,16 +564,16 @@ export function Remedies() {
                     data-ocid="remedies.add.abbreviation.input"
                     placeholder="e.g., Sul"
                     style={{
-                      background: "oklch(0.22 0.012 240)",
-                      borderColor: "oklch(0.30 0.012 240)",
-                      color: "oklch(0.93 0.008 240)",
+                      background: "oklch(0.96 0.006 240)",
+                      borderColor: "oklch(0.88 0.010 240)",
+                      color: "oklch(0.15 0.010 240)",
                     }}
                   />
                 </div>
                 <div className="col-span-2 space-y-1.5">
                   <Label
                     className="text-xs"
-                    style={{ color: "oklch(0.60 0.010 240)" }}
+                    style={{ color: "oklch(0.40 0.010 240)" }}
                   >
                     Miasmatic Classification
                   </Label>
@@ -584,9 +588,9 @@ export function Remedies() {
                     data-ocid="remedies.add.miasm.input"
                     placeholder="e.g., Psoric, Sycotic, Syphilitic"
                     style={{
-                      background: "oklch(0.22 0.012 240)",
-                      borderColor: "oklch(0.30 0.012 240)",
-                      color: "oklch(0.93 0.008 240)",
+                      background: "oklch(0.96 0.006 240)",
+                      borderColor: "oklch(0.88 0.010 240)",
+                      color: "oklch(0.15 0.010 240)",
                     }}
                   />
                 </div>
@@ -617,7 +621,7 @@ export function Remedies() {
                 <div key={field} className="space-y-1.5">
                   <Label
                     className="text-xs"
-                    style={{ color: "oklch(0.60 0.010 240)" }}
+                    style={{ color: "oklch(0.40 0.010 240)" }}
                   >
                     {label}
                   </Label>
@@ -632,9 +636,9 @@ export function Remedies() {
                     data-ocid={`remedies.add.${field}.textarea`}
                     className="text-sm"
                     style={{
-                      background: "oklch(0.22 0.012 240)",
-                      borderColor: "oklch(0.30 0.012 240)",
-                      color: "oklch(0.93 0.008 240)",
+                      background: "oklch(0.96 0.006 240)",
+                      borderColor: "oklch(0.88 0.010 240)",
+                      color: "oklch(0.15 0.010 240)",
                     }}
                   />
                 </div>
@@ -642,7 +646,7 @@ export function Remedies() {
               <div className="space-y-2 pt-1">
                 <div
                   className="text-xs font-semibold uppercase tracking-widest"
-                  style={{ color: "oklch(0.72 0.14 193)" }}
+                  style={{ color: "oklch(0.45 0.14 193)" }}
                 >
                   Relationships
                 </div>
@@ -650,7 +654,7 @@ export function Remedies() {
                   <div key={key} className="space-y-1.5">
                     <Label
                       className="text-xs"
-                      style={{ color: "oklch(0.60 0.010 240)" }}
+                      style={{ color: "oklch(0.40 0.010 240)" }}
                     >
                       {label}
                     </Label>
@@ -668,9 +672,9 @@ export function Remedies() {
                       data-ocid={`remedies.add.${key}.input`}
                       placeholder="Comma separated"
                       style={{
-                        background: "oklch(0.22 0.012 240)",
-                        borderColor: "oklch(0.30 0.012 240)",
-                        color: "oklch(0.93 0.008 240)",
+                        background: "oklch(0.96 0.006 240)",
+                        borderColor: "oklch(0.88 0.010 240)",
+                        color: "oklch(0.15 0.010 240)",
                       }}
                     />
                   </div>
@@ -683,8 +687,8 @@ export function Remedies() {
                 data-ocid="remedies.add.cancel_button"
                 onClick={() => setAddOpen(false)}
                 style={{
-                  borderColor: "oklch(0.30 0.012 240)",
-                  color: "oklch(0.70 0.010 240)",
+                  borderColor: "oklch(0.88 0.010 240)",
+                  color: "oklch(0.40 0.010 240)",
                 }}
               >
                 Cancel
@@ -692,13 +696,13 @@ export function Remedies() {
               <Button
                 data-ocid="remedies.add.submit_button"
                 onClick={handleAddRemedy}
-                disabled={addRemedy.isPending}
+                disabled={isSaving}
                 style={{
-                  background: "oklch(0.72 0.14 193)",
-                  color: "oklch(0.13 0.012 240)",
+                  background: "oklch(0.45 0.14 193)",
+                  color: "oklch(0.99 0 0)",
                 }}
               >
-                {addRemedy.isPending ? (
+                {isSaving ? (
                   <Loader2 className="w-3.5 h-3.5 animate-spin" />
                 ) : (
                   "Add Remedy"
@@ -718,7 +722,7 @@ export function Remedies() {
       >
         <Search
           className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5"
-          style={{ color: "oklch(0.50 0.008 240)" }}
+          style={{ color: "oklch(0.55 0.010 240)" }}
         />
         <Input
           data-ocid="remedies.search_input"
@@ -727,9 +731,9 @@ export function Remedies() {
           onChange={(e) => setSearch(e.target.value)}
           className="pl-9"
           style={{
-            background: "oklch(0.20 0.010 240)",
-            borderColor: "oklch(0.28 0.012 240)",
-            color: "oklch(0.93 0.008 240)",
+            background: "oklch(1.0 0 0)",
+            borderColor: "oklch(0.88 0.010 240)",
+            color: "oklch(0.15 0.010 240)",
           }}
         />
       </motion.div>
@@ -746,15 +750,15 @@ export function Remedies() {
           data-ocid="remedies.empty_state"
           className="py-16 text-center rounded-lg border"
           style={{
-            background: "oklch(0.20 0.010 240)",
-            borderColor: "oklch(0.28 0.012 240)",
+            background: "oklch(1.0 0 0)",
+            borderColor: "oklch(0.88 0.010 240)",
           }}
         >
           <FlaskConical
             className="w-10 h-10 mx-auto mb-3 opacity-20"
-            style={{ color: "oklch(0.72 0.14 193)" }}
+            style={{ color: "oklch(0.45 0.14 193)" }}
           />
-          <p className="text-sm" style={{ color: "oklch(0.55 0.010 240)" }}>
+          <p className="text-sm" style={{ color: "oklch(0.50 0.012 240)" }}>
             No remedies found
           </p>
         </div>
