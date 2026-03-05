@@ -8,6 +8,7 @@ export interface CaseInput {
   mentalGenerals: string;
   physicalGenerals: string;
   personalHistory: string;
+  investigations?: string;
   miasmaticAnalysis: string;
   totality: string;
   repertorialFindings: string;

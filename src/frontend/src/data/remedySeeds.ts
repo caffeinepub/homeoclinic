@@ -16,10 +16,10 @@ export const SEED_REMEDIES: RemedyData[] = [
     rubrics:
       "SKIN — ERUPTIONS — burning; STOMACH — APPETITE — canine, noon except at; RECTUM — DIARRHEA — morning, driving out of bed; EXTREMITIES — HEAT — hands; GENERALS — BATHING — worse; MIND — UNTIDY",
     relationships: {
-      complementary: "Aloe, Nux Vomica, Psorinum, Calcarea Carb, Sarsaparilla",
-      antidotes: "Aconite, Camphor, China, Mercury, Pulsatilla",
+      complementary: "Calcarea carbonica, Lycopodium",
+      antidotes: "Camphor",
       inimical: "Causticum",
-      followsWell: "Aconite, Belladonna, Calcarea, Lycopodium, Pulsatilla",
+      followsWell: "Nux vomica",
       followedBy: "Calcarea Carb, Lycopodium, Sarsaparilla, Sepia",
     },
   },
@@ -38,10 +38,10 @@ export const SEED_REMEDIES: RemedyData[] = [
     rubrics:
       "MIND — WEEPING — tendency; GENERALS — THIRST — thirstlessness; FEMALE — MENSES — delayed; GENERALS — AIR — open, desire for; NOSE — DISCHARGE — yellow-green, bland",
     relationships: {
-      complementary: "Kali Mur, Lycopodium, Silica, Kali Sulph",
-      antidotes: "Chamomilla, Coffea, Ignatia, Nux Vomica",
+      complementary: "Silicea",
+      antidotes: "Chamomilla",
       inimical: "Cadmium Sulph",
-      followsWell: "Kali Mur, Lycopodium, Silica, Sulphur",
+      followsWell: "Sepia",
       followedBy: "Kali Mur, Lycopodium, Natrum Mur, Silica",
     },
   },
@@ -60,10 +60,10 @@ export const SEED_REMEDIES: RemedyData[] = [
     rubrics:
       "RECTUM — CONSTIPATION — ineffectual urging; MIND — IRRITABILITY; GENERALS — FOOD — coffee, agg; SLEEP — WAKING — 3 AM; GENERALS — COLD — general, sensitive to",
     relationships: {
-      complementary: "Sulphur, Sepia",
-      antidotes: "Aconite, Chamomilla, Coffea, Ignatia, Pulsatilla",
-      inimical: "Zinc",
-      followsWell: "Sulphur, Lycopodium, Phosphorus",
+      complementary: "Sulphur",
+      antidotes: "Coffee",
+      inimical: "Zincum",
+      followsWell: "Sepia",
       followedBy: "Bryonia, Sulphur, Pulsatilla",
     },
   },
@@ -82,10 +82,10 @@ export const SEED_REMEDIES: RemedyData[] = [
     rubrics:
       "ABDOMEN — FLATULENCE; GENERALS — TIME — 4–8 PM agg; KIDNEYS — PAIN — right; MIND — CONFIDENCE — want of self; URINE — SEDIMENT — red",
     relationships: {
-      complementary: "Chelidonium, Lachesis, Sulphur",
-      antidotes: "Aconite, Camphor, Pulsatilla",
+      complementary: "Iodum",
+      antidotes: "Camphor",
       inimical: "Coffea",
-      followsWell: "Calcarea, Carbo Veg, Lachesis, Sulphur",
+      followsWell: "Sulphur",
       followedBy: "Calcarea, Graphites, Kali Carb, Sulphur",
     },
   },
@@ -170,10 +170,10 @@ export const SEED_REMEDIES: RemedyData[] = [
     rubrics:
       "HEAD — PAIN — throbbing; FACE — REDNESS; GENERALS — HEAT — burning; MIND — DELIRIUM; GENERALS — ONSET — sudden",
     relationships: {
-      complementary: "Calcarea Carb",
-      antidotes: "Aconite, Camphor, Coffea, Hepar, Opium",
+      complementary: "Calcarea carbonica",
+      antidotes: "Camphor, Opium",
       inimical: "None significant",
-      followsWell: "Aconite, Calcarea, Chamomilla, Sulphur",
+      followsWell: "Calcarea",
       followedBy: "Calcarea, Hyoscyamus, Stramonium",
     },
   },
@@ -192,10 +192,10 @@ export const SEED_REMEDIES: RemedyData[] = [
     rubrics:
       "GENERALS — MOTION — agg; GENERALS — PRESSURE — ameliorates; GENERALS — DRYNESS — mucous membranes; CHEST — PAIN — stitching, inspiration; STOMACH — THIRST — large quantities",
     relationships: {
-      complementary: "Alumina, Rhus Tox",
-      antidotes: "Aconite, Chamomilla, Clematis, Colocynth, Ignatia",
+      complementary: "Rhus tox",
+      antidotes: "Aconite",
       inimical: "Calcarea",
-      followsWell: "Aconite, Belladonna, Nux Vomica",
+      followsWell: "Natrum mur",
       followedBy:
         "Alumina, Calc Carb, Kali Carb, Natrum Mur, Nux Vomica, Pulsatilla, Sulphur",
     },
@@ -238,9 +238,9 @@ export const SEED_REMEDIES: RemedyData[] = [
       "MIND — FEAR — death, of; GENERALS — ONSET — sudden; GENERALS — FEVER — dry heat; MIND — RESTLESSNESS — anxious; GENERALS — CAUSATION — fright",
     relationships: {
       complementary: "Sulphur, Coffea",
-      antidotes: "Camphor, Coffee, Vinegar, Wine",
+      antidotes: "Camphor, Coffee, Nux vomica",
       inimical: "None significant",
-      followsWell: "Belladonna, Bryonia, Spongia",
+      followsWell: "Bryonia",
       followedBy: "Belladonna, Bryonia, Sulphur",
     },
   },
@@ -259,10 +259,10 @@ export const SEED_REMEDIES: RemedyData[] = [
     rubrics:
       "FEMALE — BEARING DOWN; MIND — INDIFFERENCE — loved ones; FACE — DISCOLORATION — yellow, saddle; GENERALS — EXERCISE — vigorous, ameliorates; MIND — WEEPING — telling symptoms",
     relationships: {
-      complementary: "Nat Mur, Nux Vomica",
-      antidotes: "Aconite, Antimonium Crudum, Rhus Tox",
+      complementary: "Natrum mur",
+      antidotes: "Nux vomica",
       inimical: "Bryonia, Lachesis, Pulsatilla",
-      followsWell: "Natrum Mur, Pulsatilla, Phosphorus",
+      followsWell: "Pulsatilla",
       followedBy: "Natrum Mur, Sulphur",
     },
   },
@@ -281,10 +281,10 @@ export const SEED_REMEDIES: RemedyData[] = [
     rubrics:
       "GENERALS — PERSPIRATION — offensive; RECTUM — CONSTIPATION — recedes, stool; GENERALS — COLD — sensitive to; MIND — CONFIDENCE — lack of self; SKIN — SUPPURATION",
     relationships: {
-      complementary: "Pulsatilla, Thuja, Sanicula",
-      antidotes: "Camphor, Fluoricum Acidum, Hepar Sulph",
+      complementary: "Pulsatilla",
+      antidotes: "Fluoric acid",
       inimical: "Mercury (do not use before Mercury)",
-      followsWell: "Calcarea Carb, Calc Phos, Pulsatilla",
+      followsWell: "Sulphur",
       followedBy: "Calc Carb, Graphites, Hepar Sulph, Sulphur",
     },
   },
@@ -964,10 +964,10 @@ export const SEED_REMEDIES: RemedyData[] = [
     rubrics:
       "GENERALS — INJURIES — bruises; MIND — WELL — says he is; GENERALS — BED — hard, feels too; GENERALS — TOUCH — agg; GENERALS — OVEREXERTION — agg",
     relationships: {
-      complementary: "Aconite, Hypericum, Ipecac",
+      complementary: "Aconite",
       antidotes: "Camphor",
       inimical: "None significant",
-      followsWell: "Rhus tox, Belladonna",
+      followsWell: "Rhus tox",
       followedBy: "Sulphur, Rhus tox",
     },
   },

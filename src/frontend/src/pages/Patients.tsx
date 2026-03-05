@@ -42,7 +42,7 @@ import { useState } from "react";
 import type React from "react";
 import { toast } from "sonner";
 import type { Patient } from "../backend.d";
-import { useActor } from "../hooks/useActor";
+import { useActorDirect } from "../hooks/useActorDirect";
 import {
   useAllPatients,
   useDeletePatient,
@@ -71,7 +71,7 @@ const EMPTY_PATIENT_FORM: PatientFormState = {
 
 export function Patients() {
   const { data: patients, isLoading } = useAllPatients();
-  const { actor, isFetching: isActorFetching } = useActor();
+  const { actor, isFetching: isActorFetching } = useActorDirect();
   const registerMutation = useRegisterPatient();
   const deleteMutation = useDeletePatient();
 
@@ -137,15 +137,6 @@ export function Patients() {
         toast.error(
           "Still connecting to the server. Please wait a moment and try again.",
           { duration: 5000 },
-        );
-      } else if (
-        msg.toLowerCase().includes("not registered") ||
-        msg.toLowerCase().includes("unauthorized") ||
-        msg.toLowerCase().includes("access denied")
-      ) {
-        toast.error(
-          "Session not ready. Please refresh the page and try again.",
-          { duration: 6000 },
         );
       } else {
         toast.error("Failed to register patient. Please try again.");

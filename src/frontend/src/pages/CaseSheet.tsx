@@ -18,6 +18,7 @@ import {
   CheckCircle,
   ClipboardList,
   FileText,
+  FlaskConical,
   Info,
   Loader2,
   Pill,
@@ -48,6 +49,8 @@ import {
 import type { RemedySuggestion } from "../utils/caseAnalysis";
 import { analyseCase } from "../utils/caseAnalysis";
 import { formatDate, generateId, todayISO } from "../utils/helpers";
+import type { InvestigationSuggestion } from "../utils/investigationSuggestions";
+import { suggestInvestigations } from "../utils/investigationSuggestions";
 
 // ─── Remedy lookup utility ────────────────────────────────────────────────────
 
@@ -1510,6 +1513,372 @@ function CaseAnalysisPanel({
   );
 }
 
+// ─── Investigation Suggestions Panel ────────────────────────────────────────
+
+const CATEGORY_COLORS: Record<
+  InvestigationSuggestion["category"],
+  { bg: string; text: string; border: string; label: string }
+> = {
+  Haematology: {
+    bg: "0.45 0.14 25",
+    text: "0.45 0.14 25",
+    border: "0.45 0.14 25",
+    label: "Haematology",
+  },
+  Biochemistry: {
+    bg: "0.45 0.15 260",
+    text: "0.45 0.15 260",
+    border: "0.45 0.15 260",
+    label: "Biochemistry",
+  },
+  Imaging: {
+    bg: "0.45 0.14 150",
+    text: "0.45 0.14 150",
+    border: "0.45 0.14 150",
+    label: "Imaging",
+  },
+  "Urine/Stool": {
+    bg: "0.45 0.16 90",
+    text: "0.45 0.16 90",
+    border: "0.45 0.16 90",
+    label: "Urine / Stool",
+  },
+  Cardiology: {
+    bg: "0.50 0.20 25",
+    text: "0.50 0.20 25",
+    border: "0.50 0.20 25",
+    label: "Cardiology",
+  },
+  Specialty: {
+    bg: "0.45 0.15 280",
+    text: "0.45 0.15 280",
+    border: "0.45 0.15 280",
+    label: "Specialty",
+  },
+};
+
+const URGENCY_CONFIG: Record<
+  InvestigationSuggestion["urgency"],
+  { label: string; color: string; bg: string; border: string }
+> = {
+  urgent: {
+    label: "Urgent",
+    color: "0.55 0.22 25",
+    bg: "0.55 0.22 25",
+    border: "0.55 0.22 25",
+  },
+  routine: {
+    label: "Routine",
+    color: "0.45 0.15 260",
+    bg: "0.45 0.15 260",
+    border: "0.45 0.15 260",
+  },
+  if_needed: {
+    label: "If Needed",
+    color: "0.48 0.010 240",
+    bg: "0.48 0.010 240",
+    border: "0.48 0.010 240",
+  },
+};
+
+function InvestigationsPanel({
+  isOpen,
+  isLoading,
+  results,
+  onClose,
+}: {
+  isOpen: boolean;
+  isLoading: boolean;
+  results: InvestigationSuggestion[];
+  onClose: () => void;
+}) {
+  // Close on Escape key
+  useEffect(() => {
+    if (!isOpen) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") onClose();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isOpen, onClose]);
+
+  if (!isOpen) return null;
+
+  // Group results by category
+  const grouped = results.reduce(
+    (acc, item) => {
+      if (!acc[item.category]) acc[item.category] = [];
+      acc[item.category].push(item);
+      return acc;
+    },
+    {} as Record<
+      InvestigationSuggestion["category"],
+      InvestigationSuggestion[]
+    >,
+  );
+
+  const categoryOrder: InvestigationSuggestion["category"][] = [
+    "Haematology",
+    "Biochemistry",
+    "Urine/Stool",
+    "Cardiology",
+    "Imaging",
+    "Specialty",
+  ];
+  const orderedCategories = categoryOrder.filter((cat) => grouped[cat]);
+
+  return (
+    <>
+      {/* Backdrop */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        className="fixed inset-0 z-40"
+        style={{ background: "rgba(0,0,0,0.35)" }}
+        onClick={onClose}
+        aria-hidden="true"
+      />
+
+      {/* Side Panel */}
+      <motion.div
+        data-ocid="case.investigations.panel"
+        initial={{ x: "100%" }}
+        animate={{ x: 0 }}
+        exit={{ x: "100%" }}
+        transition={{ type: "spring", stiffness: 340, damping: 32 }}
+        className="fixed right-0 top-0 bottom-0 z-50 flex flex-col w-full max-w-sm"
+        style={{
+          background: "oklch(var(--card))",
+          borderLeft: "1px solid oklch(var(--border))",
+          boxShadow: "-8px 0 40px oklch(0.10 0.008 240 / 0.16)",
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Panel Header */}
+        <div
+          className="flex items-start justify-between px-4 py-4 border-b shrink-0"
+          style={{
+            background: "oklch(0.45 0.14 150 / 0.06)",
+            borderColor: "oklch(0.45 0.14 150 / 0.20)",
+          }}
+        >
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-0.5">
+              <div
+                className="w-7 h-7 rounded-lg flex items-center justify-center"
+                style={{ background: "oklch(0.45 0.14 150 / 0.12)" }}
+              >
+                <FlaskConical
+                  className="w-4 h-4"
+                  style={{ color: "oklch(0.45 0.14 150)" }}
+                />
+              </div>
+              <h2
+                className="font-display font-bold text-base"
+                style={{ color: "oklch(var(--foreground))" }}
+              >
+                Investigation Suggestions
+              </h2>
+            </div>
+            <p
+              className="text-xs leading-relaxed mt-1"
+              style={{ color: "oklch(var(--muted-foreground))" }}
+            >
+              Based on Harrison&apos;s &amp; Davidson&apos;s
+            </p>
+          </div>
+          <button
+            type="button"
+            data-ocid="case.investigations.close_button"
+            onClick={onClose}
+            aria-label="Close investigations panel"
+            className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ml-3 hover:opacity-75 transition-opacity"
+            style={{
+              background: "oklch(var(--muted))",
+              color: "oklch(var(--muted-foreground))",
+            }}
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* Scrollable Body */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          {/* Loading State */}
+          {isLoading && (
+            <div
+              data-ocid="case.investigations.loading_state"
+              className="flex flex-col items-center justify-center py-12 gap-3"
+            >
+              <div
+                className="w-12 h-12 rounded-full flex items-center justify-center"
+                style={{ background: "oklch(0.45 0.14 150 / 0.10)" }}
+              >
+                <FlaskConical
+                  className="w-6 h-6 animate-pulse"
+                  style={{ color: "oklch(0.45 0.14 150)" }}
+                />
+              </div>
+              <p
+                className="text-sm font-medium"
+                style={{ color: "oklch(var(--foreground))" }}
+              >
+                Analysing symptoms…
+              </p>
+              <p
+                className="text-xs text-center max-w-[180px]"
+                style={{ color: "oklch(var(--muted-foreground))" }}
+              >
+                Correlating with Harrison&apos;s &amp; Davidson&apos;s
+              </p>
+            </div>
+          )}
+
+          {/* Empty / Not Indicated State */}
+          {!isLoading && results.length === 0 && (
+            <div
+              data-ocid="case.investigations.empty_state"
+              className="flex flex-col items-center justify-center py-10 gap-3 text-center px-2"
+            >
+              <div
+                className="w-12 h-12 rounded-full flex items-center justify-center"
+                style={{ background: "oklch(var(--muted))" }}
+              >
+                <FlaskConical
+                  className="w-5 h-5"
+                  style={{ color: "oklch(var(--muted-foreground))" }}
+                />
+              </div>
+              <p
+                className="text-sm font-medium"
+                style={{ color: "oklch(var(--foreground))" }}
+              >
+                No investigations clinically indicated
+              </p>
+              <p
+                className="text-xs leading-relaxed"
+                style={{ color: "oklch(var(--muted-foreground))" }}
+              >
+                Symptoms recorded do not warrant specific investigations at this
+                time. Fill in Chief Complaint, Physical Generals, and
+                Examination Findings for more targeted suggestions.
+              </p>
+            </div>
+          )}
+
+          {/* Results grouped by category */}
+          {!isLoading &&
+            results.length > 0 &&
+            orderedCategories.map((category) => {
+              const catConfig = CATEGORY_COLORS[category];
+              const categoryItems = grouped[category];
+              return (
+                <div key={category} className="space-y-2">
+                  {/* Category Header */}
+                  <div
+                    className="flex items-center gap-2 px-2 py-1.5 rounded-lg"
+                    style={{
+                      background: `oklch(${catConfig.bg} / 0.08)`,
+                      border: `1px solid oklch(${catConfig.border} / 0.20)`,
+                    }}
+                  >
+                    <span
+                      className="w-2 h-2 rounded-full shrink-0"
+                      style={{ background: `oklch(${catConfig.bg})` }}
+                    />
+                    <span
+                      className="text-xs font-bold uppercase tracking-widest"
+                      style={{ color: `oklch(${catConfig.text})` }}
+                    >
+                      {catConfig.label}
+                    </span>
+                    <span
+                      className="text-xs ml-auto font-semibold"
+                      style={{ color: `oklch(${catConfig.text} / 0.70)` }}
+                    >
+                      {categoryItems.length}
+                    </span>
+                  </div>
+
+                  {/* Investigation cards */}
+                  {categoryItems.map((item, idx) => {
+                    const urgConf = URGENCY_CONFIG[item.urgency];
+                    return (
+                      <motion.div
+                        key={item.name}
+                        data-ocid={`case.investigations.item.${idx + 1}`}
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: idx * 0.04 }}
+                        className="rounded-xl border p-3 space-y-2"
+                        style={{
+                          background: "oklch(var(--card))",
+                          borderColor: "oklch(var(--border))",
+                        }}
+                      >
+                        {/* Name + Urgency Badge */}
+                        <div className="flex items-start justify-between gap-2">
+                          <p
+                            className="font-semibold text-sm leading-snug flex-1"
+                            style={{ color: "oklch(var(--foreground))" }}
+                          >
+                            {item.name}
+                          </p>
+                          <span
+                            className="text-xs px-2 py-0.5 rounded-full shrink-0 font-semibold"
+                            style={{
+                              background: `oklch(${urgConf.bg} / 0.10)`,
+                              color: `oklch(${urgConf.color})`,
+                              border: `1px solid oklch(${urgConf.border} / 0.25)`,
+                            }}
+                          >
+                            {urgConf.label}
+                          </span>
+                        </div>
+
+                        {/* Reasoning */}
+                        <p
+                          className="text-xs leading-relaxed"
+                          style={{ color: "oklch(var(--foreground) / 0.85)" }}
+                        >
+                          {item.reasoning}
+                        </p>
+
+                        {/* Reference */}
+                        <p
+                          className="text-xs italic leading-snug"
+                          style={{ color: "oklch(var(--muted-foreground))" }}
+                        >
+                          📚 {item.reference}
+                        </p>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              );
+            })}
+        </div>
+
+        {/* Footer */}
+        <div
+          className="px-4 py-3 border-t shrink-0"
+          style={{ borderColor: "oklch(var(--border))" }}
+        >
+          <p
+            className="text-xs italic text-center"
+            style={{ color: "oklch(var(--muted-foreground))" }}
+          >
+            Based on Harrison&apos;s Principles of Internal Medicine (20th Ed.)
+            &amp; Davidson&apos;s Principles and Practice of Medicine (23rd Ed.)
+          </p>
+        </div>
+      </motion.div>
+    </>
+  );
+}
+
 // ─── Prescription Table (inline) ──────────────────────────────────────────────
 
 function PrescriptionTable({
@@ -2273,6 +2642,13 @@ export function CaseSheet() {
   const [analysisPopupRemedy, setAnalysisPopupRemedy] =
     useState<RemedyData | null>(null);
 
+  // ── Investigation Suggestions state ──────────────────────────────────────
+  const [investigationPanelOpen, setInvestigationPanelOpen] = useState(false);
+  const [investigationResults, setInvestigationResults] = useState<
+    InvestigationSuggestion[]
+  >([]);
+  const [investigationLoading, setInvestigationLoading] = useState(false);
+
   useEffect(() => {
     if (caseData) {
       setHpi(caseData.hpi ?? "");
@@ -2341,6 +2717,30 @@ export function CaseSheet() {
       setAnalysisResults(results);
       setAnalysisLoading(false);
     }, 600);
+  }
+
+  function handleSuggestInvestigations() {
+    const input = {
+      chiefComplaint: JSON.stringify(complaintRows),
+      hpi,
+      pastHistory,
+      familyHistory,
+      mentalGenerals,
+      physicalGenerals,
+      personalHistory: JSON.stringify(personalHistory),
+      investigations,
+      miasmaticAnalysis,
+      totality,
+      repertorialFindings,
+    };
+    setInvestigationResults([]);
+    setInvestigationLoading(true);
+    setInvestigationPanelOpen(true);
+    setTimeout(() => {
+      const results = suggestInvestigations(input);
+      setInvestigationResults(results);
+      setInvestigationLoading(false);
+    }, 500);
   }
 
   function handlePrescribeFromAnalysis(remedyName: string) {
@@ -2534,6 +2934,20 @@ export function CaseSheet() {
             >
               <Brain className="w-3.5 h-3.5" />
               Analyse Case
+            </Button>
+            <Button
+              type="button"
+              data-ocid="case.investigations.open_modal_button"
+              onClick={handleSuggestInvestigations}
+              className="gap-1.5 h-9"
+              style={{
+                background: "oklch(0.40 0.14 175)",
+                color: "oklch(0.99 0 0)",
+                border: "none",
+              }}
+            >
+              <FlaskConical className="w-3.5 h-3.5" />
+              Suggest Investigations
             </Button>
             <Button
               data-ocid="case.save.primary_button"
@@ -3048,6 +3462,20 @@ Simillimum:`}
           Analyse Case
         </Button>
         <Button
+          type="button"
+          data-ocid="case.investigations_bottom.open_modal_button"
+          onClick={handleSuggestInvestigations}
+          className="gap-1.5"
+          style={{
+            background: "oklch(0.40 0.14 175)",
+            color: "oklch(0.99 0 0)",
+            border: "none",
+          }}
+        >
+          <FlaskConical className="w-4 h-4" />
+          Suggest Investigations
+        </Button>
+        <Button
           data-ocid="case.save_bottom.primary_button"
           onClick={handleSave}
           disabled={updateCase.isPending}
@@ -3078,6 +3506,18 @@ Simillimum:`}
             onViewDetails={(remedy) => {
               setAnalysisPopupRemedy(remedy);
             }}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Investigations Panel */}
+      <AnimatePresence>
+        {investigationPanelOpen && (
+          <InvestigationsPanel
+            isOpen={investigationPanelOpen}
+            isLoading={investigationLoading}
+            results={investigationResults}
+            onClose={() => setInvestigationPanelOpen(false)}
           />
         )}
       </AnimatePresence>

@@ -10,7 +10,6 @@ import { AppLayout } from "./components/AppLayout";
 import { LoginPage } from "./components/LoginPage";
 import { ThemeProvider } from "./context/ThemeContext";
 import { useInternetIdentity } from "./hooks/useInternetIdentity";
-import { useEnsureRegistered } from "./hooks/useQueries";
 import { Appointments } from "./pages/Appointments";
 import { CaseSheet } from "./pages/CaseSheet";
 import { Dashboard } from "./pages/Dashboard";
@@ -23,8 +22,6 @@ import { Settings } from "./pages/Settings";
 // Root layout with auth guard — ThemeProvider wraps everything
 function RootLayout() {
   const { identity, isInitializing } = useInternetIdentity();
-  // Proactively register the user on every login so all subsequent calls succeed
-  useEnsureRegistered();
 
   if (isInitializing) {
     return (
