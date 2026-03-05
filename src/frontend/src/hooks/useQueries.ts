@@ -13,20 +13,20 @@ import type {
 import { useActor } from "./useActor";
 
 /** Wait up to `maxWaitMs` for the actor to become available by polling.
- *  Also triggers a retry of the actor query if it remains null. */
+ *  Aggressively retries the actor query if it remains null or errored. */
 async function waitForActor(
   getActor: () => backendInterface | null,
   retryActorQuery: () => void,
-  maxWaitMs = 15000,
+  maxWaitMs = 20000,
 ): Promise<backendInterface> {
   const start = Date.now();
-  let retried = false;
+  // Immediately trigger a retry in case the actor query errored during setup
+  retryActorQuery();
   while (Date.now() - start < maxWaitMs) {
     const a = getActor();
     if (a) return a;
-    // After 2s of waiting, trigger a query retry in case it errored
-    if (!retried && Date.now() - start > 2000) {
-      retried = true;
+    // Periodically re-trigger the query retry to recover from error state
+    if ((Date.now() - start) % 4000 < 400) {
       retryActorQuery();
     }
     await new Promise((r) => setTimeout(r, 400));
@@ -121,21 +121,41 @@ async function safeMutate<T>(
  * Proactively registers the current user as soon as the actor is available.
  * This runs once per actor instance so by the time any data query fires,
  * the user is already registered on the backend.
+ *
+ * Uses a WeakRef to track the last registered actor instance instead of
+ * actor.toString() (which always returns "[object Object]" and causes the
+ * deduplication check to always match after the first actor, preventing
+ * re-registration on new logins).
  */
 export function useEnsureRegistered() {
   const { actor, isFetching } = useActor();
-  const registeredRef = useRef<string | null>(null);
+  const registeredActorRef = useRef<WeakRef<object> | null>(null);
 
   useEffect(() => {
     if (!actor || isFetching) return;
 
-    // Build a stable key for this actor instance
-    const actorKey = actor.toString();
-    if (registeredRef.current === actorKey) return;
+    // Check if we already registered this exact actor instance
+    const previousActor = registeredActorRef.current?.deref();
+    if (previousActor === actor) return;
 
-    registeredRef.current = actorKey;
-    // Fire-and-forget -- errors are silently swallowed inside autoRegister
-    void autoRegister(actor);
+    // Track this actor instance via WeakRef
+    registeredActorRef.current = new WeakRef(actor as object);
+
+    // Retry registration up to 3 times with 2s delays between attempts
+    const registerWithRetry = async () => {
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+          await autoRegister(actor);
+          return; // success
+        } catch {
+          if (attempt < 2) {
+            await new Promise((r) => setTimeout(r, 2000));
+          }
+        }
+      }
+    };
+
+    void registerWithRetry();
   }, [actor, isFetching]);
 }
 
@@ -201,6 +221,9 @@ export function useRegisterPatient() {
         () => actorRef.current,
         () => qc.invalidateQueries({ queryKey: ["actor"] }),
       );
+      // Always proactively register before creating patient to ensure the
+      // caller's principal is recognized, especially on first login.
+      await autoRegister(resolvedActor);
       await safeMutate(resolvedActor, () =>
         resolvedActor.createPatient(patient),
       );
