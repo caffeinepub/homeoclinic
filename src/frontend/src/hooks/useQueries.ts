@@ -10,25 +10,58 @@ import type {
   backendInterface,
 } from "../backend.d";
 import { useActorDirect } from "./useActorDirect";
+import { useInternetIdentity } from "./useInternetIdentity";
 
-/** Wait up to `maxWaitMs` for the actor to become available by polling. */
-async function waitForActor(
-  getActor: () => backendInterface | null,
-  retryActorQuery: () => void,
+const ACTOR_DIRECT_QUERY_KEY = "actor-direct";
+
+/**
+ * Resolve the actor from the React Query cache, triggering a refetch if needed.
+ * This reads directly from the cache so it doesn't depend on component re-renders.
+ */
+async function resolveActor(
+  qc: ReturnType<typeof useQueryClient>,
+  principalStr: string,
   maxWaitMs = 30000,
 ): Promise<backendInterface> {
+  // Fast path: actor already in cache
+  const cached = qc.getQueryData<backendInterface | null>([
+    ACTOR_DIRECT_QUERY_KEY,
+    principalStr,
+  ]);
+  if (cached) return cached;
+
+  // Trigger a refetch and await it
+  await qc.refetchQueries({
+    queryKey: [ACTOR_DIRECT_QUERY_KEY, principalStr],
+    exact: true,
+  });
+
+  const afterRefetch = qc.getQueryData<backendInterface | null>([
+    ACTOR_DIRECT_QUERY_KEY,
+    principalStr,
+  ]);
+  if (afterRefetch) return afterRefetch;
+
+  // Fallback: poll the cache for up to maxWaitMs
   const start = Date.now();
-  retryActorQuery();
   while (Date.now() - start < maxWaitMs) {
-    const a = getActor();
-    if (a) return a;
+    await new Promise((r) => setTimeout(r, 400));
+    // Retry refetch every 2 seconds
     if ((Date.now() - start) % 2000 < 500) {
-      retryActorQuery();
+      await qc.refetchQueries({
+        queryKey: [ACTOR_DIRECT_QUERY_KEY, principalStr],
+        exact: true,
+      });
     }
-    await new Promise((r) => setTimeout(r, 300));
+    const polled = qc.getQueryData<backendInterface | null>([
+      ACTOR_DIRECT_QUERY_KEY,
+      principalStr,
+    ]);
+    if (polled) return polled;
   }
+
   throw new Error(
-    "Unable to connect to the server. Please refresh the page and try again.",
+    "Unable to connect to the server. Please log in and try again.",
   );
 }
 
@@ -75,19 +108,13 @@ export function useSearchPatients(name: string) {
 }
 
 export function useRegisterPatient() {
-  const { actor } = useActorDirect();
-  const actorRef = { current: actor };
-  actorRef.current = actor;
+  const { identity } = useInternetIdentity();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (patient: Patient) => {
-      const resolvedActor = await waitForActor(
-        () => actorRef.current,
-        () => {
-          void qc.refetchQueries({ queryKey: ["actor-direct"] });
-        },
-      );
-      await resolvedActor.createPatient(patient);
+      const principalStr = identity?.getPrincipal().toString() ?? "anonymous";
+      const actor = await resolveActor(qc, principalStr);
+      await actor.createPatient(patient);
     },
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ["patients"] });
@@ -102,11 +129,12 @@ export function useRegisterPatient() {
 }
 
 export function useUpdatePatient() {
-  const { actor } = useActorDirect();
+  const { identity } = useInternetIdentity();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, patient }: { id: string; patient: Patient }) => {
-      if (!actor) throw new Error("Not ready");
+      const principalStr = identity?.getPrincipal().toString() ?? "anonymous";
+      const actor = await resolveActor(qc, principalStr);
       await actor.updatePatient(id, patient);
     },
     onSuccess: (_d, { id }) => {
@@ -117,11 +145,12 @@ export function useUpdatePatient() {
 }
 
 export function useDeletePatient() {
-  const { actor } = useActorDirect();
+  const { identity } = useInternetIdentity();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      if (!actor) throw new Error("Not ready");
+      const principalStr = identity?.getPrincipal().toString() ?? "anonymous";
+      const actor = await resolveActor(qc, principalStr);
       await actor.deletePatient(id);
     },
     onSuccess: () => {
@@ -157,11 +186,12 @@ export function useCase(id: string) {
 }
 
 export function useCreateCase() {
-  const { actor } = useActorDirect();
+  const { identity } = useInternetIdentity();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (caseData: CaseSheet) => {
-      if (!actor) throw new Error("Not ready");
+      const principalStr = identity?.getPrincipal().toString() ?? "anonymous";
+      const actor = await resolveActor(qc, principalStr);
       await actor.createCaseSheet(caseData);
     },
     onSuccess: () => {
@@ -171,14 +201,15 @@ export function useCreateCase() {
 }
 
 export function useUpdateCase() {
-  const { actor } = useActorDirect();
+  const { identity } = useInternetIdentity();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({
       id,
       caseData,
     }: { id: string; caseData: CaseSheet }) => {
-      if (!actor) throw new Error("Not ready");
+      const principalStr = identity?.getPrincipal().toString() ?? "anonymous";
+      const actor = await resolveActor(qc, principalStr);
       await actor.updateCaseSheet(id, caseData);
     },
     onSuccess: (_d, { id, caseData }) => {
@@ -191,11 +222,12 @@ export function useUpdateCase() {
 }
 
 export function useDeleteCase() {
-  const { actor } = useActorDirect();
+  const { identity } = useInternetIdentity();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      if (!actor) throw new Error("Not ready");
+      const principalStr = identity?.getPrincipal().toString() ?? "anonymous";
+      const actor = await resolveActor(qc, principalStr);
       await actor.deleteCaseSheet(id);
     },
     onSuccess: () => {
@@ -219,11 +251,12 @@ export function usePrescriptionsByCaseSheet(caseSheetId: string) {
 }
 
 export function useCreatePrescription() {
-  const { actor } = useActorDirect();
+  const { identity } = useInternetIdentity();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (prescription: Prescription) => {
-      if (!actor) throw new Error("Not ready");
+      const principalStr = identity?.getPrincipal().toString() ?? "anonymous";
+      const actor = await resolveActor(qc, principalStr);
       return actor.createPrescription(prescription);
     },
     onSuccess: (_d, prescription) => {
@@ -235,14 +268,15 @@ export function useCreatePrescription() {
 }
 
 export function useUpdatePrescription() {
-  const { actor } = useActorDirect();
+  const { identity } = useInternetIdentity();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({
       id,
       prescription,
     }: { id: string; prescription: Prescription }) => {
-      if (!actor) throw new Error("Not ready");
+      const principalStr = identity?.getPrincipal().toString() ?? "anonymous";
+      const actor = await resolveActor(qc, principalStr);
       return actor.updatePrescription(id, prescription);
     },
     onSuccess: (_d, { prescription }) => {
@@ -254,11 +288,12 @@ export function useUpdatePrescription() {
 }
 
 export function useDeletePrescription() {
-  const { actor } = useActorDirect();
+  const { identity } = useInternetIdentity();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id }: { id: string; caseSheetId: string }) => {
-      if (!actor) throw new Error("Not ready");
+      const principalStr = identity?.getPrincipal().toString() ?? "anonymous";
+      const actor = await resolveActor(qc, principalStr);
       return actor.deletePrescription(id);
     },
     onSuccess: (_d, { caseSheetId }) => {
@@ -296,11 +331,12 @@ export function useAppointmentsByDate(date: string) {
 }
 
 export function useAddAppointment() {
-  const { actor } = useActorDirect();
+  const { identity } = useInternetIdentity();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (appointment: Appointment) => {
-      if (!actor) throw new Error("Not ready");
+      const principalStr = identity?.getPrincipal().toString() ?? "anonymous";
+      const actor = await resolveActor(qc, principalStr);
       await actor.createAppointment(appointment);
     },
     onSuccess: () => {
@@ -310,14 +346,15 @@ export function useAddAppointment() {
 }
 
 export function useUpdateAppointment() {
-  const { actor } = useActorDirect();
+  const { identity } = useInternetIdentity();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({
       id,
       appointment,
     }: { id: string; appointment: Appointment }) => {
-      if (!actor) throw new Error("Not ready");
+      const principalStr = identity?.getPrincipal().toString() ?? "anonymous";
+      const actor = await resolveActor(qc, principalStr);
       await actor.updateAppointment(id, appointment);
     },
     onSuccess: () => {
@@ -327,11 +364,12 @@ export function useUpdateAppointment() {
 }
 
 export function useDeleteAppointment() {
-  const { actor } = useActorDirect();
+  const { identity } = useInternetIdentity();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      if (!actor) throw new Error("Not ready");
+      const principalStr = identity?.getPrincipal().toString() ?? "anonymous";
+      const actor = await resolveActor(qc, principalStr);
       await actor.deleteAppointment(id);
     },
     onSuccess: () => {
@@ -355,11 +393,12 @@ export function useFollowUpsByCaseSheet(caseSheetId: string) {
 }
 
 export function useCreateFollowUp() {
-  const { actor } = useActorDirect();
+  const { identity } = useInternetIdentity();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (followUp: FollowUp) => {
-      if (!actor) throw new Error("Not ready");
+      const principalStr = identity?.getPrincipal().toString() ?? "anonymous";
+      const actor = await resolveActor(qc, principalStr);
       return actor.createFollowUp(followUp);
     },
     onSuccess: (_d, followUp) => {
@@ -371,14 +410,15 @@ export function useCreateFollowUp() {
 }
 
 export function useUpdateFollowUp() {
-  const { actor } = useActorDirect();
+  const { identity } = useInternetIdentity();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({
       id,
       followUp,
     }: { id: string; followUp: FollowUp }) => {
-      if (!actor) throw new Error("Not ready");
+      const principalStr = identity?.getPrincipal().toString() ?? "anonymous";
+      const actor = await resolveActor(qc, principalStr);
       return actor.updateFollowUp(id, followUp);
     },
     onSuccess: (_d, { followUp }) => {
@@ -404,11 +444,12 @@ export function useAllMemos() {
 }
 
 export function useAddMemo() {
-  const { actor } = useActorDirect();
+  const { identity } = useInternetIdentity();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (memo: Memo) => {
-      if (!actor) throw new Error("Not ready");
+      const principalStr = identity?.getPrincipal().toString() ?? "anonymous";
+      const actor = await resolveActor(qc, principalStr);
       await actor.createMemo(memo);
     },
     onSuccess: () => {
@@ -418,11 +459,12 @@ export function useAddMemo() {
 }
 
 export function useUpdateMemo() {
-  const { actor } = useActorDirect();
+  const { identity } = useInternetIdentity();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async ({ id, memo }: { id: string; memo: Memo }) => {
-      if (!actor) throw new Error("Not ready");
+      const principalStr = identity?.getPrincipal().toString() ?? "anonymous";
+      const actor = await resolveActor(qc, principalStr);
       await actor.updateMemo(id, memo);
     },
     onSuccess: () => {
@@ -432,11 +474,12 @@ export function useUpdateMemo() {
 }
 
 export function useDeleteMemo() {
-  const { actor } = useActorDirect();
+  const { identity } = useInternetIdentity();
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (id: string) => {
-      if (!actor) throw new Error("Not ready");
+      const principalStr = identity?.getPrincipal().toString() ?? "anonymous";
+      const actor = await resolveActor(qc, principalStr);
       await actor.deleteMemo(id);
     },
     onSuccess: () => {

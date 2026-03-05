@@ -36,6 +36,7 @@ import {
   Trash2,
   UserPlus,
   Users,
+  Wifi,
 } from "lucide-react";
 import { motion } from "motion/react";
 import { useState } from "react";
@@ -97,18 +98,11 @@ export function Patients() {
     setForm((prev) => ({ ...prev, [field]: value }));
   }
 
+  const isActorReady = !!actor && !isActorFetching;
+
   async function handleRegister() {
     if (!form.name.trim() || !form.sex || !form.age) {
       toast.error("Name, age, and sex are required");
-      return;
-    }
-
-    // If actor isn't available yet, show a clear message instead of a cryptic error
-    if (!actor && isActorFetching) {
-      toast.error(
-        "Still connecting to the server. Please wait a moment and try again.",
-        { duration: 5000 },
-      );
       return;
     }
 
@@ -131,15 +125,15 @@ export function Patients() {
       const msg = err instanceof Error ? err.message : String(err);
       if (
         msg.toLowerCase().includes("unable to connect") ||
-        msg.toLowerCase().includes("not available") ||
+        msg.toLowerCase().includes("log in") ||
         msg.toLowerCase().includes("not ready")
       ) {
         toast.error(
-          "Still connecting to the server. Please wait a moment and try again.",
-          { duration: 5000 },
+          "Could not connect to the server. Please refresh the page and log in again.",
+          { duration: 6000 },
         );
       } else {
-        toast.error("Failed to register patient. Please try again.");
+        toast.error(`Failed to register patient: ${msg}`);
       }
     }
   }
@@ -156,6 +150,30 @@ export function Patients() {
 
   return (
     <div className="p-6 max-w-5xl mx-auto">
+      {/* Connecting banner — only shown while actor is not yet ready */}
+      {!isActorReady && (
+        <motion.div
+          data-ocid="patients.connecting.loading_state"
+          initial={{ opacity: 0, y: -6 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-2 mb-4 px-4 py-2.5 rounded-lg text-sm"
+          style={{
+            background: "oklch(var(--teal) / 0.1)",
+            borderLeft: "3px solid oklch(var(--teal))",
+            color: "oklch(var(--teal))",
+          }}
+        >
+          <Loader2 className="w-3.5 h-3.5 animate-spin flex-shrink-0" />
+          <span className="font-medium">Connecting to server…</span>
+          <span
+            className="text-xs ml-1"
+            style={{ color: "oklch(var(--muted-foreground))" }}
+          >
+            Patient registration will be ready in a moment.
+          </span>
+        </motion.div>
+      )}
+
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -12 }}
@@ -353,6 +371,15 @@ export function Patients() {
               </div>
             </div>
             <DialogFooter>
+              {!isActorReady && !registerMutation.isPending && (
+                <div
+                  className="flex items-center gap-1.5 text-xs mr-auto"
+                  style={{ color: "oklch(var(--muted-foreground))" }}
+                >
+                  <Wifi className="w-3 h-3 animate-pulse" />
+                  Connecting…
+                </div>
+              )}
               <Button
                 variant="outline"
                 data-ocid="patients.cancel_button"
@@ -376,7 +403,7 @@ export function Patients() {
                 {registerMutation.isPending ? (
                   <>
                     <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />{" "}
-                    Saving…
+                    {isActorReady ? "Saving…" : "Connecting…"}
                   </>
                 ) : (
                   "Register Patient"

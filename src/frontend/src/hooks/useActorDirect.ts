@@ -10,15 +10,17 @@ export function useActorDirect() {
   const { identity } = useInternetIdentity();
   const queryClient = useQueryClient();
 
-  const actorQuery = useQuery<backendInterface>({
-    queryKey: [ACTOR_DIRECT_QUERY_KEY, identity?.getPrincipal().toString()],
+  const principalStr = identity?.getPrincipal().toString() ?? "anonymous";
+
+  const actorQuery = useQuery<backendInterface | null>({
+    queryKey: [ACTOR_DIRECT_QUERY_KEY, principalStr],
     queryFn: async () => {
-      if (!identity) {
-        // Return anonymous actor if not authenticated
-        return await createActorWithConfig();
+      if (!identity || identity.getPrincipal().isAnonymous()) {
+        // Never create an anonymous actor — the backend rejects all anonymous calls
+        return null;
       }
 
-      // Create actor with the user's identity
+      // Create actor with the user's authenticated identity
       const actor = await createActorWithConfig({
         agentOptions: {
           identity,
@@ -27,11 +29,15 @@ export function useActorDirect() {
 
       return actor;
     },
-    staleTime: Number.POSITIVE_INFINITY,
+    // Keep actor cached as long as the principal stays the same, but allow
+    // explicit refetches to succeed (don't use Infinity which blocks refetches).
+    staleTime: 1000 * 60 * 60, // 1 hour
+    gcTime: 1000 * 60 * 60 * 2, // 2 hours
     enabled: true,
   });
 
-  // When the actor changes, invalidate and refetch all dependent queries
+  // When a real authenticated actor becomes available, invalidate and refetch
+  // all dependent queries so they pick up the new actor immediately
   useEffect(() => {
     if (actorQuery.data) {
       queryClient.invalidateQueries({
@@ -48,7 +54,7 @@ export function useActorDirect() {
   }, [actorQuery.data, queryClient]);
 
   return {
-    actor: actorQuery.data || null,
+    actor: actorQuery.data ?? null,
     isFetching: actorQuery.isFetching,
   };
 }
