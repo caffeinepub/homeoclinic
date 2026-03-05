@@ -7,12 +7,15 @@ import { motion } from "motion/react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useAccessControl } from "../context/AccessControlContext";
+import { useActorDirect } from "../hooks/useActorDirect";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
 
 export function RequestAccessPage() {
   const { submitRequest } = useAccessControl();
   const { identity, clear } = useInternetIdentity();
+  const { actor, isFetching: actorLoading } = useActorDirect();
   const principal = identity?.getPrincipal().toString() ?? "";
+  const backendReady = !!actor;
 
   const [name, setName] = useState("");
   const [qualification, setQualification] = useState("");
@@ -42,14 +45,31 @@ export function RequestAccessPage() {
       toast.error("Please enter your reason for access");
       return;
     }
+    if (!principal) {
+      toast.error("Not logged in. Please refresh and try again.");
+      return;
+    }
     setIsSubmitting(true);
-    try {
-      await submitRequest(name, qualification, reason);
-      setSubmitted(true);
-    } catch {
-      toast.error("Failed to submit request. Please try again.");
-    } finally {
-      setIsSubmitting(false);
+    let attempts = 0;
+    const maxAttempts = 5;
+    while (attempts < maxAttempts) {
+      try {
+        await submitRequest(name, qualification, reason);
+        setSubmitted(true);
+        setIsSubmitting(false);
+        return;
+      } catch (_err) {
+        attempts++;
+        if (attempts < maxAttempts) {
+          // Wait a moment for the actor to be ready, then retry
+          await new Promise((res) => setTimeout(res, 1500));
+        } else {
+          toast.error(
+            "Failed to submit request. Please check your connection and try again.",
+          );
+          setIsSubmitting(false);
+        }
+      }
     }
   }
 
@@ -177,17 +197,37 @@ export function RequestAccessPage() {
                   />
                 </div>
 
+                {!backendReady && !actorLoading && (
+                  <p
+                    className="text-xs text-center"
+                    style={{ color: "oklch(var(--muted-foreground))" }}
+                  >
+                    Connecting to server... Please wait before submitting.
+                  </p>
+                )}
+                {actorLoading && (
+                  <p
+                    className="text-xs text-center"
+                    style={{ color: "oklch(var(--muted-foreground))" }}
+                  >
+                    Connecting to server...
+                  </p>
+                )}
                 <Button
                   data-ocid="request_access.submit.button"
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || actorLoading}
                   className="w-full mt-2"
                   style={{
                     background: "oklch(var(--teal))",
                     color: "oklch(0.99 0 0)",
                   }}
                 >
-                  {isSubmitting ? "Submitting..." : "Submit Request"}
+                  {isSubmitting
+                    ? "Submitting..."
+                    : actorLoading
+                      ? "Connecting..."
+                      : "Submit Request"}
                 </Button>
               </form>
             </>

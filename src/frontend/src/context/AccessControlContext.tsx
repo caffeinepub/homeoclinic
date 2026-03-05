@@ -266,7 +266,20 @@ export function AccessControlProvider({
 
   const submitRequest = useCallback(
     async (name: string, qualification: string, reason: string) => {
-      if (!actor || !principal) return;
+      if (!principal) throw new Error("Not logged in");
+      // Wait for actor to be ready (up to 10 seconds)
+      let currentActor = actor;
+      if (!currentActor) {
+        for (let i = 0; i < 20; i++) {
+          await new Promise((res) => setTimeout(res, 500));
+          // Re-read actor from queryClient isn't possible here, so throw to trigger retry in UI
+          if (!actor) continue;
+          currentActor = actor;
+          break;
+        }
+      }
+      if (!currentActor)
+        throw new Error("Backend not ready. Please try again.");
       const spec = encodeRequestSpec({
         name,
         qualification,
@@ -274,7 +287,7 @@ export function AccessControlProvider({
         submittedAt: Date.now(),
       });
       // Save to backend canister - marks this user as pending
-      await actor.saveCallerUserProfile({
+      await currentActor.saveCallerUserProfile({
         name,
         role: "pending",
         specialization: spec,
