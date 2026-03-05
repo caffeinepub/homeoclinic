@@ -949,4 +949,334 @@ export const SEED_REMEDIES: RemedyData[] = [
       followedBy: "Sulphur, Colocynth",
     },
   },
+  {
+    name: "Arnica montana",
+    abbreviation: "Arn",
+    miasmaticClassification: "Traumatic (Psoric)",
+    keynotes:
+      "First remedy for all injuries, trauma, and mechanical shock. Bruised, sore, beaten feeling all over. Says nothing is wrong and refuses help. Fear of being touched — parts feel sore and beaten. Bed feels too hard. Restless — moves constantly to find a soft spot.",
+    materiaMedicaSummary:
+      "Arnica is the premier trauma remedy. Mechanical injuries of all kinds — falls, blows, contusions, overexertion, sprains. Prevents suppuration and septic conditions after injuries. Mind: indifference, says he is well when seriously ill, forgets what he was going to say, sudden shocks. Body: bruised, sore sensation; offensive breath and body odor; hemorrhages (dark, fluid blood). Concussion, apoplexy, epistaxis. Rheumatism from overuse. Post-surgical bruising. Aggravated: touch, motion, rest, wine, dampness. Ameliorated: lying down, cold applications to head.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Bed feels too hard — constantly moves to find a soft spot. 2) Says nothing is wrong even when very ill. 3) Fear of being touched due to soreness. 4) Offensive smell of breath and stool. 5) Dark, fluid hemorrhages. 6) Rheumatism from overexertion. 7) Excellent for concussion and head injuries.",
+    clinicalIndications:
+      "Trauma, sprains, bruises, contusions. Post-surgical recovery. Concussion. Hemorrhage (dark blood). Rheumatism from overuse. Epistaxis. Apoplexy. Sports injuries.",
+    rubrics:
+      "GENERALS — INJURIES — bruises; MIND — WELL — says he is; GENERALS — BED — hard, feels too; GENERALS — TOUCH — agg; GENERALS — OVEREXERTION — agg",
+    relationships: {
+      complementary: "Aconite, Hypericum, Ipecac",
+      antidotes: "Camphor",
+      inimical: "None significant",
+      followsWell: "Rhus tox, Belladonna",
+      followedBy: "Sulphur, Rhus tox",
+    },
+  },
+  {
+    name: "Baptisia tinctoria",
+    abbreviation: "Bapt",
+    miasmaticClassification: "Septic (Syphilitic)",
+    keynotes:
+      "Septic states, typhoid-like fever with profound prostration. Offensive discharges — offensive breath, stool, sweat. Mental confusion — feels body is scattered in pieces. Stupid, besotted expression. Rapid prostration out of proportion to illness.",
+    materiaMedicaSummary:
+      "Baptisia (wild indigo) covers putrid, septic, typhoid conditions. Rapid onset of high fever with profound toxaemia. Face: dusky, besotted look, swollen. Mind: confusion — cannot tell where his limbs are; feels body scattered. Tongue: brown coating, dry, cracked in centre. Throat: dark red, swollen; can swallow liquids only. Extreme muscular soreness. Offensive odor to everything. Sleeps in mid-sentence. Used in influenza with great prostration and offensive secretions. Aggravated: humidity, fog, indoor air. Ameliorated: cool open air, rest.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Besotted, drunken-looking face. 2) Feels body is in pieces — scattered. 3) Profound prostration with high temperature. 4) Extremely offensive discharges. 5) Can only swallow liquids. 6) Sleeps while answering questions. 7) Dark red throat without much pain.",
+    clinicalIndications:
+      "Typhoid fever. Septicemia. Influenza with prostration. Putrid sore throat. Gastric fever. Offensive ulcers. Bed sores.",
+    rubrics:
+      "MIND — CONFUSION — identity; GENERALS — OFFENSIVENESS; THROAT — SWALLOWING — solids difficult; GENERALS — PROSTRATION; FEVER — TYPHOID",
+    relationships: {
+      complementary: "Gelsemium, Arsenicum",
+      antidotes: "Nux vomica",
+      inimical: "None significant",
+      followsWell: "Arsenicum, Belladonna",
+      followedBy: "Sulphur, Arsenicum",
+    },
+  },
+  {
+    name: "Colocynthis",
+    abbreviation: "Coloc",
+    miasmaticClassification: "Psoric",
+    keynotes:
+      "Severe colicky abdominal pains better from hard pressure and bending double. Ailments from anger and indignation (similar to Staphysagria but pain dominant). Agonizing, cutting, griping pains forcing patient to bend double and press on abdomen. Sudden onset of cramps after eating fruit or when angry.",
+    materiaMedicaSummary:
+      "Colocynthis (bitter cucumber) is the great colic remedy. Violent abdominal cramps — griping, cutting, agonizing — relieved by bending double and firm pressure. Diarrhea: watery, offensive, after anger or eating fruit. Neuralgic pains in sciatic nerve — left-sided, cramping. Ovarian cysts — left ovary with colicky pains better pressure. Headache pressing, heavy, better lying quietly. Vomiting from extreme pain. Aggravated: anger, indignation, eating, after grief. Ameliorated: hard pressure, bending double, warmth.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Bending double and pressing hard on abdomen relieves. 2) Ailments following anger or indignation with pain. 3) Agonizing abdominal colic — screams. 4) Left-sided sciatica cramping, better pressure. 5) Watery diarrhea after fruit or anger. 6) Left ovarian cyst pain better pressure.",
+    clinicalIndications:
+      "Intestinal colic. Irritable bowel syndrome. Left-sided sciatica. Ovarian cyst (left). Diarrhea from anger. Neuralgic headaches. Renal colic.",
+    rubrics:
+      "ABDOMEN — PAIN — pressure, better; ABDOMEN — PAIN — bending double, better; MIND — AILMENTS FROM — anger; EXTREMITIES — SCIATIC NERVE — left",
+    relationships: {
+      complementary: "Mag Phos, Causticum",
+      antidotes: "Coffea, Chamomilla",
+      inimical: "None significant",
+      followsWell: "Chamomilla, Merc sol",
+      followedBy: "Sulphur, Mag Phos",
+    },
+  },
+  {
+    name: "Drosera rotundifolia",
+    abbreviation: "Dros",
+    miasmaticClassification: "Tubercular",
+    keynotes:
+      "Spasmodic, whooping cough — paroxysms so violent the patient turns blue and vomits. Cough after midnight with barking, deep hollow sound. Tickling larynx. Holds chest during cough. Suspicious mind. Used for tubercular tendency and bone destruction.",
+    materiaMedicaSummary:
+      "Drosera (sundew) is Hahnemann's specific for whooping cough and spasmodic cough. Cough: paroxysmal, suffocative; barking, deep hollow; worse after midnight, lying down, warmth; patient holds sides during cough; vomits after coughing; turns blue from violence of attack. Laryngeal phthisis. Growing pains in bones. Tuberculosis with night sweats. Suspicious, restless, doesn't want to be left alone. Aggravated: after midnight, lying down, warmth, singing, laughing. Ameliorated: rest, sitting up, open air.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Paroxysmal whooping cough worse after midnight. 2) Turns blue during coughing spells. 3) Vomiting after cough. 4) Holds sides during cough — sore. 5) Tuberculosis with night sweats. 6) Bone destruction, growing pains. 7) Suspicious disposition.",
+    clinicalIndications:
+      "Whooping cough. Spasmodic cough. Laryngeal phthisis. Tuberculosis. Growing pains in children. Night cough. Bronchitis.",
+    rubrics:
+      "COUGH — WHOOPING; COUGH — NIGHT — midnight, after; COUGH — PAROXYSMAL; LARYNX — PHTHISIS; GENERALS — TUBERCULAR DIATHESIS",
+    relationships: {
+      complementary: "Tuberculinum, Nux Vomica",
+      antidotes: "Camphor",
+      inimical: "None significant",
+      followsWell: "Belladonna, Sulphur",
+      followedBy: "Sulphur, Calcarea",
+    },
+  },
+  {
+    name: "Eupatorium perfoliatum",
+    abbreviation: "Eup-per",
+    miasmaticClassification: "Psoric",
+    keynotes:
+      "Bone pains — deep, aching, as if bones would break (breakbone fever). Thirst for cold water before and during chill. Bilious vomiting during fever. Restless — must move despite pain. Influenza with intense bone-breaking pain.",
+    materiaMedicaSummary:
+      "Eupatorium perfoliatum (boneset) covers influenza and malarial fevers with intense, deep bone pains. Fever: chill begins 7–9 AM, preceded by thirst; during chill, thirst for large quantities of cold water; fever with intense bone pains; sweating ameliorates except head. Vomiting: bilious, with intense nausea; cannot bear smell of food; relieved after vomiting of bile. Headache: occipital, throbbing. Soreness of eyeballs. Cough: sore, painful chest; must hold chest during cough. Aggravated: morning 7–9 AM, motion, cold air. Ameliorated: sweating (except head), lying on face.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Bone pains during fever as if bones breaking. 2) Thirst before chill — distinctive keynote. 3) Bilious vomiting with nausea during fever. 4) Restless despite pain. 5) Soreness of eyeballs. 6) Chill starts 7–9 AM. 7) Holds chest during cough.",
+    clinicalIndications:
+      "Influenza. Malaria with bone pains. Dengue fever. Bilious fever. Hepatitis. Coughs with bone pain. Rheumatic conditions.",
+    rubrics:
+      "GENERALS — BONES — pain, as if broken; CHILL — THIRST — chill, during; STOMACH — NAUSEA — violent; FEVER — CHILL — 7–9 AM",
+    relationships: {
+      complementary: "Bryonia, Natrum Mur",
+      antidotes: "Arsenicum",
+      inimical: "None significant",
+      followsWell: "Aconite, Bryonia",
+      followedBy: "Sulphur, Bryonia",
+    },
+  },
+  {
+    name: "Ferrum phosphoricum",
+    abbreviation: "Ferr-p",
+    miasmaticClassification: "Psoric",
+    keynotes:
+      "First stage of all inflammatory conditions before exudation — the ideal remedy for early fever and congestion. Mild fever with slow onset. Anemia with redness of face. Hemorrhages (bright red). Cough: hard, short, dry, worse 4–6 AM.",
+    materiaMedicaSummary:
+      "Ferrum phosphoricum (iron phosphate) is the Schuessler tissue salt for early inflammation. Suitable for all acute conditions at the very onset before pathological changes are established. Fever: slow onset, no intensity; patient wants to lie down; flushed, hot face. Anemia: face red, hot, flushed; pallor alternating with flushing. Respiratory: first stage of pneumonia, bronchitis, croup; cough hard, short; worse 4–6 AM. Hemorrhages: epistaxis (bright red blood). Ears: earache with intense local congestion. Aggravated: night, 4–6 AM, cold, motion. Ameliorated: cold applications, rest.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) First stage remedy before exudation. 2) Low-grade fever, no marked symptoms. 3) Bright red hemorrhages. 4) Flushed face alternating with pallor. 5) Cough 4–6 AM — very reliable keynote. 6) Anemia with hot flushes. 7) Onset of inflammatory conditions.",
+    clinicalIndications:
+      "Fevers (early stage). First stage pneumonia/bronchitis. Anemia. Epistaxis. Earache (otitis media early). Croup (early stage). Vomiting of undigested food.",
+    rubrics:
+      "FEVER — BEGINNING of illness; COUGH — MORNING — 4–6 AM; NOSE — EPISTAXIS — bright red; GENERALS — ANEMIA; GENERALS — INFLAMMATORY CONDITIONS — early",
+    relationships: {
+      complementary: "Calc Phos, Kali Mur",
+      antidotes: "Nux Vomica",
+      inimical: "None significant",
+      followsWell: "Aconite, Belladonna",
+      followedBy: "Sulphur, Kali Mur",
+    },
+  },
+  {
+    name: "Hamamelis virginiana",
+    abbreviation: "Ham",
+    miasmaticClassification: "Venous (Sycotic)",
+    keynotes:
+      "Venous stasis and passive hemorrhages — dark, non-coagulating blood. Varicose veins — bruised, sore, tired feeling. Hemorrhoids with bleeding and great soreness. Bruised, sore feeling everywhere without trauma. Depression and sadness.",
+    materiaMedicaSummary:
+      "Hamamelis (witch hazel) acts primarily on the venous circulation. All complaints arise from venous engorgement and passive hemorrhage. Hemorrhages: dark, fluid, non-coagulable — from any orifice. Hemorrhoids: bleeding, burning, raw soreness; hemorrhoids during pregnancy. Varicose veins: swollen, bruised, painful; leg ulcers. Nose: epistaxis, passive. Eyes: sub-conjunctival hemorrhage. Ovaries: neuralgia. Testicles: orchitis with bruised soreness. Aggravated: motion, warm moist air, warm bath, pressure. Ameliorated: rest.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Venous hemorrhage — dark, passive. 2) Varicose veins with bruised soreness. 3) Bleeding hemorrhoids — main indication. 4) Bruised sore feeling without injury. 5) Sub-conjunctival hemorrhage. 6) Depression with passive bleeding tendency. 7) Hemorrhage from any mucous membrane.",
+    clinicalIndications:
+      "Hemorrhoids (bleeding). Varicose veins. Passive hemorrhages. Epistaxis. Sub-conjunctival hemorrhage. Phlebitis. Orchitis. Venous ulcers.",
+    rubrics:
+      "RECTUM — HEMORRHOIDS — bleeding; GENERALS — HEMORRHAGE — dark; EXTREMITIES — VARICOSE VEINS; GENERALS — VENOUS CIRCULATION — weak; GENERALS — BRUISED — feeling",
+    relationships: {
+      complementary: "Arnica, Pulsatilla",
+      antidotes: "Arnica",
+      inimical: "None significant",
+      followsWell: "Pulsatilla, Nux Vomica",
+      followedBy: "Sulphur, Lycopodium",
+    },
+  },
+  {
+    name: "Ipecacuanha",
+    abbreviation: "Ipec",
+    miasmaticClassification: "Psoric",
+    keynotes:
+      "Persistent, constant nausea not relieved by vomiting — the hallmark. Clean, moist tongue (not coated). Hemorrhages — bright red, profuse, gushing. Spasmodic cough ending in nausea/gagging. Asthma: wheezing, constriction, nausea.",
+    materiaMedicaSummary:
+      "Ipecacuanha (ipecac root) is characterized by persistent nausea with clean tongue. Stomach: extreme nausea with copious saliva; nausea not relieved by vomiting; aversion to food; no thirst. Respiratory: spasmodic cough; child stiffens and becomes blue; rattling mucus; nausea with cough. Hemorrhages: bright, profuse, gushing hemorrhages — from lungs, uterus, bowels; blood is bright red. Malaria: apyrexia without thirst; nausea dominant feature. Asthma: sudden, with nausea and rattling. Aggravated: warm, moist air, lying down, eating, motion. Ameliorated: open air, rest, pressure.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Nausea persistent — the overriding symptom. 2) Clean, moist, clear tongue despite nausea. 3) Bright red profuse hemorrhage — distinctive. 4) Cough with gagging and vomiting. 5) Asthma with nausea. 6) No thirst at all. 7) Dysentery with constant nausea.",
+    clinicalIndications:
+      "Nausea and vomiting. Asthma. Hemorrhages (bright red). Whooping cough. Dysentery. Morning sickness. Malaria. Post-partum hemorrhage.",
+    rubrics:
+      "STOMACH — NAUSEA — persistent; TONGUE — CLEAN; GENERALS — HEMORRHAGE — bright red; COUGH — NAUSEA — during; GENERALS — THIRST — thirstlessness",
+    relationships: {
+      complementary: "Ant Tart, Arsenicum",
+      antidotes: "Arsenicum, Nux Vomica",
+      inimical: "None significant",
+      followsWell: "Aconite, Belladonna",
+      followedBy: "Sulphur, Ant Tart",
+    },
+  },
+  {
+    name: "Ledum palustre",
+    abbreviation: "Led",
+    miasmaticClassification: "Sycotic",
+    keynotes:
+      "Puncture wounds — first remedy for insect stings, nail wounds, animal bites. Affected parts are cold but better from cold applications (opposite to most remedies). Ascending rheumatism — starts in feet, goes upward. Black eye (orbital ecchymosis).",
+    materiaMedicaSummary:
+      "Ledum (marsh tea) is the remedy for puncture wounds and insect bites. Wounds: deep punctures from nails, thorns, bites; parts become cold, numb, discolored but better cold applications. Rheumatism: ascending from feet upward; joints swollen, hot, pale or livid; worse warmth. Gout: feet and small joints. Eye: ecchymosis after injuries; black eye. Prevents tetanus and suppuration after puncture wounds. Animal bites including tick bites (Lyme disease precursor). Aggravated: warmth, motion, heat of bed. Ameliorated: cold, cold bathing.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Puncture wounds — nails, insect stings, bites. 2) Parts feel cold but are better from cold. 3) Ascending rheumatism — feet upward. 4) Black eye after trauma. 5) Prevents tetanus. 6) Gout in small joints. 7) Better cold applications — distinctive.",
+    clinicalIndications:
+      "Puncture wounds. Insect stings. Animal bites. Black eye. Ascending rheumatism. Gout (small joints). Tetanus prevention. Tick bites.",
+    rubrics:
+      "GENERALS — INJURIES — puncture wounds; EXTREMITIES — RHEUMATISM — ascending; EYE — ECCHYMOSIS; GENERALS — COLD — applications, better; GENERALS — BITES — insect",
+    relationships: {
+      complementary: "Arnica, Hypericum",
+      antidotes: "Camphor",
+      inimical: "None significant",
+      followsWell: "Hypericum, Arnica",
+      followedBy: "Sulphur, Rhus tox",
+    },
+  },
+  {
+    name: "Phytolacca decandra",
+    abbreviation: "Phyt",
+    miasmaticClassification: "Syphilitic",
+    keynotes:
+      "Throat complaints — dark red, rough, burning; pains radiate to ears on swallowing. Breast: glandular swelling, mastitis, cracked nipples. Glandular enlargements. Rheumatic pains, shifting, electric, shooting through body.",
+    materiaMedicaSummary:
+      "Phytolacca (poke root) acts powerfully on fibrous and glandular tissues. Throat: dark red or purplish, rough, burning; pains shooting to ears; tonsils swollen; diphtheria. Breasts: mastitis with lump, hard, painful; nipples cracked and very sore; milk stringy; used in weaning. Glands: enlarged parotid, cervical, axillary glands; tonsils; breasts. Rheumatism: pains fly like electric shocks; worse cold damp; worse motion; shooting pains. Gonorrheal rheumatism. Aggravated: cold damp, motion, night. Ameliorated: warmth, rest, dry weather.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Sore throat dark red with ear radiation on swallowing. 2) Mastitis — hardness of breast with pain. 3) Glandular enlargements. 4) Shooting, electric rheumatic pains. 5) Cracked sore nipples. 6) Diphtheria with dark membranes. 7) Better warmth and rest.",
+    clinicalIndications:
+      "Mastitis. Sore throat (diphtheria, tonsillitis). Glandular swellings. Gonorrheal rheumatism. Sciatica. Mumps. Breast tumors. Cracked nipples.",
+    rubrics:
+      "THROAT — PAIN — ear extending to, swallowing on; FEMALE — BREAST — mastitis; GLANDS — ENLARGED; EXTREMITIES — PAIN — electric, like shocks; THROAT — DIPHTHERIA",
+    relationships: {
+      complementary: "Belladonna, Silica",
+      antidotes: "Chamomilla",
+      inimical: "None significant",
+      followsWell: "Merc sol, Belladonna",
+      followedBy: "Sulphur, Silica",
+    },
+  },
+  {
+    name: "Podophyllum peltatum",
+    abbreviation: "Pod",
+    miasmaticClassification: "Psoric",
+    keynotes:
+      "Profuse, gushing, watery or greenish diarrhea — morning diarrhea (5–10 AM) with offensive odor. Liver complaints — right lobe with desire to press liver. Prolapse of rectum during stool. Alternation of diarrhea with headache or constipation.",
+    materiaMedicaSummary:
+      "Podophyllum (May apple) acts primarily on the liver and bowels. Diarrhea: profuse, watery, gushing, offensive; morning 5–10 AM; child screams and rolls head before stool; jelly-like mucus; worse teething. Liver: enlarged right lobe; pain in right hypochondrium; desires to press and rub liver; jaundice; bilious headache. Rectum: prolapse; hemorrhoids. Stool: green, watery, grass-green, offensive; followed by weakness and nausea. Colic before stool. Alternation of head symptoms and bowel symptoms. Aggravated: morning, early AM, hot weather, eating, dentition. Ameliorated: lying on abdomen, rubbing liver.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Morning diarrhea gushing and profuse. 2) Liver complaints — desires to press right side. 3) Prolapse of rectum during stool. 4) Alternation of symptoms — head and bowels. 5) Green, offensive stool in teething children. 6) Empty, gone feeling in stomach. 7) Rolls head during teething.",
+    clinicalIndications:
+      "Summer diarrhea. Hepatitis. Cholera infantum. Teething diarrhea. Prolapse ani. Cholecystitis. Morning diarrhea. Jaundice.",
+    rubrics:
+      "RECTUM — DIARRHEA — morning; STOOL — GUSHING; ABDOMEN — LIVER — pressing on, desire; RECTUM — PROLAPSE — stool, during; STOOL — OFFENSIVE",
+    relationships: {
+      complementary: "Nat Sulph, Sulphur",
+      antidotes: "Camphor, Nux Vomica",
+      inimical: "None significant",
+      followsWell: "Nux Vomica, Ipecac",
+      followedBy: "Sulphur, Nat Sulph",
+    },
+  },
+  {
+    name: "Ruta graveolens",
+    abbreviation: "Ruta",
+    miasmaticClassification: "Sycotic",
+    keynotes:
+      "Injury to tendons, ligaments, and periosteum. Eye strain — aching eyes from overuse, fine work, reading. Wrists and ankles from sprains. Ganglion. Bruised bones (periosteum affected). Follows Arnica when bones feel bruised.",
+    materiaMedicaSummary:
+      "Ruta (rue) follows Arnica for injuries involving periosteum, tendons, and cartilage. Bruised feeling in bones and joints. Eyes: aching, burning, strained; blurred vision from overuse; useful for computer eye strain. Tendons: tendinitis, ganglia on wrists. Ankle: sprains with weakness. Periosteum: bruised, sore feelings. Spine: lumbago from overwork; bruised back. Rectum: rectal prolapse after straining. Constipation. Aggravated: lying, cold, wet, touch. Ameliorated: warmth, motion (slight).",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Periosteum and tendon injuries — bones feel bruised. 2) Eye strain from overuse — distinctive. 3) Wrist ganglion. 4) Ankle sprains with weakness. 5) Lumbago from overwork. 6) Prolapse rectum from straining. 7) Follows Arnica for deeper tissue injury.",
+    clinicalIndications:
+      "Tendon injuries. Eye strain. Ganglion wrist. Ankle sprains. Lumbago. Periostitis. Rectal prolapse. Constipation. Carpal tunnel syndrome.",
+    rubrics:
+      "EXTREMITIES — TENDONS — injuries; EYE — STRAIN — from; GENERALS — INJURIES — periosteum; BACK — LUMBAGO — overexertion; WRIST — GANGLION",
+    relationships: {
+      complementary: "Arnica, Calc Phos",
+      antidotes: "Camphor",
+      inimical: "None significant",
+      followsWell: "Rhus tox, Arnica",
+      followedBy: "Sulphur, Calc Phos",
+    },
+  },
+  {
+    name: "Sabadilla",
+    abbreviation: "Sab",
+    miasmaticClassification: "Psoric",
+    keynotes:
+      "Hay fever — violent sneezing with profuse watery nasal discharge and lachrymation. Chilly patient worse cold air, better warm drinks. Imaginary illness — hypochondriacal, thinks he has terrible diseases. Threadworm.",
+    materiaMedicaSummary:
+      "Sabadilla (cevadilla) is a leading remedy for hay fever and nasal allergies. Nose: violent, prolonged sneezing; watery nasal discharge; itching and tingling in nose; worse cold air, strong odors, flowers. Eyes: profuse watery lachrymation with sneezing. Mind: hypochondriacal — imagines he has terrible diseases, cancer; fixed ideas about health. Throat: stitching pains better swallowing. Worms: threadworms with itching anus. Chilly — chilliness from crown to toes. Aggravated: cold, cold air, odors (flowers, garlic). Ameliorated: warm food and drinks, warmth.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Hay fever with violent sneezing. 2) Imaginary illness — hypochondriacal delusions. 3) Watery discharge from nose and eyes. 4) Chilly — worse cold air. 5) Better warm drinks and food. 6) Threadworms with itching. 7) Stitching throat pains relieved by swallowing warm liquids.",
+    clinicalIndications:
+      "Hay fever. Allergic rhinitis. Threadworms. Hypochondriasis. Colds from cold air. Sneezing paroxysms. Lachrymation with sneezing.",
+    rubrics:
+      "NOSE — SNEEZING — violent; MIND — IMAGINATIONS — disease, of having; GENERALS — CHILLINESS; GENERALS — WARM — things, desire for; NOSE — HAY FEVER",
+    relationships: {
+      complementary: "Allium Cepa, Arsenicum",
+      antidotes: "Camphor",
+      inimical: "None significant",
+      followsWell: "Arsenicum, Wyethia",
+      followedBy: "Sulphur, Lycopodium",
+    },
+  },
+  {
+    name: "Sanguinaria canadensis",
+    abbreviation: "Sang",
+    miasmaticClassification: "Psoric",
+    keynotes:
+      "Right-sided migraine — pain starts occiput, goes over vertex, settles over right eye. Burning palms and soles. Flushes of heat in menopause. Circumscribed redness of cheeks. Periodic headaches worse sun and light.",
+    materiaMedicaSummary:
+      "Sanguinaria (bloodroot) has a prominent right-sided affinity. Headache: periodic, sick headache; starts in nape, goes over right side to settle above right eye; worse sun, motion, light; better dark room, lying still, sleep, vomiting. Menopause: flushes of heat, burning, circumscribed red cheeks. Chest: pneumonia right side; burning in chest. Throat: burning, rawness. Shoulder: right-sided rheumatism — cannot raise arm (deltoid). Polypi — nasal. Aggravated: right side, sun, odors, motion. Ameliorated: sleep, vomiting, dark room.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Right-sided periodic sick headache. 2) Burning palms and soles. 3) Circumscribed red cheeks. 4) Flushes of heat — menopausal. 5) Right deltoid rheumatism. 6) Nasal polypi. 7) Headache better after vomiting.",
+    clinicalIndications:
+      "Right-sided migraine. Menopause (hot flushes). Shoulder rheumatism (right deltoid). Nasal polypi. Right pneumonia. Burning dysmenorrhea. Pharyngitis.",
+    rubrics:
+      "HEAD — PAIN — right side; HEAD — PAIN — occiput, extending to; GENERALS — HEAT — flushes of; EXTREMITIES — SHOULDER — right; NOSE — POLYPI",
+    relationships: {
+      complementary: "Lachesis, Sulphur",
+      antidotes: "Nux Vomica",
+      inimical: "None significant",
+      followsWell: "Belladonna, Nat Mur",
+      followedBy: "Sulphur, Lachesis",
+    },
+  },
+  {
+    name: "Tarentula hispanica",
+    abbreviation: "Tarent",
+    miasmaticClassification: "Sycotic",
+    keynotes:
+      "Extreme restlessness — constant motion of hands and feet. Better from music (must dance). Hysterical — sudden onset of severe symptoms. Destructive, manipulative, cunning behavior. Rapid movement. Better rubbing affected part on rough surfaces.",
+    materiaMedicaSummary:
+      "Tarentula hispanica (Spanish spider) presents the most extreme form of restlessness and hypersensitivity. Mind: extreme restlessness; must move constantly; worse at rest; sudden attacks of crying/laughing; manipulative and cunning; better from bright colors, music, dancing. Nervous system: chorea, epilepsy, hysteria; involuntary movements. Cardiac: palpitations, angina with anguish. Skin: extreme sensitiveness; erysipelas; carbuncles. Physical manifestations of hysteria. Aggravated: seeing others in trouble, touch, motion, noise. Ameliorated: music, dancing, bright colors, rubbing on hard surface.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Better from music — must dance. 2) Extreme restlessness — cannot be still. 3) Cunning, manipulative personality. 4) Sudden changes in behavior. 5) Involuntary movements — chorea. 6) Better rubbing against hard rough surfaces. 7) Hysterical attacks.",
+    clinicalIndications:
+      "Hysteria. Chorea. Extreme restlessness. Angina. Carbuncles. Erysipelas. Attention deficit hyperactivity. Manipulative personality disorders. Palpitations.",
+    rubrics:
+      "MIND — RESTLESSNESS — extreme; GENERALS — MUSIC — ameliorates; MIND — DANCING; MIND — CUNNING; EXTREMITIES — MOTION — constant",
+    relationships: {
+      complementary: "Zincum, Lycopodium",
+      antidotes: "Camphor",
+      inimical: "None significant",
+      followsWell: "Ignatia, Belladonna",
+      followedBy: "Sulphur, Lycopodium",
+    },
+  },
 ];
