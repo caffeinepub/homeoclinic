@@ -2,11 +2,23 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { CheckCircle2, Copy, Stethoscope } from "lucide-react";
-import { motion } from "motion/react";
+import {
+  CheckCircle2,
+  Copy,
+  Eye,
+  EyeOff,
+  ShieldCheck,
+  Stethoscope,
+  X,
+} from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { useAccessControl } from "../context/AccessControlContext";
+import {
+  ADMIN_PASSPHRASE,
+  setAdminSession,
+  useAccessControl,
+} from "../context/AccessControlContext";
 import { useActorDirect } from "../hooks/useActorDirect";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
 
@@ -22,6 +34,29 @@ export function RequestAccessPage() {
   const [reason, setReason] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Admin unlock modal
+  const [showAdminModal, setShowAdminModal] = useState(false);
+  const [adminPassphrase, setAdminPassphrase] = useState("");
+  const [showAdminPass, setShowAdminPass] = useState(false);
+  const [adminLoading, setAdminLoading] = useState(false);
+
+  async function handleAdminLogin() {
+    if (!adminPassphrase.trim()) {
+      toast.error("Please enter the admin passphrase");
+      return;
+    }
+    setAdminLoading(true);
+    await new Promise((r) => setTimeout(r, 400));
+    if (adminPassphrase === ADMIN_PASSPHRASE) {
+      setAdminSession(true);
+      toast.success("Admin access granted");
+      setShowAdminModal(false);
+    } else {
+      toast.error("Incorrect passphrase");
+    }
+    setAdminLoading(false);
+  }
 
   function handleCopyPrincipal() {
     if (principal) {
@@ -58,14 +93,15 @@ export function RequestAccessPage() {
         setSubmitted(true);
         setIsSubmitting(false);
         return;
-      } catch (_err) {
+      } catch (err) {
         attempts++;
+        const errMsg = err instanceof Error ? err.message : String(err);
         if (attempts < maxAttempts) {
           // Wait a moment for the actor to be ready, then retry
           await new Promise((res) => setTimeout(res, 1500));
         } else {
           toast.error(
-            "Failed to submit request. Please check your connection and try again.",
+            `Failed to submit request: ${errMsg}. Please check your connection and try again.`,
           );
           setIsSubmitting(false);
         }
@@ -310,8 +346,8 @@ export function RequestAccessPage() {
             </div>
           </div>
 
-          {/* Sign out */}
-          <div className="mt-4 text-center">
+          {/* Sign out + admin unlock */}
+          <div className="mt-4 flex items-center justify-between">
             <button
               type="button"
               onClick={clear}
@@ -319,6 +355,16 @@ export function RequestAccessPage() {
               style={{ color: "oklch(var(--muted-foreground))" }}
             >
               Sign out
+            </button>
+            <button
+              type="button"
+              data-ocid="request_access.admin_login.button"
+              onClick={() => setShowAdminModal(true)}
+              className="flex items-center gap-1.5 text-xs font-medium"
+              style={{ color: "oklch(0.55 0.14 280)" }}
+            >
+              <ShieldCheck className="w-3.5 h-3.5" />
+              Admin Login
             </button>
           </div>
         </div>
@@ -338,6 +384,134 @@ export function RequestAccessPage() {
           </a>
         </div>
       </motion.div>
+
+      {/* Admin passphrase modal */}
+      <AnimatePresence>
+        {showAdminModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            style={{
+              background: "oklch(0.08 0.01 240 / 0.6)",
+              backdropFilter: "blur(4px)",
+            }}
+            onClick={(e) => {
+              if (e.target === e.currentTarget) {
+                setShowAdminModal(false);
+                setAdminPassphrase("");
+              }
+            }}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 16 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 16 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="w-full max-w-sm rounded-2xl border p-6"
+              style={{
+                background: "oklch(var(--card))",
+                borderColor: "oklch(var(--border))",
+                boxShadow: "0 16px 48px oklch(0.08 0.01 240 / 0.2)",
+              }}
+              data-ocid="admin_login.modal"
+            >
+              <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center gap-2">
+                  <div
+                    className="w-8 h-8 rounded-lg flex items-center justify-center"
+                    style={{ background: "oklch(0.55 0.14 280 / 0.12)" }}
+                  >
+                    <ShieldCheck
+                      className="w-4 h-4"
+                      style={{ color: "oklch(0.55 0.14 280)" }}
+                    />
+                  </div>
+                  <h2
+                    className="text-base font-display font-semibold"
+                    style={{ color: "oklch(var(--foreground))" }}
+                  >
+                    Admin Access
+                  </h2>
+                </div>
+                <button
+                  type="button"
+                  data-ocid="admin_login.close_button"
+                  onClick={() => {
+                    setShowAdminModal(false);
+                    setAdminPassphrase("");
+                  }}
+                  className="w-7 h-7 rounded-md flex items-center justify-center"
+                  style={{ color: "oklch(var(--muted-foreground))" }}
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+              <p
+                className="text-sm mb-4"
+                style={{ color: "oklch(var(--muted-foreground))" }}
+              >
+                Enter the admin passphrase to unlock admin access.
+              </p>
+              <div className="relative mb-4">
+                <Input
+                  data-ocid="admin_login.passphrase.input"
+                  type={showAdminPass ? "text" : "password"}
+                  value={adminPassphrase}
+                  onChange={(e) => setAdminPassphrase(e.target.value)}
+                  placeholder="Enter admin passphrase"
+                  autoFocus
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleAdminLogin();
+                  }}
+                  className="pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowAdminPass((v) => !v)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2"
+                  style={{ color: "oklch(var(--muted-foreground))" }}
+                >
+                  {showAdminPass ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
+                </button>
+              </div>
+              <Button
+                data-ocid="admin_login.submit.button"
+                onClick={handleAdminLogin}
+                disabled={adminLoading}
+                className="w-full h-10 text-sm font-semibold"
+                style={{
+                  background: "oklch(0.55 0.14 280)",
+                  color: "oklch(0.99 0 0)",
+                }}
+              >
+                {adminLoading ? (
+                  <span className="flex items-center gap-2">
+                    <span
+                      className="w-4 h-4 border-2 rounded-full animate-spin"
+                      style={{
+                        borderColor: "oklch(0.99 0 0 / 0.3)",
+                        borderTopColor: "oklch(0.99 0 0)",
+                      }}
+                    />
+                    Verifying...
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-2">
+                    <ShieldCheck className="w-4 h-4" />
+                    Unlock Admin Access
+                  </span>
+                )}
+              </Button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

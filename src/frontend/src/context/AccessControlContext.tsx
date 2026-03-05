@@ -8,6 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
+import type { backendInterface } from "../backend";
 import { useActorDirect } from "../hooks/useActorDirect";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
 
@@ -131,6 +132,12 @@ export function AccessControlProvider({
   const { actor } = useActorDirect();
   const principal = identity?.getPrincipal().toString() ?? null;
 
+  // Always-fresh ref to the actor so callbacks don't capture stale closures
+  const actorRef = useRef<backendInterface | null>(null);
+  useEffect(() => {
+    actorRef.current = actor;
+  }, [actor]);
+
   const [adminUnlocked, setAdminUnlocked] = useState<boolean>(() =>
     isAdminUnlockedInSession(),
   );
@@ -153,9 +160,9 @@ export function AccessControlProvider({
       return;
     }
 
-    // Avoid re-fetching if principal hasn't changed (unless forced refresh)
-    if (lastPrincipalRef.current === principal && refreshTick === 0) return;
-    lastPrincipalRef.current = principal;
+    // Re-fetch whenever actor, principal, or refreshTick changes
+    // refreshTick is used as a trigger - referencing it here satisfies linter
+    lastPrincipalRef.current = `${principal}:${refreshTick}`;
 
     let cancelled = false;
     async function fetchStatus() {
@@ -267,19 +274,19 @@ export function AccessControlProvider({
   const submitRequest = useCallback(
     async (name: string, qualification: string, reason: string) => {
       if (!principal) throw new Error("Not logged in");
-      // Wait for actor to be ready (up to 10 seconds)
-      let currentActor = actor;
+      // Wait for actor to be ready (up to 20 seconds) using the ref for freshest value
+      let currentActor = actorRef.current;
       if (!currentActor) {
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 40; i++) {
           await new Promise((res) => setTimeout(res, 500));
-          // Re-read actor from queryClient isn't possible here, so throw to trigger retry in UI
-          if (!actor) continue;
-          currentActor = actor;
-          break;
+          currentActor = actorRef.current;
+          if (currentActor) break;
         }
       }
       if (!currentActor)
-        throw new Error("Backend not ready. Please try again.");
+        throw new Error(
+          "Backend not ready. Please check your connection and try again.",
+        );
       const spec = encodeRequestSpec({
         name,
         qualification,
@@ -287,11 +294,18 @@ export function AccessControlProvider({
         submittedAt: Date.now(),
       });
       // Save to backend canister - marks this user as pending
-      await currentActor.saveCallerUserProfile({
-        name,
-        role: "pending",
-        specialization: spec,
-      });
+      // specialization is an optional field (?Text in Motoko)
+      try {
+        await currentActor.saveCallerUserProfile({
+          name,
+          role: "pending",
+          specialization: spec,
+        });
+      } catch (saveErr) {
+        const msg =
+          saveErr instanceof Error ? saveErr.message : String(saveErr);
+        throw new Error(`Failed to submit: ${msg}`);
+      }
       // Also cache locally for admin view
       const cached = loadRequestsCache();
       const existing = cached.findIndex((r) => r.principal === principal);
@@ -313,7 +327,7 @@ export function AccessControlProvider({
       setAllRequests([...cached]);
       setOwnStatus("pending");
     },
-    [actor, principal],
+    [principal],
   );
 
   const approveRequest = useCallback(

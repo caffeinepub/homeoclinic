@@ -20,7 +20,8 @@ import {
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
 
 export function LoginPage() {
-  const { login, isLoggingIn, isInitializing } = useInternetIdentity();
+  const { login, isLoggingIn, isInitializing, identity } =
+    useInternetIdentity();
   const [showAdminModal, setShowAdminModal] = useState(false);
   const [passphrase, setPassphrase] = useState("");
   const [showPass, setShowPass] = useState(false);
@@ -38,8 +39,13 @@ export function LoginPage() {
       setAdminSession(true);
       toast.success("Admin access granted");
       setShowAdminModal(false);
-      // Trigger login to get identity
-      login();
+      // If user already has an identity, the session flag change triggers re-render via the
+      // homeo_admin_changed event. If not yet logged in, open Internet Identity login.
+      if (!identity) {
+        login();
+      }
+      // If identity already exists, the AccessControlProvider will pick up adminUnlocked=true
+      // via the storage event listener and re-evaluate accessState to "admin".
     } else {
       toast.error("Incorrect passphrase");
     }
