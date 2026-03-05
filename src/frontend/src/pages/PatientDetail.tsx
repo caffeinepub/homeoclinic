@@ -50,10 +50,13 @@ import {
 function InfoRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex flex-col gap-0.5">
-      <span className="text-xs" style={{ color: "oklch(0.55 0.010 240)" }}>
+      <span
+        className="text-xs"
+        style={{ color: "oklch(var(--muted-foreground))" }}
+      >
         {label}
       </span>
-      <span className="text-sm" style={{ color: "oklch(0.18 0.010 240)" }}>
+      <span className="text-sm" style={{ color: "oklch(var(--foreground))" }}>
         {value || "—"}
       </span>
     </div>
@@ -196,7 +199,9 @@ export function PatientDetail() {
   if (!patient) {
     return (
       <div className="p-6 text-center">
-        <p style={{ color: "oklch(0.50 0.012 240)" }}>Patient not found</p>
+        <p style={{ color: "oklch(var(--muted-foreground))" }}>
+          Patient not found
+        </p>
         <Link to="/patients">
           <Button className="mt-4" variant="outline">
             Back to Patients
@@ -218,7 +223,7 @@ export function PatientDetail() {
           to="/patients"
           data-ocid="patient_detail.back.link"
           className="flex items-center gap-1.5 text-xs mb-4 hover:underline"
-          style={{ color: "oklch(0.50 0.012 240)" }}
+          style={{ color: "oklch(var(--muted-foreground))" }}
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           Back to Patients
@@ -239,14 +244,14 @@ export function PatientDetail() {
             <div>
               <h1
                 className="text-2xl font-display font-bold"
-                style={{ color: "oklch(0.15 0.010 240)" }}
+                style={{ color: "oklch(var(--foreground))" }}
               >
                 {patient.name}
               </h1>
               <div className="flex items-center gap-2 mt-0.5">
                 <span
                   className="text-sm"
-                  style={{ color: "oklch(0.50 0.012 240)" }}
+                  style={{ color: "oklch(var(--muted-foreground))" }}
                 >
                   {patient.age?.toString()} yrs · {patient.sex}
                 </span>
@@ -271,8 +276,8 @@ export function PatientDetail() {
               onClick={openEdit}
               className="gap-1.5 h-8 text-xs"
               style={{
-                borderColor: "oklch(0.88 0.010 240)",
-                color: "oklch(0.40 0.010 240)",
+                borderColor: "oklch(var(--border))",
+                color: "oklch(var(--muted-foreground))",
               }}
             >
               <Edit2 className="w-3 h-3" /> Edit
@@ -284,7 +289,7 @@ export function PatientDetail() {
               disabled={createCase.isPending}
               className="gap-1.5 h-8 text-xs"
               style={{
-                background: "oklch(0.45 0.14 193)",
+                background: "oklch(var(--teal))",
                 color: "oklch(0.99 0 0)",
               }}
             >
@@ -306,16 +311,16 @@ export function PatientDetail() {
         transition={{ delay: 0.08 }}
         className="rounded-lg border p-5 mb-5"
         style={{
-          background: "oklch(1.0 0 0)",
-          borderColor: "oklch(0.88 0.010 240)",
-          boxShadow: "0 1px 4px oklch(0.15 0.010 240 / 0.05)",
+          background: "oklch(var(--card))",
+          borderColor: "oklch(var(--border))",
+          boxShadow: "var(--card-shadow)",
         }}
       >
         <div className="flex items-center gap-2 mb-4">
-          <User className="w-4 h-4" style={{ color: "oklch(0.45 0.14 193)" }} />
+          <User className="w-4 h-4" style={{ color: "oklch(var(--teal))" }} />
           <span
             className="text-xs font-semibold uppercase tracking-widest"
-            style={{ color: "oklch(0.45 0.14 193)" }}
+            style={{ color: "oklch(var(--teal))" }}
           >
             Bio-Data
           </span>
@@ -346,21 +351,21 @@ export function PatientDetail() {
           <TabsList
             className="mb-4"
             style={{
-              background: "oklch(0.93 0.008 240)",
-              borderColor: "oklch(0.88 0.010 240)",
+              background: "oklch(var(--muted))",
+              borderColor: "oklch(var(--border))",
             }}
           >
             <TabsTrigger
               value="cases"
               data-ocid="patient_detail.cases.tab"
-              style={{ color: "oklch(0.40 0.010 240)" }}
+              style={{ color: "oklch(var(--muted-foreground))" }}
             >
               Case Sheets ({cases?.length ?? 0})
             </TabsTrigger>
             <TabsTrigger
               value="appointments"
               data-ocid="patient_detail.appointments.tab"
-              style={{ color: "oklch(0.40 0.010 240)" }}
+              style={{ color: "oklch(var(--muted-foreground))" }}
             >
               Appointments
             </TabsTrigger>
@@ -378,17 +383,17 @@ export function PatientDetail() {
                 data-ocid="patient_detail.cases.empty_state"
                 className="py-12 text-center rounded-lg border"
                 style={{
-                  background: "oklch(1.0 0 0)",
-                  borderColor: "oklch(0.88 0.010 240)",
+                  background: "oklch(var(--card))",
+                  borderColor: "oklch(var(--border))",
                 }}
               >
                 <FileText
                   className="w-8 h-8 mx-auto mb-2 opacity-20"
-                  style={{ color: "oklch(0.45 0.14 193)" }}
+                  style={{ color: "oklch(var(--teal))" }}
                 />
                 <p
                   className="text-sm mb-3"
-                  style={{ color: "oklch(0.50 0.012 240)" }}
+                  style={{ color: "oklch(var(--muted-foreground))" }}
                 >
                   No case sheets yet
                 </p>
@@ -396,7 +401,7 @@ export function PatientDetail() {
                   size="sm"
                   onClick={handleNewCase}
                   style={{
-                    background: "oklch(0.45 0.14 193)",
+                    background: "oklch(var(--teal))",
                     color: "oklch(0.99 0 0)",
                   }}
                 >
@@ -410,7 +415,7 @@ export function PatientDetail() {
                     <div className="flex items-center gap-2 mb-2">
                       <span
                         className="text-xs font-semibold uppercase tracking-widest"
-                        style={{ color: "oklch(0.45 0.14 193)" }}
+                        style={{ color: "oklch(var(--teal))" }}
                       >
                         {yr}
                       </span>
@@ -426,19 +431,19 @@ export function PatientDetail() {
                             data-ocid={`patient_detail.case.item.${i + 1}`}
                             className="flex items-center justify-between px-4 py-3 rounded-lg border transition-colors hover:border-teal/30"
                             style={{
-                              background: "oklch(1.0 0 0)",
-                              borderColor: "oklch(0.88 0.010 240)",
+                              background: "oklch(var(--card))",
+                              borderColor: "oklch(var(--border))",
                             }}
                           >
                             <div className="flex items-center gap-3">
                               <FileText
                                 className="w-4 h-4"
-                                style={{ color: "oklch(0.45 0.14 193)" }}
+                                style={{ color: "oklch(var(--teal))" }}
                               />
                               <div>
                                 <div
                                   className="text-sm font-medium"
-                                  style={{ color: "oklch(0.18 0.010 240)" }}
+                                  style={{ color: "oklch(var(--foreground))" }}
                                 >
                                   {c.chiefComplaint
                                     ? c.chiefComplaint.slice(0, 60) +
@@ -447,7 +452,9 @@ export function PatientDetail() {
                                 </div>
                                 <div
                                   className="text-xs mt-0.5"
-                                  style={{ color: "oklch(0.55 0.010 240)" }}
+                                  style={{
+                                    color: "oklch(var(--muted-foreground))",
+                                  }}
                                 >
                                   {formatDate(
                                     new Date(Number(c.createdAt))
@@ -459,7 +466,9 @@ export function PatientDetail() {
                             </div>
                             <ChevronRight
                               className="w-4 h-4"
-                              style={{ color: "oklch(0.60 0.010 240)" }}
+                              style={{
+                                color: "oklch(var(--muted-foreground))",
+                              }}
                             />
                           </div>
                         </Link>
@@ -479,7 +488,7 @@ export function PatientDetail() {
                 data-ocid="patient_detail.add_appointment.button"
                 onClick={() => setApptOpen(true)}
                 style={{
-                  background: "oklch(0.45 0.14 193)",
+                  background: "oklch(var(--teal))",
                   color: "oklch(0.99 0 0)",
                 }}
               >
@@ -491,15 +500,18 @@ export function PatientDetail() {
               data-ocid="patient_detail.appointments.empty_state"
               className="py-10 text-center rounded-lg border"
               style={{
-                background: "oklch(1.0 0 0)",
-                borderColor: "oklch(0.88 0.010 240)",
+                background: "oklch(var(--card))",
+                borderColor: "oklch(var(--border))",
               }}
             >
               <Calendar
                 className="w-8 h-8 mx-auto mb-2 opacity-20"
-                style={{ color: "oklch(0.45 0.14 193)" }}
+                style={{ color: "oklch(var(--teal))" }}
               />
-              <p className="text-sm" style={{ color: "oklch(0.50 0.012 240)" }}>
+              <p
+                className="text-sm"
+                style={{ color: "oklch(var(--muted-foreground))" }}
+              >
                 Appointments are listed in the Appointments module
               </p>
             </div>
@@ -513,14 +525,14 @@ export function PatientDetail() {
           data-ocid="patient_detail.edit.dialog"
           className="max-w-lg max-h-[90vh] overflow-y-auto"
           style={{
-            background: "oklch(1.0 0 0)",
-            borderColor: "oklch(0.88 0.010 240)",
+            background: "oklch(var(--card))",
+            borderColor: "oklch(var(--border))",
           }}
         >
           <DialogHeader>
             <DialogTitle
               className="font-display"
-              style={{ color: "oklch(0.15 0.010 240)" }}
+              style={{ color: "oklch(var(--foreground))" }}
             >
               Edit Patient
             </DialogTitle>
@@ -530,7 +542,7 @@ export function PatientDetail() {
               <div className="col-span-2 space-y-1.5">
                 <Label
                   className="text-xs"
-                  style={{ color: "oklch(0.40 0.010 240)" }}
+                  style={{ color: "oklch(var(--muted-foreground))" }}
                 >
                   Full Name
                 </Label>
@@ -541,16 +553,16 @@ export function PatientDetail() {
                     setEditForm((p) => ({ ...p, name: e.target.value }))
                   }
                   style={{
-                    background: "oklch(0.96 0.006 240)",
-                    borderColor: "oklch(0.88 0.010 240)",
-                    color: "oklch(0.15 0.010 240)",
+                    background: "oklch(var(--muted))",
+                    borderColor: "oklch(var(--border))",
+                    color: "oklch(var(--foreground))",
                   }}
                 />
               </div>
               <div className="space-y-1.5">
                 <Label
                   className="text-xs"
-                  style={{ color: "oklch(0.40 0.010 240)" }}
+                  style={{ color: "oklch(var(--muted-foreground))" }}
                 >
                   Age
                 </Label>
@@ -562,16 +574,16 @@ export function PatientDetail() {
                     setEditForm((p) => ({ ...p, age: e.target.value }))
                   }
                   style={{
-                    background: "oklch(0.96 0.006 240)",
-                    borderColor: "oklch(0.88 0.010 240)",
-                    color: "oklch(0.15 0.010 240)",
+                    background: "oklch(var(--muted))",
+                    borderColor: "oklch(var(--border))",
+                    color: "oklch(var(--foreground))",
                   }}
                 />
               </div>
               <div className="space-y-1.5">
                 <Label
                   className="text-xs"
-                  style={{ color: "oklch(0.40 0.010 240)" }}
+                  style={{ color: "oklch(var(--muted-foreground))" }}
                 >
                   Sex
                 </Label>
@@ -582,17 +594,17 @@ export function PatientDetail() {
                   <SelectTrigger
                     data-ocid="patient_detail.edit.sex.select"
                     style={{
-                      background: "oklch(0.96 0.006 240)",
-                      borderColor: "oklch(0.88 0.010 240)",
-                      color: "oklch(0.15 0.010 240)",
+                      background: "oklch(var(--muted))",
+                      borderColor: "oklch(var(--border))",
+                      color: "oklch(var(--foreground))",
                     }}
                   >
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent
                     style={{
-                      background: "oklch(1.0 0 0)",
-                      borderColor: "oklch(0.88 0.010 240)",
+                      background: "oklch(var(--card))",
+                      borderColor: "oklch(var(--border))",
                     }}
                   >
                     <SelectItem value="Male">Male</SelectItem>
@@ -604,7 +616,7 @@ export function PatientDetail() {
               <div className="space-y-1.5">
                 <Label
                   className="text-xs"
-                  style={{ color: "oklch(0.40 0.010 240)" }}
+                  style={{ color: "oklch(var(--muted-foreground))" }}
                 >
                   Occupation
                 </Label>
@@ -615,16 +627,16 @@ export function PatientDetail() {
                     setEditForm((p) => ({ ...p, occupation: e.target.value }))
                   }
                   style={{
-                    background: "oklch(0.96 0.006 240)",
-                    borderColor: "oklch(0.88 0.010 240)",
-                    color: "oklch(0.15 0.010 240)",
+                    background: "oklch(var(--muted))",
+                    borderColor: "oklch(var(--border))",
+                    color: "oklch(var(--foreground))",
                   }}
                 />
               </div>
               <div className="space-y-1.5">
                 <Label
                   className="text-xs"
-                  style={{ color: "oklch(0.40 0.010 240)" }}
+                  style={{ color: "oklch(var(--muted-foreground))" }}
                 >
                   Contact
                 </Label>
@@ -635,16 +647,16 @@ export function PatientDetail() {
                     setEditForm((p) => ({ ...p, contact: e.target.value }))
                   }
                   style={{
-                    background: "oklch(0.96 0.006 240)",
-                    borderColor: "oklch(0.88 0.010 240)",
-                    color: "oklch(0.15 0.010 240)",
+                    background: "oklch(var(--muted))",
+                    borderColor: "oklch(var(--border))",
+                    color: "oklch(var(--foreground))",
                   }}
                 />
               </div>
               <div className="col-span-2 space-y-1.5">
                 <Label
                   className="text-xs"
-                  style={{ color: "oklch(0.40 0.010 240)" }}
+                  style={{ color: "oklch(var(--muted-foreground))" }}
                 >
                   Address
                 </Label>
@@ -655,9 +667,9 @@ export function PatientDetail() {
                     setEditForm((p) => ({ ...p, address: e.target.value }))
                   }
                   style={{
-                    background: "oklch(0.96 0.006 240)",
-                    borderColor: "oklch(0.88 0.010 240)",
-                    color: "oklch(0.15 0.010 240)",
+                    background: "oklch(var(--muted))",
+                    borderColor: "oklch(var(--border))",
+                    color: "oklch(var(--foreground))",
                   }}
                 />
               </div>
@@ -669,8 +681,8 @@ export function PatientDetail() {
               data-ocid="patient_detail.edit.cancel_button"
               onClick={() => setEditOpen(false)}
               style={{
-                borderColor: "oklch(0.88 0.010 240)",
-                color: "oklch(0.40 0.010 240)",
+                borderColor: "oklch(var(--border))",
+                color: "oklch(var(--muted-foreground))",
               }}
             >
               Cancel
@@ -680,7 +692,7 @@ export function PatientDetail() {
               onClick={handleSaveEdit}
               disabled={updatePatient.isPending}
               style={{
-                background: "oklch(0.45 0.14 193)",
+                background: "oklch(var(--teal))",
                 color: "oklch(0.99 0 0)",
               }}
             >
@@ -699,14 +711,14 @@ export function PatientDetail() {
         <DialogContent
           data-ocid="patient_detail.appointment.dialog"
           style={{
-            background: "oklch(1.0 0 0)",
-            borderColor: "oklch(0.88 0.010 240)",
+            background: "oklch(var(--card))",
+            borderColor: "oklch(var(--border))",
           }}
         >
           <DialogHeader>
             <DialogTitle
               className="font-display"
-              style={{ color: "oklch(0.15 0.010 240)" }}
+              style={{ color: "oklch(var(--foreground))" }}
             >
               Add Appointment
             </DialogTitle>
@@ -715,7 +727,7 @@ export function PatientDetail() {
             <div className="space-y-1.5">
               <Label
                 className="text-xs"
-                style={{ color: "oklch(0.40 0.010 240)" }}
+                style={{ color: "oklch(var(--muted-foreground))" }}
               >
                 Date
               </Label>
@@ -727,16 +739,16 @@ export function PatientDetail() {
                 }
                 data-ocid="patient_detail.appointment.date.input"
                 style={{
-                  background: "oklch(0.96 0.006 240)",
-                  borderColor: "oklch(0.88 0.010 240)",
-                  color: "oklch(0.15 0.010 240)",
+                  background: "oklch(var(--muted))",
+                  borderColor: "oklch(var(--border))",
+                  color: "oklch(var(--foreground))",
                 }}
               />
             </div>
             <div className="space-y-1.5">
               <Label
                 className="text-xs"
-                style={{ color: "oklch(0.40 0.010 240)" }}
+                style={{ color: "oklch(var(--muted-foreground))" }}
               >
                 Time
               </Label>
@@ -748,16 +760,16 @@ export function PatientDetail() {
                 }
                 data-ocid="patient_detail.appointment.time.input"
                 style={{
-                  background: "oklch(0.96 0.006 240)",
-                  borderColor: "oklch(0.88 0.010 240)",
-                  color: "oklch(0.15 0.010 240)",
+                  background: "oklch(var(--muted))",
+                  borderColor: "oklch(var(--border))",
+                  color: "oklch(var(--foreground))",
                 }}
               />
             </div>
             <div className="space-y-1.5">
               <Label
                 className="text-xs"
-                style={{ color: "oklch(0.40 0.010 240)" }}
+                style={{ color: "oklch(var(--muted-foreground))" }}
               >
                 Visit Type
               </Label>
@@ -768,17 +780,17 @@ export function PatientDetail() {
                 <SelectTrigger
                   data-ocid="patient_detail.appointment.type.select"
                   style={{
-                    background: "oklch(0.96 0.006 240)",
-                    borderColor: "oklch(0.88 0.010 240)",
-                    color: "oklch(0.15 0.010 240)",
+                    background: "oklch(var(--muted))",
+                    borderColor: "oklch(var(--border))",
+                    color: "oklch(var(--foreground))",
                   }}
                 >
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent
                   style={{
-                    background: "oklch(1.0 0 0)",
-                    borderColor: "oklch(0.88 0.010 240)",
+                    background: "oklch(var(--card))",
+                    borderColor: "oklch(var(--border))",
                   }}
                 >
                   <SelectItem value="New">New Patient</SelectItem>
@@ -795,8 +807,8 @@ export function PatientDetail() {
               data-ocid="patient_detail.appointment.cancel_button"
               onClick={() => setApptOpen(false)}
               style={{
-                borderColor: "oklch(0.88 0.010 240)",
-                color: "oklch(0.40 0.010 240)",
+                borderColor: "oklch(var(--border))",
+                color: "oklch(var(--muted-foreground))",
               }}
             >
               Cancel
@@ -806,7 +818,7 @@ export function PatientDetail() {
               onClick={handleAddAppointment}
               disabled={addAppointment.isPending}
               style={{
-                background: "oklch(0.45 0.14 193)",
+                background: "oklch(var(--teal))",
                 color: "oklch(0.99 0 0)",
               }}
             >

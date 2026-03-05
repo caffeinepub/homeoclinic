@@ -70,16 +70,16 @@ function RemedyCard({
       onClick={onClick}
       className="w-full text-left p-4 rounded-lg border transition-all"
       style={{
-        background: "oklch(1.0 0 0)",
-        borderColor: "oklch(0.88 0.010 240)",
-        boxShadow: "0 1px 3px oklch(0.15 0.010 240 / 0.04)",
+        background: "oklch(var(--card))",
+        borderColor: "oklch(var(--border))",
+        boxShadow: "var(--card-shadow)",
       }}
     >
       <div className="flex items-start justify-between mb-2">
         <div>
           <div
             className="font-display font-bold text-base"
-            style={{ color: "oklch(0.15 0.010 240)" }}
+            style={{ color: "oklch(var(--foreground))" }}
           >
             {remedy.name}
           </div>
@@ -92,7 +92,7 @@ function RemedyCard({
         </div>
         <ChevronRight
           className="w-4 h-4 mt-0.5"
-          style={{ color: "oklch(0.65 0.008 240)" }}
+          style={{ color: "oklch(var(--muted-foreground))" }}
         />
       </div>
       <Badge
@@ -107,7 +107,7 @@ function RemedyCard({
       </Badge>
       <p
         className="text-xs line-clamp-2"
-        style={{ color: "oklch(0.50 0.012 240)" }}
+        style={{ color: "oklch(var(--muted-foreground))" }}
       >
         {remedy.keynotes}
       </p>
@@ -135,9 +135,9 @@ function RemedyDetail({
         exit={{ opacity: 0, y: 40 }}
         className="w-full sm:max-w-2xl max-h-[92vh] overflow-y-auto rounded-t-2xl sm:rounded-2xl border"
         style={{
-          background: "oklch(1.0 0 0)",
-          borderColor: "oklch(0.88 0.010 240)",
-          boxShadow: "0 16px 48px oklch(0.15 0.010 240 / 0.15)",
+          background: "oklch(var(--card))",
+          borderColor: "oklch(var(--border))",
+          boxShadow: "var(--card-shadow-md)",
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -145,8 +145,8 @@ function RemedyDetail({
         <div
           className="sticky top-0 flex items-center justify-between px-5 py-4 border-b"
           style={{
-            background: "oklch(1.0 0 0)",
-            borderColor: "oklch(0.90 0.008 240)",
+            background: "oklch(var(--card))",
+            borderColor: "oklch(var(--border))",
           }}
         >
           <div>
@@ -154,7 +154,7 @@ function RemedyDetail({
               <div>
                 <h2
                   className="text-xl font-display font-bold"
-                  style={{ color: "oklch(0.15 0.010 240)" }}
+                  style={{ color: "oklch(var(--foreground))" }}
                 >
                   {remedy.name}
                 </h2>
@@ -185,8 +185,8 @@ function RemedyDetail({
             data-ocid="remedy_detail.close_button"
             className="w-8 h-8 rounded-lg flex items-center justify-center"
             style={{
-              background: "oklch(0.93 0.008 240)",
-              color: "oklch(0.40 0.010 240)",
+              background: "oklch(var(--muted))",
+              color: "oklch(var(--muted-foreground))",
             }}
           >
             <X className="w-4 h-4" />
@@ -198,7 +198,7 @@ function RemedyDetail({
           <Tabs defaultValue="keynotes">
             <TabsList
               className="mb-4 flex-wrap h-auto"
-              style={{ background: "oklch(0.93 0.008 240)" }}
+              style={{ background: "oklch(var(--muted))" }}
             >
               <TabsTrigger
                 value="keynotes"
@@ -249,7 +249,7 @@ function RemedyDetail({
                   </div>
                   <p
                     className="text-sm leading-relaxed whitespace-pre-line"
-                    style={{ color: "oklch(0.20 0.010 240)" }}
+                    style={{ color: "oklch(var(--foreground))" }}
                   >
                     {remedy.keynotes}
                   </p>
@@ -258,19 +258,19 @@ function RemedyDetail({
                   <div
                     className="p-4 rounded-lg"
                     style={{
-                      background: "oklch(0.96 0.006 240)",
-                      border: "1px solid oklch(0.88 0.010 240)",
+                      background: "oklch(var(--muted))",
+                      border: "1px solid oklch(var(--border))",
                     }}
                   >
                     <div
                       className="text-xs font-semibold uppercase tracking-widest mb-2"
-                      style={{ color: "oklch(0.45 0.14 193)" }}
+                      style={{ color: "oklch(var(--teal))" }}
                     >
                       Clinical Indications
                     </div>
                     <p
                       className="text-sm leading-relaxed"
-                      style={{ color: "oklch(0.25 0.010 240)" }}
+                      style={{ color: "oklch(var(--foreground))" }}
                     >
                       {remedy.clinicalIndications}
                     </p>
@@ -283,19 +283,19 @@ function RemedyDetail({
               <div
                 className="p-4 rounded-lg"
                 style={{
-                  background: "oklch(0.96 0.006 240)",
-                  border: "1px solid oklch(0.88 0.010 240)",
+                  background: "oklch(var(--muted))",
+                  border: "1px solid oklch(var(--border))",
                 }}
               >
                 <div
                   className="text-xs font-semibold uppercase tracking-widest mb-3"
-                  style={{ color: "oklch(0.45 0.14 193)" }}
+                  style={{ color: "oklch(var(--teal))" }}
                 >
                   Materia Medica Summary (Boericke)
                 </div>
                 <p
                   className="text-sm leading-relaxed whitespace-pre-line"
-                  style={{ color: "oklch(0.22 0.010 240)" }}
+                  style={{ color: "oklch(var(--foreground))" }}
                 >
                   {remedy.materiaMedicaSummary}
                 </p>
@@ -306,8 +306,8 @@ function RemedyDetail({
               <div
                 className="p-4 rounded-lg"
                 style={{
-                  background: "oklch(0.96 0.006 240)",
-                  border: "1px solid oklch(0.88 0.010 240)",
+                  background: "oklch(var(--muted))",
+                  border: "1px solid oklch(var(--border))",
                 }}
               >
                 <div
@@ -318,7 +318,7 @@ function RemedyDetail({
                 </div>
                 <p
                   className="text-sm leading-relaxed whitespace-pre-line"
-                  style={{ color: "oklch(0.22 0.010 240)" }}
+                  style={{ color: "oklch(var(--foreground))" }}
                 >
                   {remedy.synopticKeyHighlights}
                 </p>
@@ -329,8 +329,8 @@ function RemedyDetail({
               <div
                 className="p-4 rounded-lg"
                 style={{
-                  background: "oklch(0.96 0.006 240)",
-                  border: "1px solid oklch(0.88 0.010 240)",
+                  background: "oklch(var(--muted))",
+                  border: "1px solid oklch(var(--border))",
                 }}
               >
                 <div
@@ -345,8 +345,8 @@ function RemedyDetail({
                       key={r.trim() || r}
                       className="text-xs px-2 py-1.5 rounded font-mono"
                       style={{
-                        background: "oklch(0.91 0.008 240)",
-                        color: "oklch(0.28 0.010 240)",
+                        background: "oklch(var(--muted))",
+                        color: "oklch(var(--foreground))",
                       }}
                     >
                       {r.trim()}
@@ -476,18 +476,18 @@ export function Remedies() {
           <div className="flex items-center gap-2 mb-1">
             <FlaskConical
               className="w-4 h-4"
-              style={{ color: "oklch(0.45 0.14 193)" }}
+              style={{ color: "oklch(var(--teal))" }}
             />
             <span
               className="text-xs font-semibold uppercase tracking-widest"
-              style={{ color: "oklch(0.45 0.14 193)" }}
+              style={{ color: "oklch(var(--teal))" }}
             >
               Remedy Reference
             </span>
           </div>
           <h1
             className="text-2xl font-display font-bold tracking-tight"
-            style={{ color: "oklch(0.15 0.010 240)" }}
+            style={{ color: "oklch(var(--foreground))" }}
           >
             Materia Medica & Relationships
           </h1>
@@ -499,7 +499,7 @@ export function Remedies() {
               data-ocid="remedies.add.open_modal_button"
               className="gap-2 h-9"
               style={{
-                background: "oklch(0.45 0.14 193)",
+                background: "oklch(var(--teal))",
                 color: "oklch(0.99 0 0)",
               }}
             >
@@ -511,14 +511,14 @@ export function Remedies() {
             data-ocid="remedies.add.dialog"
             className="max-w-2xl max-h-[90vh] overflow-y-auto"
             style={{
-              background: "oklch(1.0 0 0)",
-              borderColor: "oklch(0.88 0.010 240)",
+              background: "oklch(var(--card))",
+              borderColor: "oklch(var(--border))",
             }}
           >
             <DialogHeader>
               <DialogTitle
                 className="font-display"
-                style={{ color: "oklch(0.15 0.010 240)" }}
+                style={{ color: "oklch(var(--foreground))" }}
               >
                 Add New Remedy
               </DialogTitle>
@@ -528,7 +528,7 @@ export function Remedies() {
                 <div className="space-y-1.5">
                   <Label
                     className="text-xs"
-                    style={{ color: "oklch(0.40 0.010 240)" }}
+                    style={{ color: "oklch(var(--muted-foreground))" }}
                   >
                     Name *
                   </Label>
@@ -540,16 +540,16 @@ export function Remedies() {
                     data-ocid="remedies.add.name.input"
                     placeholder="e.g., Sulphur"
                     style={{
-                      background: "oklch(0.96 0.006 240)",
-                      borderColor: "oklch(0.88 0.010 240)",
-                      color: "oklch(0.15 0.010 240)",
+                      background: "oklch(var(--muted))",
+                      borderColor: "oklch(var(--border))",
+                      color: "oklch(var(--foreground))",
                     }}
                   />
                 </div>
                 <div className="space-y-1.5">
                   <Label
                     className="text-xs"
-                    style={{ color: "oklch(0.40 0.010 240)" }}
+                    style={{ color: "oklch(var(--muted-foreground))" }}
                   >
                     Abbreviation *
                   </Label>
@@ -564,16 +564,16 @@ export function Remedies() {
                     data-ocid="remedies.add.abbreviation.input"
                     placeholder="e.g., Sul"
                     style={{
-                      background: "oklch(0.96 0.006 240)",
-                      borderColor: "oklch(0.88 0.010 240)",
-                      color: "oklch(0.15 0.010 240)",
+                      background: "oklch(var(--muted))",
+                      borderColor: "oklch(var(--border))",
+                      color: "oklch(var(--foreground))",
                     }}
                   />
                 </div>
                 <div className="col-span-2 space-y-1.5">
                   <Label
                     className="text-xs"
-                    style={{ color: "oklch(0.40 0.010 240)" }}
+                    style={{ color: "oklch(var(--muted-foreground))" }}
                   >
                     Miasmatic Classification
                   </Label>
@@ -588,9 +588,9 @@ export function Remedies() {
                     data-ocid="remedies.add.miasm.input"
                     placeholder="e.g., Psoric, Sycotic, Syphilitic"
                     style={{
-                      background: "oklch(0.96 0.006 240)",
-                      borderColor: "oklch(0.88 0.010 240)",
-                      color: "oklch(0.15 0.010 240)",
+                      background: "oklch(var(--muted))",
+                      borderColor: "oklch(var(--border))",
+                      color: "oklch(var(--foreground))",
                     }}
                   />
                 </div>
@@ -621,7 +621,7 @@ export function Remedies() {
                 <div key={field} className="space-y-1.5">
                   <Label
                     className="text-xs"
-                    style={{ color: "oklch(0.40 0.010 240)" }}
+                    style={{ color: "oklch(var(--muted-foreground))" }}
                   >
                     {label}
                   </Label>
@@ -636,9 +636,9 @@ export function Remedies() {
                     data-ocid={`remedies.add.${field}.textarea`}
                     className="text-sm"
                     style={{
-                      background: "oklch(0.96 0.006 240)",
-                      borderColor: "oklch(0.88 0.010 240)",
-                      color: "oklch(0.15 0.010 240)",
+                      background: "oklch(var(--muted))",
+                      borderColor: "oklch(var(--border))",
+                      color: "oklch(var(--foreground))",
                     }}
                   />
                 </div>
@@ -646,7 +646,7 @@ export function Remedies() {
               <div className="space-y-2 pt-1">
                 <div
                   className="text-xs font-semibold uppercase tracking-widest"
-                  style={{ color: "oklch(0.45 0.14 193)" }}
+                  style={{ color: "oklch(var(--teal))" }}
                 >
                   Relationships
                 </div>
@@ -654,7 +654,7 @@ export function Remedies() {
                   <div key={key} className="space-y-1.5">
                     <Label
                       className="text-xs"
-                      style={{ color: "oklch(0.40 0.010 240)" }}
+                      style={{ color: "oklch(var(--muted-foreground))" }}
                     >
                       {label}
                     </Label>
@@ -672,9 +672,9 @@ export function Remedies() {
                       data-ocid={`remedies.add.${key}.input`}
                       placeholder="Comma separated"
                       style={{
-                        background: "oklch(0.96 0.006 240)",
-                        borderColor: "oklch(0.88 0.010 240)",
-                        color: "oklch(0.15 0.010 240)",
+                        background: "oklch(var(--muted))",
+                        borderColor: "oklch(var(--border))",
+                        color: "oklch(var(--foreground))",
                       }}
                     />
                   </div>
@@ -687,8 +687,8 @@ export function Remedies() {
                 data-ocid="remedies.add.cancel_button"
                 onClick={() => setAddOpen(false)}
                 style={{
-                  borderColor: "oklch(0.88 0.010 240)",
-                  color: "oklch(0.40 0.010 240)",
+                  borderColor: "oklch(var(--border))",
+                  color: "oklch(var(--muted-foreground))",
                 }}
               >
                 Cancel
@@ -698,7 +698,7 @@ export function Remedies() {
                 onClick={handleAddRemedy}
                 disabled={isSaving}
                 style={{
-                  background: "oklch(0.45 0.14 193)",
+                  background: "oklch(var(--teal))",
                   color: "oklch(0.99 0 0)",
                 }}
               >
@@ -722,7 +722,7 @@ export function Remedies() {
       >
         <Search
           className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5"
-          style={{ color: "oklch(0.55 0.010 240)" }}
+          style={{ color: "oklch(var(--muted-foreground))" }}
         />
         <Input
           data-ocid="remedies.search_input"
@@ -731,9 +731,9 @@ export function Remedies() {
           onChange={(e) => setSearch(e.target.value)}
           className="pl-9"
           style={{
-            background: "oklch(1.0 0 0)",
-            borderColor: "oklch(0.88 0.010 240)",
-            color: "oklch(0.15 0.010 240)",
+            background: "oklch(var(--card))",
+            borderColor: "oklch(var(--border))",
+            color: "oklch(var(--foreground))",
           }}
         />
       </motion.div>
@@ -750,15 +750,18 @@ export function Remedies() {
           data-ocid="remedies.empty_state"
           className="py-16 text-center rounded-lg border"
           style={{
-            background: "oklch(1.0 0 0)",
-            borderColor: "oklch(0.88 0.010 240)",
+            background: "oklch(var(--card))",
+            borderColor: "oklch(var(--border))",
           }}
         >
           <FlaskConical
             className="w-10 h-10 mx-auto mb-3 opacity-20"
-            style={{ color: "oklch(0.45 0.14 193)" }}
+            style={{ color: "oklch(var(--teal))" }}
           />
-          <p className="text-sm" style={{ color: "oklch(0.50 0.012 240)" }}>
+          <p
+            className="text-sm"
+            style={{ color: "oklch(var(--muted-foreground))" }}
+          >
             No remedies found
           </p>
         </div>

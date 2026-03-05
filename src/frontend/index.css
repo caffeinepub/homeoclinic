@@ -33,7 +33,7 @@
     --primary-foreground: 0.99 0 0;
     --secondary: 0.93 0.008 240;
     --secondary-foreground: 0.25 0.010 240;
-    --muted: 0.94 0.006 240;
+    --muted: 0.95 0.006 240;
     --muted-foreground: 0.50 0.012 240;
     --accent: 0.92 0.010 193;
     --accent-foreground: 0.20 0.015 193;
@@ -48,13 +48,13 @@
     --chart-4: 0.55 0.14 90;
     --chart-5: 0.55 0.18 30;
     /* Sidebar stays dark for classic dark-sidebar + light-content layout */
-    --sidebar: 0.15 0.015 240;
+    --sidebar: 0.13 0.008 240;
     --sidebar-foreground: 0.90 0.008 240;
     --sidebar-primary: 0.72 0.14 193;
     --sidebar-primary-foreground: 0.14 0.015 240;
-    --sidebar-accent: 0.22 0.012 240;
+    --sidebar-accent: 0.20 0.010 240;
     --sidebar-accent-foreground: 0.93 0.008 240;
-    --sidebar-border: 0.24 0.010 240;
+    --sidebar-border: 0.20 0.010 240;
     --sidebar-ring: 0.72 0.14 193;
 
     /* Clinical specific tokens */
@@ -64,6 +64,59 @@
     --slate-light: 0.55 0.008 240;
     --warning: 0.55 0.14 80;
     --success: 0.45 0.15 150;
+
+    /* Card shadow for light mode */
+    --card-shadow: 0 1px 4px oklch(0.15 0.010 240 / 0.07);
+    --card-shadow-md: 0 2px 10px oklch(0.15 0.010 240 / 0.08);
+  }
+
+  .dark {
+    /* Dark Theme - Softer dark navy/grey */
+    --background: 0.14 0.010 240;
+    --foreground: 0.92 0.008 240;
+    --card: 0.18 0.010 240;
+    --card-foreground: 0.92 0.008 240;
+    --popover: 0.18 0.010 240;
+    --popover-foreground: 0.92 0.008 240;
+    --primary: 0.62 0.14 193;
+    --primary-foreground: 0.10 0.008 240;
+    --secondary: 0.22 0.010 240;
+    --secondary-foreground: 0.80 0.008 240;
+    --muted: 0.22 0.010 240;
+    --muted-foreground: 0.58 0.010 240;
+    --accent: 0.22 0.014 193;
+    --accent-foreground: 0.80 0.012 193;
+    --destructive: 0.52 0.20 25;
+    --destructive-foreground: 0.97 0 0;
+    --border: 0.26 0.012 240;
+    --input: 0.22 0.010 240;
+    --ring: 0.62 0.14 193;
+    --chart-1: 0.62 0.14 193;
+    --chart-2: 0.58 0.15 150;
+    --chart-3: 0.55 0.15 260;
+    --chart-4: 0.60 0.14 90;
+    --chart-5: 0.60 0.18 30;
+    /* Sidebar slightly darker than card in dark mode */
+    --sidebar: 0.11 0.008 240;
+    --sidebar-foreground: 0.90 0.008 240;
+    --sidebar-primary: 0.65 0.14 193;
+    --sidebar-primary-foreground: 0.10 0.008 240;
+    --sidebar-accent: 0.18 0.010 240;
+    --sidebar-accent-foreground: 0.85 0.008 240;
+    --sidebar-border: 0.20 0.010 240;
+    --sidebar-ring: 0.65 0.14 193;
+
+    /* Clinical tokens dark */
+    --teal: 0.65 0.14 193;
+    --teal-dim: 0.55 0.12 193;
+    --teal-glow: 0.65 0.14 193;
+    --slate-light: 0.55 0.008 240;
+    --warning: 0.65 0.14 80;
+    --success: 0.58 0.15 150;
+
+    /* Card shadow for dark mode */
+    --card-shadow: 0 1px 4px oklch(0.05 0.005 240 / 0.3);
+    --card-shadow-md: 0 2px 10px oklch(0.05 0.005 240 / 0.4);
   }
 
   * {
@@ -104,38 +157,46 @@
 .clinical-form-table {
   width: 100%;
   border-collapse: collapse;
-  background: #ffffff;
-  color: #1a1a2e;
+  background: oklch(var(--card));
+  color: oklch(var(--card-foreground));
   font-size: 0.82rem;
   line-height: 1.4;
 }
 
 .clinical-form-table th {
-  background: #1e3a5f;
+  background: oklch(0.22 0.018 220);
   color: #ffffff;
   font-weight: 600;
   text-align: left;
   padding: 7px 10px;
-  border: 1px solid #b0c4d8;
+  border: 1px solid oklch(var(--border));
   font-size: 0.78rem;
   letter-spacing: 0.03em;
   white-space: nowrap;
 }
 
+.dark .clinical-form-table th {
+  background: oklch(0.18 0.016 220);
+}
+
 .clinical-form-table td {
-  border: 1px solid #b0c4d8;
+  border: 1px solid oklch(var(--border));
   padding: 4px 6px;
   vertical-align: top;
-  background: #ffffff;
-  color: #1a1a2e;
+  background: oklch(var(--card));
+  color: oklch(var(--card-foreground));
 }
 
 .clinical-form-table td.label-cell {
-  background: #f0f5fb;
+  background: oklch(var(--muted));
   font-weight: 600;
-  color: #1e3a5f;
+  color: oklch(0.25 0.015 220);
   white-space: nowrap;
   width: 30%;
+}
+
+.dark .clinical-form-table td.label-cell {
+  color: oklch(0.72 0.012 220);
 }
 
 .clinical-form-table td input,
@@ -145,7 +206,7 @@
   background: transparent;
   border: none;
   outline: none;
-  color: #1a1a2e;
+  color: oklch(var(--card-foreground));
   font-size: 0.82rem;
   font-family: inherit;
   padding: 1px 2px;
@@ -154,27 +215,35 @@
 
 .clinical-form-table td input:focus,
 .clinical-form-table td textarea:focus {
-  background: #f5f9ff;
+  background: oklch(var(--muted));
   border-radius: 2px;
 }
 
 .clinical-form-wrapper {
-  background: #ffffff;
-  border: 2px solid #1e3a5f;
+  background: oklch(var(--card));
+  border: 2px solid oklch(0.22 0.018 220);
   border-radius: 4px;
   overflow: hidden;
   overflow-x: auto;
-  box-shadow: 0 2px 12px rgba(30,58,95,0.12);
+  box-shadow: var(--card-shadow-md);
+}
+
+.dark .clinical-form-wrapper {
+  border-color: oklch(0.28 0.014 220);
 }
 
 .clinical-section-header {
-  background: #1e3a5f;
+  background: oklch(0.22 0.018 220);
   color: #ffffff;
   padding: 6px 12px;
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.dark .clinical-section-header {
+  background: oklch(0.18 0.016 220);
 }
 
 @layer utilities {

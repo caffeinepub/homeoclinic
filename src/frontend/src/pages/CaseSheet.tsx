@@ -129,8 +129,8 @@ function RemedyPopup({
         transition={{ duration: 0.18 }}
         className="w-full max-w-xl max-h-[88vh] overflow-y-auto rounded-2xl border flex flex-col"
         style={{
-          background: "oklch(1.0 0 0)",
-          borderColor: "oklch(0.88 0.010 240)",
+          background: "oklch(var(--card))",
+          borderColor: "oklch(var(--border))",
           boxShadow: "0 20px 60px oklch(0.15 0.010 240 / 0.18)",
         }}
         onClick={(e) => e.stopPropagation()}
@@ -139,15 +139,15 @@ function RemedyPopup({
         <div
           className="sticky top-0 flex items-start justify-between px-5 py-4 border-b z-10"
           style={{
-            background: "oklch(1.0 0 0)",
-            borderColor: "oklch(0.90 0.008 240)",
+            background: "oklch(var(--card))",
+            borderColor: "oklch(var(--border))",
           }}
         >
           <div>
             <div className="flex items-center gap-2 flex-wrap">
               <span
                 className="font-display font-bold text-lg"
-                style={{ color: "oklch(0.15 0.010 240)" }}
+                style={{ color: "oklch(var(--foreground))" }}
               >
                 {remedy.name}
               </span>
@@ -172,7 +172,7 @@ function RemedyPopup({
             </div>
             <p
               className="text-xs mt-2 italic"
-              style={{ color: "oklch(0.50 0.012 240)" }}
+              style={{ color: "oklch(var(--muted-foreground))" }}
             >
               Prescription Reference — Boericke &amp; Synoptic Key
             </p>
@@ -183,8 +183,8 @@ function RemedyPopup({
             onClick={onClose}
             className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ml-3 mt-0.5 hover:opacity-80 transition-opacity"
             style={{
-              background: "oklch(0.93 0.008 240)",
-              color: "oklch(0.40 0.010 240)",
+              background: "oklch(var(--muted))",
+              color: "oklch(var(--muted-foreground))",
             }}
             aria-label="Close remedy details"
           >
@@ -234,7 +234,7 @@ function RemedyPopup({
                   </div>
                   <p
                     className="text-sm leading-relaxed whitespace-pre-line"
-                    style={{ color: "oklch(0.20 0.010 240)" }}
+                    style={{ color: "oklch(var(--foreground))" }}
                   >
                     {remedy.keynotes}
                   </p>
@@ -243,19 +243,19 @@ function RemedyPopup({
                   <div
                     className="p-3 rounded-lg"
                     style={{
-                      background: "oklch(0.96 0.006 240)",
-                      border: "1px solid oklch(0.88 0.010 240)",
+                      background: "oklch(var(--muted))",
+                      border: "1px solid oklch(var(--border))",
                     }}
                   >
                     <div
                       className="text-xs font-semibold uppercase tracking-widest mb-1.5"
-                      style={{ color: "oklch(0.45 0.14 193)" }}
+                      style={{ color: "oklch(var(--teal))" }}
                     >
                       Clinical Indications
                     </div>
                     <p
                       className="text-sm leading-relaxed"
-                      style={{ color: "oklch(0.25 0.010 240)" }}
+                      style={{ color: "oklch(var(--foreground))" }}
                     >
                       {remedy.clinicalIndications}
                     </p>
@@ -268,19 +268,19 @@ function RemedyPopup({
               <div
                 className="p-4 rounded-lg"
                 style={{
-                  background: "oklch(0.96 0.006 240)",
-                  border: "1px solid oklch(0.88 0.010 240)",
+                  background: "oklch(var(--muted))",
+                  border: "1px solid oklch(var(--border))",
                 }}
               >
                 <div
                   className="text-xs font-semibold uppercase tracking-widest mb-3"
-                  style={{ color: "oklch(0.45 0.14 193)" }}
+                  style={{ color: "oklch(var(--teal))" }}
                 >
                   Materia Medica Summary (Boericke)
                 </div>
                 <p
                   className="text-sm leading-relaxed whitespace-pre-line"
-                  style={{ color: "oklch(0.22 0.010 240)" }}
+                  style={{ color: "oklch(var(--foreground))" }}
                 >
                   {remedy.materiaMedicaSummary}
                 </p>
@@ -291,8 +291,8 @@ function RemedyPopup({
               <div
                 className="p-4 rounded-lg"
                 style={{
-                  background: "oklch(0.96 0.006 240)",
-                  border: "1px solid oklch(0.88 0.010 240)",
+                  background: "oklch(var(--muted))",
+                  border: "1px solid oklch(var(--border))",
                 }}
               >
                 <div
@@ -303,7 +303,7 @@ function RemedyPopup({
                 </div>
                 <p
                   className="text-sm leading-relaxed whitespace-pre-line"
-                  style={{ color: "oklch(0.22 0.010 240)" }}
+                  style={{ color: "oklch(var(--foreground))" }}
                 >
                   {remedy.synopticKeyHighlights}
                 </p>
@@ -314,8 +314,8 @@ function RemedyPopup({
               <div
                 className="p-4 rounded-lg"
                 style={{
-                  background: "oklch(0.96 0.006 240)",
-                  border: "1px solid oklch(0.88 0.010 240)",
+                  background: "oklch(var(--muted))",
+                  border: "1px solid oklch(var(--border))",
                 }}
               >
                 <div
@@ -602,8 +602,8 @@ function parseFollowUpRows(raw: string): FollowUpRow[] {
 // ─── Shared section styles ─────────────────────────────────────────────────
 
 const ACCORDION_ITEM_STYLE = {
-  background: "oklch(1.0 0 0)",
-  borderColor: "oklch(0.88 0.010 240)",
+  background: "oklch(var(--card))",
+  borderColor: "oklch(var(--border))",
 };
 
 const SECTION_NUM_STYLE = {
@@ -643,7 +643,7 @@ function SectionTextarea({
     <div className="space-y-2">
       <Label
         className="text-xs font-semibold uppercase tracking-widest"
-        style={{ color: "oklch(0.45 0.14 193)" }}
+        style={{ color: "oklch(var(--teal))" }}
       >
         {label}
       </Label>
@@ -655,9 +655,9 @@ function SectionTextarea({
         placeholder={placeholder}
         className="resize-y text-sm"
         style={{
-          background: "oklch(0.97 0.004 240)",
-          borderColor: "oklch(0.88 0.010 240)",
-          color: "oklch(0.18 0.010 240)",
+          background: "oklch(var(--muted))",
+          borderColor: "oklch(var(--border))",
+          color: "oklch(var(--foreground))",
         }}
       />
     </div>
@@ -769,7 +769,7 @@ function ChiefComplaintTable({
         className="gap-1.5 text-xs"
         style={{
           borderColor: "oklch(0.45 0.14 193 / 0.4)",
-          color: "oklch(0.45 0.14 193)",
+          color: "oklch(var(--teal))",
         }}
       >
         <Plus size={12} /> Add Complaint Row
@@ -1000,8 +1000,8 @@ function PreviousPrescriptionsTable({
         data-ocid="case.prev_prescriptions.empty_state"
         className="rounded-lg border px-4 py-6 text-center text-sm italic"
         style={{
-          borderColor: "oklch(0.88 0.010 240)",
-          color: "oklch(0.55 0.010 240)",
+          borderColor: "oklch(var(--border))",
+          color: "oklch(var(--muted-foreground))",
           background: "oklch(0.98 0.003 240)",
         }}
       >
@@ -1420,7 +1420,7 @@ function PrescriptionTable({
                         left: 0,
                         right: 0,
                         zIndex: 100,
-                        background: "oklch(1.0 0 0)",
+                        background: "oklch(var(--card))",
                         border: "1px solid oklch(0.85 0.010 240)",
                         borderRadius: "8px",
                         boxShadow: "0 6px 24px oklch(0.15 0.010 240 / 0.12)",
@@ -1467,7 +1467,7 @@ function PrescriptionTable({
                           <span
                             style={{
                               fontWeight: 700,
-                              color: "oklch(0.20 0.010 240)",
+                              color: "oklch(var(--foreground))",
                               flex: 1,
                             }}
                           >
@@ -1749,13 +1749,13 @@ function FollowUpTable({
           className="rounded-lg border p-4 space-y-3"
           data-ocid="case.followup.form.panel"
           style={{
-            background: "oklch(0.97 0.004 240)",
-            borderColor: "oklch(0.88 0.010 240)",
+            background: "oklch(var(--muted))",
+            borderColor: "oklch(var(--border))",
           }}
         >
           <p
             className="text-xs font-semibold uppercase tracking-widest mb-2"
-            style={{ color: "oklch(0.45 0.14 193)" }}
+            style={{ color: "oklch(var(--teal))" }}
           >
             New Follow-up — Visit {followUps.length + 1}
           </p>
@@ -1764,7 +1764,7 @@ function FollowUpTable({
             <div className="space-y-1.5">
               <Label
                 className="text-xs"
-                style={{ color: "oklch(0.40 0.010 240)" }}
+                style={{ color: "oklch(var(--muted-foreground))" }}
               >
                 Date *
               </Label>
@@ -1774,9 +1774,9 @@ function FollowUpTable({
                 onChange={(e) => updateFu("date", e.target.value)}
                 data-ocid="case.followup.date.input"
                 style={{
-                  background: "oklch(1.0 0 0)",
-                  borderColor: "oklch(0.88 0.010 240)",
-                  color: "oklch(0.15 0.010 240)",
+                  background: "oklch(var(--card))",
+                  borderColor: "oklch(var(--border))",
+                  color: "oklch(var(--foreground))",
                 }}
               />
             </div>
@@ -1812,7 +1812,7 @@ function FollowUpTable({
             <div key={key} className="space-y-1.5">
               <Label
                 className="text-xs"
-                style={{ color: "oklch(0.40 0.010 240)" }}
+                style={{ color: "oklch(var(--muted-foreground))" }}
               >
                 {label}
               </Label>
@@ -1824,9 +1824,9 @@ function FollowUpTable({
                 placeholder={ph}
                 className="text-sm"
                 style={{
-                  background: "oklch(1.0 0 0)",
-                  borderColor: "oklch(0.88 0.010 240)",
-                  color: "oklch(0.18 0.010 240)",
+                  background: "oklch(var(--card))",
+                  borderColor: "oklch(var(--border))",
+                  color: "oklch(var(--foreground))",
                 }}
               />
             </div>
@@ -1839,7 +1839,7 @@ function FollowUpTable({
               data-ocid="case.followup.submit_button"
               onClick={commitFu}
               style={{
-                background: "oklch(0.45 0.14 193)",
+                background: "oklch(var(--teal))",
                 color: "oklch(0.99 0 0)",
               }}
             >
@@ -1862,8 +1862,8 @@ function FollowUpTable({
                 });
               }}
               style={{
-                borderColor: "oklch(0.88 0.010 240)",
-                color: "oklch(0.40 0.010 240)",
+                borderColor: "oklch(var(--border))",
+                color: "oklch(var(--muted-foreground))",
               }}
             >
               Cancel
@@ -2050,7 +2050,9 @@ export function CaseSheet() {
   if (!caseData) {
     return (
       <div className="p-6 text-center">
-        <p style={{ color: "oklch(0.55 0.010 240)" }}>Case not found</p>
+        <p style={{ color: "oklch(var(--muted-foreground))" }}>
+          Case not found
+        </p>
       </div>
     );
   }
@@ -2069,7 +2071,7 @@ export function CaseSheet() {
             params={{ id: patient.id }}
             data-ocid="case.back.link"
             className="flex items-center gap-1.5 text-xs mb-4 hover:underline"
-            style={{ color: "oklch(0.55 0.010 240)" }}
+            style={{ color: "oklch(var(--muted-foreground))" }}
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             Back to {patient.name}
@@ -2081,11 +2083,11 @@ export function CaseSheet() {
             <div className="flex items-center gap-2 mb-0.5">
               <ClipboardList
                 className="w-4 h-4"
-                style={{ color: "oklch(0.45 0.14 193)" }}
+                style={{ color: "oklch(var(--teal))" }}
               />
               <span
                 className="text-xs font-semibold uppercase tracking-widest"
-                style={{ color: "oklch(0.45 0.14 193)" }}
+                style={{ color: "oklch(var(--teal))" }}
               >
                 Case Sheet
               </span>
@@ -2112,14 +2114,14 @@ export function CaseSheet() {
             </div>
             <h1
               className="text-xl font-display font-bold"
-              style={{ color: "oklch(0.15 0.010 240)" }}
+              style={{ color: "oklch(var(--foreground))" }}
             >
               {patient ? patient.name : "Case Sheet"}
             </h1>
             {patient && (
               <p
                 className="text-xs mt-0.5"
-                style={{ color: "oklch(0.55 0.010 240)" }}
+                style={{ color: "oklch(var(--muted-foreground))" }}
               >
                 Age: {patient.age?.toString()} · {patient.sex} ·{" "}
                 {patient.occupation}
@@ -2132,7 +2134,7 @@ export function CaseSheet() {
             disabled={updateCase.isPending}
             className="gap-1.5 h-9"
             style={{
-              background: "oklch(0.45 0.14 193)",
+              background: "oklch(var(--teal))",
               color: "oklch(0.99 0 0)",
             }}
           >
@@ -2181,7 +2183,7 @@ export function CaseSheet() {
           >
             <AccordionTrigger
               className="px-4 py-3 hover:no-underline font-semibold text-sm"
-              style={{ color: "oklch(0.18 0.010 240)" }}
+              style={{ color: "oklch(var(--foreground))" }}
             >
               <span className="flex items-center gap-2">
                 <SectionNum n={1} />
@@ -2204,7 +2206,7 @@ export function CaseSheet() {
           >
             <AccordionTrigger
               className="px-4 py-3 hover:no-underline font-semibold text-sm"
-              style={{ color: "oklch(0.18 0.010 240)" }}
+              style={{ color: "oklch(var(--foreground))" }}
             >
               <span className="flex items-center gap-2">
                 <SectionNum n={2} />
@@ -2236,7 +2238,7 @@ Response to treatment:`}
           >
             <AccordionTrigger
               className="px-4 py-3 hover:no-underline font-semibold text-sm"
-              style={{ color: "oklch(0.18 0.010 240)" }}
+              style={{ color: "oklch(var(--foreground))" }}
             >
               <span className="flex items-center gap-2">
                 <SectionNum n={3} />
@@ -2268,7 +2270,7 @@ Suppressed diseases (skin eruptions, discharges):`}
           >
             <AccordionTrigger
               className="px-4 py-3 hover:no-underline font-semibold text-sm"
-              style={{ color: "oklch(0.18 0.010 240)" }}
+              style={{ color: "oklch(var(--foreground))" }}
             >
               <span className="flex items-center gap-2">
                 <SectionNum n={4} />
@@ -2300,7 +2302,7 @@ Miasmatic predispositions in family:`}
           >
             <AccordionTrigger
               className="px-4 py-3 hover:no-underline font-semibold text-sm"
-              style={{ color: "oklch(0.18 0.010 240)" }}
+              style={{ color: "oklch(var(--foreground))" }}
             >
               <span className="flex items-center gap-2">
                 <SectionNum n={5} />
@@ -2323,7 +2325,7 @@ Miasmatic predispositions in family:`}
           >
             <AccordionTrigger
               className="px-4 py-3 hover:no-underline font-semibold text-sm"
-              style={{ color: "oklch(0.18 0.010 240)" }}
+              style={{ color: "oklch(var(--foreground))" }}
             >
               <span className="flex items-center gap-2">
                 <SectionNum n={6} />
@@ -2357,7 +2359,7 @@ Sleep — position, disturbing factors, talking in sleep:`}
           >
             <AccordionTrigger
               className="px-4 py-3 hover:no-underline font-semibold text-sm"
-              style={{ color: "oklch(0.18 0.010 240)" }}
+              style={{ color: "oklch(var(--foreground))" }}
             >
               <span className="flex items-center gap-2">
                 <SectionNum n={7} />
@@ -2389,7 +2391,7 @@ Periodicity:`}
           >
             <AccordionTrigger
               className="px-4 py-3 hover:no-underline font-semibold text-sm"
-              style={{ color: "oklch(0.18 0.010 240)" }}
+              style={{ color: "oklch(var(--foreground))" }}
             >
               <span className="flex items-center gap-2">
                 <SectionNum n={8} />
@@ -2409,7 +2411,7 @@ Periodicity:`}
           >
             <AccordionTrigger
               className="px-4 py-3 hover:no-underline font-semibold text-sm"
-              style={{ color: "oklch(0.18 0.010 240)" }}
+              style={{ color: "oklch(var(--foreground))" }}
             >
               <span className="flex items-center gap-2">
                 <SectionNum n={9} />
@@ -2440,7 +2442,7 @@ Date of investigation:`}
           >
             <AccordionTrigger
               className="px-4 py-3 hover:no-underline font-semibold text-sm"
-              style={{ color: "oklch(0.18 0.010 240)" }}
+              style={{ color: "oklch(var(--foreground))" }}
             >
               <span className="flex items-center gap-2">
                 <SectionNum n={10} />
@@ -2472,7 +2474,7 @@ Intercurrent nosode considered:`}
           >
             <AccordionTrigger
               className="px-4 py-3 hover:no-underline font-semibold text-sm"
-              style={{ color: "oklch(0.18 0.010 240)" }}
+              style={{ color: "oklch(var(--foreground))" }}
             >
               <span className="flex items-center gap-2">
                 <SectionNum n={11} />
@@ -2506,7 +2508,7 @@ Keynote symptoms:`}
           >
             <AccordionTrigger
               className="px-4 py-3 hover:no-underline font-semibold text-sm"
-              style={{ color: "oklch(0.18 0.010 240)" }}
+              style={{ color: "oklch(var(--foreground))" }}
             >
               <span className="flex items-center gap-2">
                 <SectionNum n={12} />
@@ -2543,7 +2545,7 @@ Simillimum:`}
           >
             <AccordionTrigger
               className="px-4 py-3 hover:no-underline font-semibold text-sm"
-              style={{ color: "oklch(0.18 0.010 240)" }}
+              style={{ color: "oklch(var(--foreground))" }}
             >
               <span className="flex items-center gap-2">
                 <SectionNum n={13} />
@@ -2573,14 +2575,14 @@ Simillimum:`}
           >
             <AccordionTrigger
               className="px-4 py-3 hover:no-underline font-semibold text-sm"
-              style={{ color: "oklch(0.18 0.010 240)" }}
+              style={{ color: "oklch(var(--foreground))" }}
             >
               <span className="flex items-center gap-2">
                 <SectionNum n={14} />
                 Current Prescription ({prescriptionRows.length})
                 <Pill
                   className="w-3.5 h-3.5 ml-1"
-                  style={{ color: "oklch(0.45 0.14 193)" }}
+                  style={{ color: "oklch(var(--teal))" }}
                 />
               </span>
             </AccordionTrigger>
@@ -2600,14 +2602,14 @@ Simillimum:`}
           >
             <AccordionTrigger
               className="px-4 py-3 hover:no-underline font-semibold text-sm"
-              style={{ color: "oklch(0.18 0.010 240)" }}
+              style={{ color: "oklch(var(--foreground))" }}
             >
               <span className="flex items-center gap-2">
                 <SectionNum n={15} />
                 Follow-ups ({followUpRows.length})
                 <FileText
                   className="w-3.5 h-3.5 ml-1"
-                  style={{ color: "oklch(0.45 0.14 193)" }}
+                  style={{ color: "oklch(var(--teal))" }}
                 />
               </span>
             </AccordionTrigger>
@@ -2629,7 +2631,7 @@ Simillimum:`}
           disabled={updateCase.isPending}
           className="gap-1.5"
           style={{
-            background: "oklch(0.45 0.14 193)",
+            background: "oklch(var(--teal))",
             color: "oklch(0.99 0 0)",
           }}
         >

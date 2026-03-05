@@ -8,6 +8,7 @@ import {
 } from "@tanstack/react-router";
 import { AppLayout } from "./components/AppLayout";
 import { LoginPage } from "./components/LoginPage";
+import { ThemeProvider } from "./context/ThemeContext";
 import { useInternetIdentity } from "./hooks/useInternetIdentity";
 import { useEnsureRegistered } from "./hooks/useQueries";
 import { Appointments } from "./pages/Appointments";
@@ -17,8 +18,9 @@ import { Memos } from "./pages/Memos";
 import { PatientDetail } from "./pages/PatientDetail";
 import { Patients } from "./pages/Patients";
 import { Remedies } from "./pages/Remedies";
+import { Settings } from "./pages/Settings";
 
-// Root route with auth guard
+// Root layout with auth guard — ThemeProvider wraps everything
 function RootLayout() {
   const { identity, isInitializing } = useInternetIdentity();
   // Proactively register the user on every login so all subsequent calls succeed
@@ -28,17 +30,20 @@ function RootLayout() {
     return (
       <div
         className="min-h-screen flex items-center justify-center"
-        style={{ background: "oklch(0.13 0.008 240)" }}
+        style={{ background: "oklch(var(--background))" }}
       >
         <div className="flex items-center gap-3">
           <div
             className="w-5 h-5 border-2 rounded-full animate-spin"
             style={{
-              borderColor: "oklch(0.72 0.14 193 / 0.3)",
-              borderTopColor: "oklch(0.72 0.14 193)",
+              borderColor: "oklch(var(--teal) / 0.3)",
+              borderTopColor: "oklch(var(--teal))",
             }}
           />
-          <span className="text-sm" style={{ color: "oklch(0.55 0.010 240)" }}>
+          <span
+            className="text-sm"
+            style={{ color: "oklch(var(--muted-foreground))" }}
+          >
             Initializing…
           </span>
         </div>
@@ -102,6 +107,12 @@ const memosRoute = createRoute({
   component: Memos,
 });
 
+const settingsRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/settings",
+  component: Settings,
+});
+
 const routeTree = rootRoute.addChildren([
   indexRoute,
   patientsRoute,
@@ -110,6 +121,7 @@ const routeTree = rootRoute.addChildren([
   remediesRoute,
   appointmentsRoute,
   memosRoute,
+  settingsRoute,
 ]);
 
 const router = createRouter({ routeTree });
@@ -122,9 +134,9 @@ declare module "@tanstack/react-router" {
 
 export default function App() {
   return (
-    <>
+    <ThemeProvider>
       <RouterProvider router={router} />
       <Toaster />
-    </>
+    </ThemeProvider>
   );
 }

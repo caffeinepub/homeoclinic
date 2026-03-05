@@ -1,5 +1,4 @@
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "@tanstack/react-router";
 import {
@@ -31,31 +30,28 @@ function StatCard({
   label,
   value,
   loading,
-  color,
+  colorClass,
 }: {
   icon: React.ElementType;
   label: string;
   value: string | number;
   loading: boolean;
-  color: string;
+  colorClass: string;
 }) {
   return (
     <div
-      className="rounded-lg border p-4"
+      className="rounded-xl border p-4"
       style={{
-        background: "oklch(1.0 0 0)",
-        borderColor: "oklch(0.88 0.010 240)",
-        boxShadow: "0 1px 4px oklch(0.15 0.010 240 / 0.05)",
+        background: "oklch(var(--card))",
+        borderColor: "oklch(var(--border))",
+        boxShadow: "var(--card-shadow)",
       }}
     >
       <div className="flex items-center justify-between mb-3">
         <div
-          className="w-8 h-8 rounded-md flex items-center justify-center"
-          style={{
-            backgroundColor: `oklch(${color} / 0.10)`,
-          }}
+          className={`w-8 h-8 rounded-md flex items-center justify-center ${colorClass}`}
         >
-          <Icon className="w-4 h-4" style={{ color: `oklch(${color})` }} />
+          <Icon className="w-4 h-4" />
         </div>
       </div>
       <div>
@@ -64,14 +60,14 @@ function StatCard({
         ) : (
           <div
             className="text-2xl font-display font-bold tracking-tight"
-            style={{ color: "oklch(0.15 0.010 240)" }}
+            style={{ color: "oklch(var(--foreground))" }}
           >
             {value}
           </div>
         )}
         <div
           className="text-xs mt-0.5"
-          style={{ color: "oklch(0.50 0.012 240)" }}
+          style={{ color: "oklch(var(--muted-foreground))" }}
         >
           {label}
         </div>
@@ -99,28 +95,28 @@ export function Dashboard() {
       label: "Total Patients",
       value: patients?.length ?? 0,
       loading: loadingPt,
-      color: "0.45 0.14 193",
+      colorClass: "bg-[oklch(var(--teal)/0.10)] text-[oklch(var(--teal))]",
     },
     {
       icon: CalendarDays,
       label: "Today's Appointments",
       value: todayAppts?.length ?? 0,
       loading: loadingAppt,
-      color: "0.45 0.15 150",
+      colorClass: "bg-[oklch(0.45_0.15_150/0.10)] text-[oklch(0.45_0.15_150)]",
     },
     {
       icon: FileText,
       label: `Cases in ${year}`,
       value: thisYearPatients,
       loading: loadingPt,
-      color: "0.50 0.14 90",
+      colorClass: "bg-[oklch(0.50_0.14_90/0.10)] text-[oklch(0.50_0.14_90)]",
     },
     {
       icon: StickyNote,
       label: "Memos",
       value: memos?.length ?? 0,
       loading: loadingMemos,
-      color: "0.45 0.15 260",
+      colorClass: "bg-[oklch(0.45_0.15_260/0.10)] text-[oklch(0.45_0.15_260)]",
     },
   ];
 
@@ -135,22 +131,25 @@ export function Dashboard() {
         <div className="flex items-center gap-2 mb-1">
           <Stethoscope
             className="w-4 h-4"
-            style={{ color: "oklch(0.45 0.14 193)" }}
+            style={{ color: "oklch(var(--teal))" }}
           />
           <span
             className="text-xs font-semibold uppercase tracking-widest"
-            style={{ color: "oklch(0.45 0.14 193)" }}
+            style={{ color: "oklch(var(--teal))" }}
           >
             HomeoClinic
           </span>
         </div>
         <h1
           className="text-2xl font-display font-bold tracking-tight"
-          style={{ color: "oklch(0.15 0.010 240)" }}
+          style={{ color: "oklch(var(--foreground))" }}
         >
           {greeting}, Doctor
         </h1>
-        <p className="text-sm mt-1" style={{ color: "oklch(0.50 0.012 240)" }}>
+        <p
+          className="text-sm mt-1"
+          style={{ color: "oklch(var(--muted-foreground))" }}
+        >
           {new Date().toLocaleDateString("en-IN", {
             weekday: "long",
             day: "numeric",
@@ -178,34 +177,31 @@ export function Dashboard() {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="rounded-lg border"
+          className="rounded-xl border"
           style={{
-            background: "oklch(1.0 0 0)",
-            borderColor: "oklch(0.88 0.010 240)",
-            boxShadow: "0 1px 4px oklch(0.15 0.010 240 / 0.05)",
+            background: "oklch(var(--card))",
+            borderColor: "oklch(var(--border))",
+            boxShadow: "var(--card-shadow)",
           }}
         >
           <div
             className="flex items-center justify-between px-4 py-3 border-b"
-            style={{ borderColor: "oklch(0.90 0.008 240)" }}
+            style={{ borderColor: "oklch(var(--border))" }}
           >
             <div className="flex items-center gap-2">
               <CalendarDays
                 className="w-4 h-4"
-                style={{ color: "oklch(0.45 0.14 193)" }}
+                style={{ color: "oklch(var(--teal))" }}
               />
               <span
                 className="text-sm font-semibold"
-                style={{ color: "oklch(0.20 0.010 240)" }}
+                style={{ color: "oklch(var(--foreground))" }}
               >
                 Today's Appointments
               </span>
             </div>
             <Link to="/appointments">
-              <span
-                className="text-xs"
-                style={{ color: "oklch(0.45 0.14 193)" }}
-              >
+              <span className="text-xs" style={{ color: "oklch(var(--teal))" }}>
                 View all →
               </span>
             </Link>
@@ -221,7 +217,7 @@ export function Dashboard() {
               <div
                 data-ocid="dashboard.appointments.empty_state"
                 className="py-8 text-center"
-                style={{ color: "oklch(0.55 0.010 240)" }}
+                style={{ color: "oklch(var(--muted-foreground))" }}
               >
                 <CalendarDays className="w-8 h-8 mx-auto mb-2 opacity-30" />
                 <p className="text-sm">No appointments today</p>
@@ -232,19 +228,19 @@ export function Dashboard() {
                   <div
                     key={appt.id}
                     data-ocid={`dashboard.appointment.item.${i + 1}`}
-                    className="flex items-center justify-between p-2.5 rounded-md"
-                    style={{ background: "oklch(0.96 0.006 240)" }}
+                    className="flex items-center justify-between p-2.5 rounded-lg"
+                    style={{ background: "oklch(var(--muted))" }}
                   >
                     <div>
                       <div
                         className="text-sm font-medium"
-                        style={{ color: "oklch(0.18 0.010 240)" }}
+                        style={{ color: "oklch(var(--foreground))" }}
                       >
                         {appt.patientName}
                       </div>
                       <div
                         className="text-xs"
-                        style={{ color: "oklch(0.50 0.012 240)" }}
+                        style={{ color: "oklch(var(--muted-foreground))" }}
                       >
                         {appt.reason}
                       </div>
@@ -253,8 +249,8 @@ export function Dashboard() {
                       variant="outline"
                       className="text-xs"
                       style={{
-                        borderColor: "oklch(0.45 0.14 193 / 0.4)",
-                        color: "oklch(0.45 0.14 193)",
+                        borderColor: "oklch(var(--teal) / 0.4)",
+                        color: "oklch(var(--teal))",
                       }}
                     >
                       {appt.reason}
@@ -273,20 +269,20 @@ export function Dashboard() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="rounded-lg border"
+            className="rounded-xl border"
             style={{
-              background: "oklch(1.0 0 0)",
-              borderColor: "oklch(0.88 0.010 240)",
-              boxShadow: "0 1px 4px oklch(0.15 0.010 240 / 0.05)",
+              background: "oklch(var(--card))",
+              borderColor: "oklch(var(--border))",
+              boxShadow: "var(--card-shadow)",
             }}
           >
             <div
               className="px-4 py-3 border-b"
-              style={{ borderColor: "oklch(0.90 0.008 240)" }}
+              style={{ borderColor: "oklch(var(--border))" }}
             >
               <span
                 className="text-sm font-semibold"
-                style={{ color: "oklch(0.20 0.010 240)" }}
+                style={{ color: "oklch(var(--foreground))" }}
               >
                 Quick Actions
               </span>
@@ -295,11 +291,11 @@ export function Dashboard() {
               <Link to="/patients" data-ocid="dashboard.new_patient.button">
                 <button
                   type="button"
-                  className="w-full flex items-center gap-2 p-2.5 rounded-md text-sm transition-all hover:scale-[1.02] active:scale-[0.98]"
+                  className="w-full flex items-center gap-2 p-2.5 rounded-lg text-sm transition-all hover:scale-[1.02] active:scale-[0.98]"
                   style={{
-                    background: "oklch(0.45 0.14 193 / 0.08)",
-                    color: "oklch(0.35 0.14 193)",
-                    border: "1px solid oklch(0.45 0.14 193 / 0.2)",
+                    background: "oklch(var(--teal) / 0.08)",
+                    color: "oklch(var(--teal))",
+                    border: "1px solid oklch(var(--teal) / 0.2)",
                   }}
                 >
                   <UserPlus className="w-4 h-4" />
@@ -312,10 +308,10 @@ export function Dashboard() {
               >
                 <button
                   type="button"
-                  className="w-full flex items-center gap-2 p-2.5 rounded-md text-sm transition-all hover:scale-[1.02] active:scale-[0.98]"
+                  className="w-full flex items-center gap-2 p-2.5 rounded-lg text-sm transition-all hover:scale-[1.02] active:scale-[0.98]"
                   style={{
                     background: "oklch(0.45 0.15 150 / 0.08)",
-                    color: "oklch(0.35 0.15 150)",
+                    color: "oklch(0.45 0.15 150)",
                     border: "1px solid oklch(0.45 0.15 150 / 0.2)",
                   }}
                 >
@@ -326,10 +322,10 @@ export function Dashboard() {
               <Link to="/patients" data-ocid="dashboard.case_sheets.button">
                 <button
                   type="button"
-                  className="w-full flex items-center gap-2 p-2.5 rounded-md text-sm transition-all hover:scale-[1.02] active:scale-[0.98]"
+                  className="w-full flex items-center gap-2 p-2.5 rounded-lg text-sm transition-all hover:scale-[1.02] active:scale-[0.98]"
                   style={{
                     background: "oklch(0.50 0.14 90 / 0.08)",
-                    color: "oklch(0.38 0.14 90)",
+                    color: "oklch(0.50 0.14 90)",
                     border: "1px solid oklch(0.50 0.14 90 / 0.2)",
                   }}
                 >
@@ -340,10 +336,10 @@ export function Dashboard() {
               <Link to="/remedies" data-ocid="dashboard.remedies.button">
                 <button
                   type="button"
-                  className="w-full flex items-center gap-2 p-2.5 rounded-md text-sm transition-all hover:scale-[1.02] active:scale-[0.98]"
+                  className="w-full flex items-center gap-2 p-2.5 rounded-lg text-sm transition-all hover:scale-[1.02] active:scale-[0.98]"
                   style={{
                     background: "oklch(0.45 0.15 260 / 0.08)",
-                    color: "oklch(0.35 0.15 260)",
+                    color: "oklch(0.45 0.15 260)",
                     border: "1px solid oklch(0.45 0.15 260 / 0.2)",
                   }}
                 >
@@ -359,25 +355,25 @@ export function Dashboard() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.25 }}
-            className="rounded-lg border"
+            className="rounded-xl border"
             style={{
-              background: "oklch(1.0 0 0)",
-              borderColor: "oklch(0.88 0.010 240)",
-              boxShadow: "0 1px 4px oklch(0.15 0.010 240 / 0.05)",
+              background: "oklch(var(--card))",
+              borderColor: "oklch(var(--border))",
+              boxShadow: "var(--card-shadow)",
             }}
           >
             <div
               className="flex items-center justify-between px-4 py-3 border-b"
-              style={{ borderColor: "oklch(0.90 0.008 240)" }}
+              style={{ borderColor: "oklch(var(--border))" }}
             >
               <div className="flex items-center gap-2">
                 <StickyNote
                   className="w-4 h-4"
-                  style={{ color: "oklch(0.45 0.14 193)" }}
+                  style={{ color: "oklch(var(--teal))" }}
                 />
                 <span
                   className="text-sm font-semibold"
-                  style={{ color: "oklch(0.20 0.010 240)" }}
+                  style={{ color: "oklch(var(--foreground))" }}
                 >
                   Recent Memos
                 </span>
@@ -385,7 +381,7 @@ export function Dashboard() {
               <Link to="/memos">
                 <span
                   className="text-xs"
-                  style={{ color: "oklch(0.45 0.14 193)" }}
+                  style={{ color: "oklch(var(--teal))" }}
                 >
                   View all →
                 </span>
@@ -401,7 +397,7 @@ export function Dashboard() {
                 <div
                   data-ocid="dashboard.memos.empty_state"
                   className="py-6 text-center"
-                  style={{ color: "oklch(0.55 0.010 240)" }}
+                  style={{ color: "oklch(var(--muted-foreground))" }}
                 >
                   <StickyNote className="w-6 h-6 mx-auto mb-1 opacity-30" />
                   <p className="text-xs">No memos yet</p>
@@ -412,17 +408,17 @@ export function Dashboard() {
                     <div
                       key={memo.id}
                       data-ocid={`dashboard.memo.item.${i + 1}`}
-                      className="p-2.5 rounded-md"
-                      style={{ background: "oklch(0.96 0.006 240)" }}
+                      className="p-2.5 rounded-lg"
+                      style={{ background: "oklch(var(--muted))" }}
                     >
                       <div className="flex items-center gap-1.5 mb-0.5">
                         <Clock
                           className="w-3 h-3"
-                          style={{ color: "oklch(0.55 0.010 240)" }}
+                          style={{ color: "oklch(var(--muted-foreground))" }}
                         />
                         <span
                           className="text-xs"
-                          style={{ color: "oklch(0.55 0.010 240)" }}
+                          style={{ color: "oklch(var(--muted-foreground))" }}
                         >
                           {new Date(Number(memo.createdAt)).toLocaleDateString(
                             "en-IN",
@@ -432,7 +428,7 @@ export function Dashboard() {
                       </div>
                       <p
                         className="text-xs line-clamp-2"
-                        style={{ color: "oklch(0.25 0.010 240)" }}
+                        style={{ color: "oklch(var(--foreground))" }}
                       >
                         {memo.content}
                       </p>
@@ -448,14 +444,14 @@ export function Dashboard() {
       {/* Footer */}
       <div
         className="mt-8 text-center text-xs"
-        style={{ color: "oklch(0.60 0.008 240)" }}
+        style={{ color: "oklch(var(--muted-foreground))" }}
       >
         © {new Date().getFullYear()}. Built with love using{" "}
         <a
           href={`https://caffeine.ai?utm_source=caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(window.location.hostname)}`}
           target="_blank"
           rel="noopener noreferrer"
-          style={{ color: "oklch(0.45 0.14 193)" }}
+          style={{ color: "oklch(var(--teal))" }}
         >
           caffeine.ai
         </a>

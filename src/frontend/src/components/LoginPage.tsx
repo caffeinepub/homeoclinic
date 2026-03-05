@@ -9,7 +9,7 @@ export function LoginPage() {
   return (
     <div
       className="min-h-screen flex items-center justify-center relative overflow-hidden"
-      style={{ background: "oklch(0.97 0.004 240)" }}
+      style={{ background: "oklch(var(--background))" }}
     >
       {/* Background grid pattern */}
       <div
@@ -46,8 +46,8 @@ export function LoginPage() {
         <div
           className="rounded-2xl border p-8"
           style={{
-            background: "oklch(1.0 0 0)",
-            borderColor: "oklch(0.88 0.010 240)",
+            background: "oklch(var(--card))",
+            borderColor: "oklch(var(--border))",
             boxShadow:
               "0 8px 32px oklch(0.15 0.010 240 / 0.08), 0 2px 8px oklch(0.15 0.010 240 / 0.04)",
           }}
@@ -57,13 +57,13 @@ export function LoginPage() {
             <div
               className="w-16 h-16 rounded-2xl flex items-center justify-center"
               style={{
-                background: "oklch(0.45 0.14 193 / 0.10)",
+                background: "oklch(var(--teal) / 0.10)",
                 border: "1px solid oklch(0.45 0.14 193 / 0.25)",
               }}
             >
               <Stethoscope
                 className="w-8 h-8"
-                style={{ color: "oklch(0.45 0.14 193)" }}
+                style={{ color: "oklch(var(--teal))" }}
               />
             </div>
           </div>
@@ -71,11 +71,14 @@ export function LoginPage() {
           <div className="text-center mb-8">
             <h1
               className="text-3xl font-display font-bold tracking-tight mb-2"
-              style={{ color: "oklch(0.15 0.010 240)" }}
+              style={{ color: "oklch(var(--foreground))" }}
             >
               HomeoClinic
             </h1>
-            <p className="text-sm" style={{ color: "oklch(0.50 0.012 240)" }}>
+            <p
+              className="text-sm"
+              style={{ color: "oklch(var(--muted-foreground))" }}
+            >
               Clinical Management System
             </p>
             <div
@@ -106,15 +109,15 @@ export function LoginPage() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 }}
                 className="flex items-center gap-3 text-sm"
-                style={{ color: "oklch(0.35 0.012 240)" }}
+                style={{ color: "oklch(var(--foreground))" }}
               >
                 <div
                   className="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0"
-                  style={{ background: "oklch(0.45 0.14 193 / 0.08)" }}
+                  style={{ background: "oklch(var(--teal) / 0.08)" }}
                 >
                   <Icon
                     className="w-3.5 h-3.5"
-                    style={{ color: "oklch(0.45 0.14 193)" }}
+                    style={{ color: "oklch(var(--teal))" }}
                   />
                 </div>
                 {text}
@@ -128,7 +131,7 @@ export function LoginPage() {
             disabled={isLoggingIn || isInitializing}
             className="w-full h-11 text-sm font-semibold"
             style={{
-              background: "oklch(0.45 0.14 193)",
+              background: "oklch(var(--teal))",
               color: "oklch(0.99 0 0)",
             }}
           >
@@ -153,7 +156,7 @@ export function LoginPage() {
 
           <p
             className="text-center text-xs mt-4"
-            style={{ color: "oklch(0.60 0.008 240)" }}
+            style={{ color: "oklch(var(--muted-foreground))" }}
           >
             Secure authentication via Internet Identity
           </p>

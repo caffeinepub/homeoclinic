@@ -129,18 +129,18 @@ export function Appointments() {
     return (
       <div
         data-ocid={`appointments.appointment.item.${i + 1}`}
-        className="flex items-center gap-3 px-4 py-3 rounded-lg border group"
+        className="flex items-center gap-3 px-4 py-3 rounded-xl border group"
         style={{
-          background: "oklch(1.0 0 0)",
-          borderColor: "oklch(0.88 0.010 240)",
-          boxShadow: "0 1px 3px oklch(0.15 0.010 240 / 0.04)",
+          background: "oklch(var(--card))",
+          borderColor: "oklch(var(--border))",
+          boxShadow: "var(--card-shadow)",
         }}
       >
         <div
           className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
           style={{
-            background: "oklch(0.45 0.14 193 / 0.10)",
-            color: "oklch(0.38 0.14 193)",
+            background: "oklch(var(--teal) / 0.10)",
+            color: "oklch(var(--teal))",
           }}
         >
           {appt.patientName.charAt(0).toUpperCase()}
@@ -148,11 +148,14 @@ export function Appointments() {
         <div className="flex-1 min-w-0">
           <div
             className="text-sm font-medium truncate"
-            style={{ color: "oklch(0.18 0.010 240)" }}
+            style={{ color: "oklch(var(--foreground))" }}
           >
             {appt.patientName}
           </div>
-          <div className="text-xs" style={{ color: "oklch(0.55 0.010 240)" }}>
+          <div
+            className="text-xs"
+            style={{ color: "oklch(var(--muted-foreground))" }}
+          >
             {formatDate(appt.date)}
             {appt.time && ` · ${appt.time}`}
             {appt.reason && ` · ${appt.reason}`}
@@ -165,11 +168,11 @@ export function Appointments() {
             borderColor:
               appt.reason === "Follow-up"
                 ? "oklch(0.45 0.15 150 / 0.4)"
-                : "oklch(0.45 0.14 193 / 0.4)",
+                : "oklch(var(--teal) / 0.4)",
             color:
               appt.reason === "Follow-up"
-                ? "oklch(0.38 0.15 150)"
-                : "oklch(0.38 0.14 193)",
+                ? "oklch(0.45 0.15 150)"
+                : "oklch(var(--teal))",
           }}
         >
           {appt.reason}
@@ -180,8 +183,8 @@ export function Appointments() {
           onClick={() => setDeleteId(appt.id)}
           className="w-7 h-7 rounded-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
           style={{
-            color: "oklch(0.55 0.22 25)",
-            background: "oklch(0.55 0.22 25 / 0.08)",
+            color: "oklch(var(--destructive))",
+            background: "oklch(var(--destructive) / 0.08)",
           }}
         >
           <Trash2 className="w-3.5 h-3.5" />
@@ -202,18 +205,18 @@ export function Appointments() {
           <div className="flex items-center gap-2 mb-1">
             <CalendarDays
               className="w-4 h-4"
-              style={{ color: "oklch(0.45 0.14 193)" }}
+              style={{ color: "oklch(var(--teal))" }}
             />
             <span
               className="text-xs font-semibold uppercase tracking-widest"
-              style={{ color: "oklch(0.45 0.14 193)" }}
+              style={{ color: "oklch(var(--teal))" }}
             >
               Schedule
             </span>
           </div>
           <h1
             className="text-2xl font-display font-bold tracking-tight"
-            style={{ color: "oklch(0.15 0.010 240)" }}
+            style={{ color: "oklch(var(--foreground))" }}
           >
             Appointments
           </h1>
@@ -225,7 +228,7 @@ export function Appointments() {
               data-ocid="appointments.add.open_modal_button"
               className="gap-2 h-9"
               style={{
-                background: "oklch(0.45 0.14 193)",
+                background: "oklch(var(--teal))",
                 color: "oklch(0.99 0 0)",
               }}
             >
@@ -237,14 +240,14 @@ export function Appointments() {
             data-ocid="appointments.add.dialog"
             className="max-w-md"
             style={{
-              background: "oklch(1.0 0 0)",
-              borderColor: "oklch(0.88 0.010 240)",
+              background: "oklch(var(--card))",
+              borderColor: "oklch(var(--border))",
             }}
           >
             <DialogHeader>
               <DialogTitle
                 className="font-display"
-                style={{ color: "oklch(0.15 0.010 240)" }}
+                style={{ color: "oklch(var(--foreground))" }}
               >
                 New Appointment
               </DialogTitle>
@@ -254,14 +257,14 @@ export function Appointments() {
               <div className="space-y-2">
                 <Label
                   className="text-xs"
-                  style={{ color: "oklch(0.40 0.010 240)" }}
+                  style={{ color: "oklch(var(--muted-foreground))" }}
                 >
                   Patient Name *
                 </Label>
                 <div className="relative">
                   <Search
                     className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5"
-                    style={{ color: "oklch(0.55 0.010 240)" }}
+                    style={{ color: "oklch(var(--muted-foreground))" }}
                   />
                   <Input
                     data-ocid="appointments.add.search.search_input"
@@ -276,18 +279,18 @@ export function Appointments() {
                     }
                     className="pl-8"
                     style={{
-                      background: "oklch(0.96 0.006 240)",
-                      borderColor: "oklch(0.88 0.010 240)",
-                      color: "oklch(0.15 0.010 240)",
+                      background: "oklch(var(--muted))",
+                      borderColor: "oklch(var(--border))",
+                      color: "oklch(var(--foreground))",
                     }}
                   />
                 </div>
                 {form.patientSearch && filteredPatients.length > 0 && (
                   <div
-                    className="rounded-md border max-h-36 overflow-y-auto"
+                    className="rounded-lg border max-h-36 overflow-y-auto"
                     style={{
-                      background: "oklch(1.0 0 0)",
-                      borderColor: "oklch(0.88 0.010 240)",
+                      background: "oklch(var(--popover))",
+                      borderColor: "oklch(var(--border))",
                     }}
                   >
                     {filteredPatients.slice(0, 5).map((p) => (
@@ -302,8 +305,20 @@ export function Appointments() {
                             patientSearch: p.name,
                           }))
                         }
-                        className="w-full text-left px-3 py-2 text-sm hover:bg-[oklch(0.96_0.006_240)] transition-colors"
-                        style={{ color: "oklch(0.20 0.010 240)" }}
+                        className="w-full text-left px-3 py-2 text-sm transition-colors"
+                        style={{
+                          color: "oklch(var(--foreground))",
+                        }}
+                        onMouseEnter={(e) => {
+                          (
+                            e.currentTarget as HTMLButtonElement
+                          ).style.background = "oklch(var(--muted))";
+                        }}
+                        onMouseLeave={(e) => {
+                          (
+                            e.currentTarget as HTMLButtonElement
+                          ).style.background = "transparent";
+                        }}
                       >
                         {p.name} — {p.age?.toString()} yrs
                       </button>
@@ -314,7 +329,7 @@ export function Appointments() {
               <div className="space-y-1.5">
                 <Label
                   className="text-xs"
-                  style={{ color: "oklch(0.40 0.010 240)" }}
+                  style={{ color: "oklch(var(--muted-foreground))" }}
                 >
                   Date *
                 </Label>
@@ -326,16 +341,16 @@ export function Appointments() {
                   }
                   data-ocid="appointments.add.date.input"
                   style={{
-                    background: "oklch(0.96 0.006 240)",
-                    borderColor: "oklch(0.88 0.010 240)",
-                    color: "oklch(0.15 0.010 240)",
+                    background: "oklch(var(--muted))",
+                    borderColor: "oklch(var(--border))",
+                    color: "oklch(var(--foreground))",
                   }}
                 />
               </div>
               <div className="space-y-1.5">
                 <Label
                   className="text-xs"
-                  style={{ color: "oklch(0.40 0.010 240)" }}
+                  style={{ color: "oklch(var(--muted-foreground))" }}
                 >
                   Time
                 </Label>
@@ -347,16 +362,16 @@ export function Appointments() {
                   }
                   data-ocid="appointments.add.time.input"
                   style={{
-                    background: "oklch(0.96 0.006 240)",
-                    borderColor: "oklch(0.88 0.010 240)",
-                    color: "oklch(0.15 0.010 240)",
+                    background: "oklch(var(--muted))",
+                    borderColor: "oklch(var(--border))",
+                    color: "oklch(var(--foreground))",
                   }}
                 />
               </div>
               <div className="space-y-1.5">
                 <Label
                   className="text-xs"
-                  style={{ color: "oklch(0.40 0.010 240)" }}
+                  style={{ color: "oklch(var(--muted-foreground))" }}
                 >
                   Visit Type / Reason
                 </Label>
@@ -367,17 +382,17 @@ export function Appointments() {
                   <SelectTrigger
                     data-ocid="appointments.add.type.select"
                     style={{
-                      background: "oklch(0.96 0.006 240)",
-                      borderColor: "oklch(0.88 0.010 240)",
-                      color: "oklch(0.15 0.010 240)",
+                      background: "oklch(var(--muted))",
+                      borderColor: "oklch(var(--border))",
+                      color: "oklch(var(--foreground))",
                     }}
                   >
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent
                     style={{
-                      background: "oklch(1.0 0 0)",
-                      borderColor: "oklch(0.88 0.010 240)",
+                      background: "oklch(var(--popover))",
+                      borderColor: "oklch(var(--border))",
                     }}
                   >
                     <SelectItem value="New">New Patient</SelectItem>
@@ -394,8 +409,8 @@ export function Appointments() {
                 data-ocid="appointments.add.cancel_button"
                 onClick={() => setAddOpen(false)}
                 style={{
-                  borderColor: "oklch(0.88 0.010 240)",
-                  color: "oklch(0.40 0.010 240)",
+                  borderColor: "oklch(var(--border))",
+                  color: "oklch(var(--muted-foreground))",
                 }}
               >
                 Cancel
@@ -405,7 +420,7 @@ export function Appointments() {
                 onClick={handleAdd}
                 disabled={addAppt.isPending}
                 style={{
-                  background: "oklch(0.45 0.14 193)",
+                  background: "oklch(var(--teal))",
                   color: "oklch(0.99 0 0)",
                 }}
               >
@@ -423,7 +438,7 @@ export function Appointments() {
       <Tabs defaultValue="today">
         <TabsList
           className="mb-5"
-          style={{ background: "oklch(0.93 0.008 240)" }}
+          style={{ background: "oklch(var(--muted))" }}
         >
           <TabsTrigger value="today" data-ocid="appointments.today.tab">
             By Date
@@ -441,10 +456,10 @@ export function Appointments() {
           >
             {/* Date navigation */}
             <div
-              className="flex items-center gap-3 mb-4 p-3 rounded-lg border"
+              className="flex items-center gap-3 mb-4 p-3 rounded-xl border"
               style={{
-                background: "oklch(1.0 0 0)",
-                borderColor: "oklch(0.88 0.010 240)",
+                background: "oklch(var(--card))",
+                borderColor: "oklch(var(--border))",
               }}
             >
               <button
@@ -453,8 +468,8 @@ export function Appointments() {
                 onClick={prevDay}
                 className="w-7 h-7 rounded-md flex items-center justify-center"
                 style={{
-                  background: "oklch(0.93 0.008 240)",
-                  color: "oklch(0.40 0.010 240)",
+                  background: "oklch(var(--muted))",
+                  color: "oklch(var(--muted-foreground))",
                 }}
               >
                 <ChevronLeft className="w-4 h-4" />
@@ -466,9 +481,9 @@ export function Appointments() {
                 data-ocid="appointments.date.input"
                 className="flex-1 text-center"
                 style={{
-                  background: "oklch(0.96 0.006 240)",
-                  borderColor: "oklch(0.88 0.010 240)",
-                  color: "oklch(0.15 0.010 240)",
+                  background: "oklch(var(--muted))",
+                  borderColor: "oklch(var(--border))",
+                  color: "oklch(var(--foreground))",
                 }}
               />
               <button
@@ -477,8 +492,8 @@ export function Appointments() {
                 onClick={nextDay}
                 className="w-7 h-7 rounded-md flex items-center justify-center"
                 style={{
-                  background: "oklch(0.93 0.008 240)",
-                  color: "oklch(0.40 0.010 240)",
+                  background: "oklch(var(--muted))",
+                  color: "oklch(var(--muted-foreground))",
                 }}
               >
                 <ChevronRight className="w-4 h-4" />
@@ -487,7 +502,7 @@ export function Appointments() {
 
             <div
               className="mb-2 text-xs"
-              style={{ color: "oklch(0.50 0.012 240)" }}
+              style={{ color: "oklch(var(--muted-foreground))" }}
             >
               {formatDate(selectedDate)} — {dateAppts?.length ?? 0}{" "}
               appointment(s)
@@ -496,25 +511,25 @@ export function Appointments() {
             {loadingDate ? (
               <div className="space-y-2">
                 {[1, 2, 3].map((i) => (
-                  <Skeleton key={i} className="h-14 rounded-lg" />
+                  <Skeleton key={i} className="h-14 rounded-xl" />
                 ))}
               </div>
             ) : !dateAppts?.length ? (
               <div
                 data-ocid="appointments.date.empty_state"
-                className="py-14 text-center rounded-lg border"
+                className="py-14 text-center rounded-xl border"
                 style={{
-                  background: "oklch(1.0 0 0)",
-                  borderColor: "oklch(0.88 0.010 240)",
+                  background: "oklch(var(--card))",
+                  borderColor: "oklch(var(--border))",
                 }}
               >
                 <CalendarDays
                   className="w-10 h-10 mx-auto mb-2 opacity-20"
-                  style={{ color: "oklch(0.45 0.14 193)" }}
+                  style={{ color: "oklch(var(--teal))" }}
                 />
                 <p
                   className="text-sm"
-                  style={{ color: "oklch(0.50 0.012 240)" }}
+                  style={{ color: "oklch(var(--muted-foreground))" }}
                 >
                   No appointments on this date
                 </p>
@@ -538,25 +553,25 @@ export function Appointments() {
             {loadingAll ? (
               <div className="space-y-2">
                 {[1, 2, 3].map((i) => (
-                  <Skeleton key={i} className="h-14 rounded-lg" />
+                  <Skeleton key={i} className="h-14 rounded-xl" />
                 ))}
               </div>
             ) : !allAppts?.length ? (
               <div
                 data-ocid="appointments.all.empty_state"
-                className="py-14 text-center rounded-lg border"
+                className="py-14 text-center rounded-xl border"
                 style={{
-                  background: "oklch(1.0 0 0)",
-                  borderColor: "oklch(0.88 0.010 240)",
+                  background: "oklch(var(--card))",
+                  borderColor: "oklch(var(--border))",
                 }}
               >
                 <CalendarDays
                   className="w-10 h-10 mx-auto mb-2 opacity-20"
-                  style={{ color: "oklch(0.45 0.14 193)" }}
+                  style={{ color: "oklch(var(--teal))" }}
                 />
                 <p
                   className="text-sm"
-                  style={{ color: "oklch(0.50 0.012 240)" }}
+                  style={{ color: "oklch(var(--muted-foreground))" }}
                 >
                   No appointments yet
                 </p>
@@ -582,15 +597,17 @@ export function Appointments() {
         <AlertDialogContent
           data-ocid="appointments.delete.dialog"
           style={{
-            background: "oklch(1.0 0 0)",
-            borderColor: "oklch(0.88 0.010 240)",
+            background: "oklch(var(--card))",
+            borderColor: "oklch(var(--border))",
           }}
         >
           <AlertDialogHeader>
-            <AlertDialogTitle style={{ color: "oklch(0.15 0.010 240)" }}>
+            <AlertDialogTitle style={{ color: "oklch(var(--foreground))" }}>
               Delete Appointment?
             </AlertDialogTitle>
-            <AlertDialogDescription style={{ color: "oklch(0.50 0.012 240)" }}>
+            <AlertDialogDescription
+              style={{ color: "oklch(var(--muted-foreground))" }}
+            >
               This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -598,9 +615,9 @@ export function Appointments() {
             <AlertDialogCancel
               data-ocid="appointments.delete.cancel_button"
               style={{
-                background: "oklch(0.94 0.008 240)",
-                borderColor: "oklch(0.88 0.010 240)",
-                color: "oklch(0.30 0.010 240)",
+                background: "oklch(var(--muted))",
+                borderColor: "oklch(var(--border))",
+                color: "oklch(var(--foreground))",
               }}
             >
               Cancel
@@ -609,7 +626,7 @@ export function Appointments() {
               data-ocid="appointments.delete.confirm_button"
               onClick={() => deleteId && handleDelete(deleteId)}
               style={{
-                background: "oklch(0.55 0.22 25)",
+                background: "oklch(var(--destructive))",
                 color: "oklch(0.99 0 0)",
               }}
             >

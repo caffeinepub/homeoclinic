@@ -98,18 +98,18 @@ export function Memos() {
         <div className="flex items-center gap-2 mb-1">
           <StickyNote
             className="w-4 h-4"
-            style={{ color: "oklch(0.45 0.14 193)" }}
+            style={{ color: "oklch(var(--teal))" }}
           />
           <span
             className="text-xs font-semibold uppercase tracking-widest"
-            style={{ color: "oklch(0.45 0.14 193)" }}
+            style={{ color: "oklch(var(--teal))" }}
           >
             Physician Notes
           </span>
         </div>
         <h1
           className="text-2xl font-display font-bold tracking-tight"
-          style={{ color: "oklch(0.15 0.010 240)" }}
+          style={{ color: "oklch(var(--foreground))" }}
         >
           Memos
         </h1>
@@ -120,16 +120,16 @@ export function Memos() {
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.08 }}
-        className="rounded-lg border p-4 mb-6"
+        className="rounded-xl border p-4 mb-6"
         style={{
-          background: "oklch(1.0 0 0)",
-          borderColor: "oklch(0.88 0.010 240)",
-          boxShadow: "0 1px 4px oklch(0.15 0.010 240 / 0.05)",
+          background: "oklch(var(--card))",
+          borderColor: "oklch(var(--border))",
+          boxShadow: "var(--card-shadow)",
         }}
       >
         <div
           className="text-xs font-semibold uppercase tracking-widest mb-3"
-          style={{ color: "oklch(0.45 0.14 193)" }}
+          style={{ color: "oklch(var(--teal))" }}
         >
           New Memo
         </div>
@@ -141,9 +141,9 @@ export function Memos() {
           placeholder="Write a clinical note, reminder, or observation…"
           className="text-sm mb-3"
           style={{
-            background: "oklch(0.97 0.004 240)",
-            borderColor: "oklch(0.88 0.010 240)",
-            color: "oklch(0.18 0.010 240)",
+            background: "oklch(var(--muted))",
+            borderColor: "oklch(var(--border))",
+            color: "oklch(var(--foreground))",
           }}
         />
         <div className="flex justify-end">
@@ -153,7 +153,7 @@ export function Memos() {
             disabled={addMemo.isPending || !newContent.trim()}
             className="gap-1.5 h-8 text-sm"
             style={{
-              background: "oklch(0.45 0.14 193)",
+              background: "oklch(var(--teal))",
               color: "oklch(0.99 0 0)",
             }}
           >
@@ -171,23 +171,26 @@ export function Memos() {
       {isLoading ? (
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
-            <Skeleton key={i} className="h-24 rounded-lg" />
+            <Skeleton key={i} className="h-24 rounded-xl" />
           ))}
         </div>
       ) : !sorted.length ? (
         <div
           data-ocid="memos.empty_state"
-          className="py-16 text-center rounded-lg border"
+          className="py-16 text-center rounded-xl border"
           style={{
-            background: "oklch(1.0 0 0)",
-            borderColor: "oklch(0.88 0.010 240)",
+            background: "oklch(var(--card))",
+            borderColor: "oklch(var(--border))",
           }}
         >
           <StickyNote
             className="w-10 h-10 mx-auto mb-3 opacity-20"
-            style={{ color: "oklch(0.45 0.14 193)" }}
+            style={{ color: "oklch(var(--teal))" }}
           />
-          <p className="text-sm" style={{ color: "oklch(0.50 0.012 240)" }}>
+          <p
+            className="text-sm"
+            style={{ color: "oklch(var(--muted-foreground))" }}
+          >
             No memos yet. Write your first clinical note above.
           </p>
         </div>
@@ -202,25 +205,25 @@ export function Memos() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 layout
-                className="rounded-lg border group"
+                className="rounded-xl border group"
                 style={{
-                  background: "oklch(1.0 0 0)",
-                  borderColor: "oklch(0.88 0.010 240)",
-                  boxShadow: "0 1px 3px oklch(0.15 0.010 240 / 0.04)",
+                  background: "oklch(var(--card))",
+                  borderColor: "oklch(var(--border))",
+                  boxShadow: "var(--card-shadow)",
                 }}
               >
                 <div
                   className="flex items-center justify-between px-4 py-2.5 border-b"
-                  style={{ borderColor: "oklch(0.91 0.008 240)" }}
+                  style={{ borderColor: "oklch(var(--border))" }}
                 >
                   <div className="flex items-center gap-1.5">
                     <Clock
                       className="w-3 h-3"
-                      style={{ color: "oklch(0.60 0.010 240)" }}
+                      style={{ color: "oklch(var(--muted-foreground))" }}
                     />
                     <span
                       className="text-xs"
-                      style={{ color: "oklch(0.55 0.010 240)" }}
+                      style={{ color: "oklch(var(--muted-foreground))" }}
                     >
                       {new Date(Number(memo.createdAt)).toLocaleDateString(
                         "en-IN",
@@ -237,7 +240,7 @@ export function Memos() {
                           data-ocid={`memos.cancel_button.${i + 1}`}
                           onClick={() => setEditId(null)}
                           className="h-6 px-2 text-xs"
-                          style={{ color: "oklch(0.50 0.012 240)" }}
+                          style={{ color: "oklch(var(--muted-foreground))" }}
                         >
                           Cancel
                         </Button>
@@ -248,7 +251,7 @@ export function Memos() {
                           disabled={updateMemo.isPending}
                           className="h-6 px-2 text-xs gap-1"
                           style={{
-                            background: "oklch(0.45 0.14 193)",
+                            background: "oklch(var(--teal))",
                             color: "oklch(0.99 0 0)",
                           }}
                         >
@@ -264,8 +267,8 @@ export function Memos() {
                           onClick={() => startEdit(memo)}
                           className="px-2 py-0.5 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity"
                           style={{
-                            color: "oklch(0.45 0.14 193)",
-                            background: "oklch(0.45 0.14 193 / 0.08)",
+                            color: "oklch(var(--teal))",
+                            background: "oklch(var(--teal) / 0.08)",
                           }}
                         >
                           Edit
@@ -276,8 +279,8 @@ export function Memos() {
                           onClick={() => setDeleteId(memo.id)}
                           className="w-6 h-6 rounded flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                           style={{
-                            color: "oklch(0.55 0.22 25)",
-                            background: "oklch(0.55 0.22 25 / 0.08)",
+                            color: "oklch(var(--destructive))",
+                            background: "oklch(var(--destructive) / 0.08)",
                           }}
                         >
                           <Trash2 className="w-3 h-3" />
@@ -296,15 +299,15 @@ export function Memos() {
                       autoFocus
                       className="text-sm"
                       style={{
-                        background: "oklch(0.97 0.004 240)",
-                        borderColor: "oklch(0.45 0.14 193 / 0.4)",
-                        color: "oklch(0.18 0.010 240)",
+                        background: "oklch(var(--muted))",
+                        borderColor: "oklch(var(--teal) / 0.4)",
+                        color: "oklch(var(--foreground))",
                       }}
                     />
                   ) : (
                     <p
                       className="text-sm whitespace-pre-wrap leading-relaxed"
-                      style={{ color: "oklch(0.25 0.010 240)" }}
+                      style={{ color: "oklch(var(--foreground))" }}
                     >
                       {memo.content}
                     </p>
@@ -324,15 +327,17 @@ export function Memos() {
         <AlertDialogContent
           data-ocid="memos.delete.dialog"
           style={{
-            background: "oklch(1.0 0 0)",
-            borderColor: "oklch(0.88 0.010 240)",
+            background: "oklch(var(--card))",
+            borderColor: "oklch(var(--border))",
           }}
         >
           <AlertDialogHeader>
-            <AlertDialogTitle style={{ color: "oklch(0.15 0.010 240)" }}>
+            <AlertDialogTitle style={{ color: "oklch(var(--foreground))" }}>
               Delete Memo?
             </AlertDialogTitle>
-            <AlertDialogDescription style={{ color: "oklch(0.50 0.012 240)" }}>
+            <AlertDialogDescription
+              style={{ color: "oklch(var(--muted-foreground))" }}
+            >
               This memo will be permanently deleted.
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -340,9 +345,9 @@ export function Memos() {
             <AlertDialogCancel
               data-ocid="memos.delete.cancel_button"
               style={{
-                background: "oklch(0.94 0.008 240)",
-                borderColor: "oklch(0.88 0.010 240)",
-                color: "oklch(0.30 0.010 240)",
+                background: "oklch(var(--muted))",
+                borderColor: "oklch(var(--border))",
+                color: "oklch(var(--foreground))",
               }}
             >
               Cancel
@@ -351,7 +356,7 @@ export function Memos() {
               data-ocid="memos.delete.confirm_button"
               onClick={() => deleteId && handleDelete(deleteId)}
               style={{
-                background: "oklch(0.55 0.22 25)",
+                background: "oklch(var(--destructive))",
                 color: "oklch(0.99 0 0)",
               }}
             >
