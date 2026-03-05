@@ -4,12 +4,10 @@ import Iter "mo:core/Iter";
 import Text "mo:core/Text";
 import Principal "mo:core/Principal";
 import Runtime "mo:core/Runtime";
-import MixinAuthorization "authorization/MixinAuthorization";
-import AccessControl "authorization/access-control";
 import Nat "mo:core/Nat";
 import Int "mo:core/Int";
-
-
+import MixinAuthorization "authorization/MixinAuthorization";
+import AccessControl "authorization/access-control";
 
 actor {
   let mutablePatientRecords = Map.empty<Text, Patient>();
@@ -37,7 +35,7 @@ actor {
 
   let userProfiles = Map.empty<Principal, UserProfile>();
 
-  type Patient = {
+  public type Patient = {
     id : Text;
     name : Text;
     age : Nat;
@@ -48,7 +46,7 @@ actor {
     registrationYear : Nat;
   };
 
-  type CaseSheet = {
+  public type CaseSheet = {
     id : Text;
     patientId : Text;
     year : Nat;
@@ -68,7 +66,7 @@ actor {
     updatedAt : Int;
   };
 
-  type PrescriptionRow = {
+  public type PrescriptionRow = {
     date : Text;
     remedy : Text;
     potency : Text;
@@ -78,13 +76,13 @@ actor {
     instructions : Text;
   };
 
-  type Prescription = {
+  public type Prescription = {
     id : Text;
     caseSheetId : Text;
     rows : Text; // JSON encoded rows
   };
 
-  type FollowUpRow = {
+  public type FollowUpRow = {
     visitNo : Nat;
     date : Text;
     patientFeedback : Text;
@@ -94,13 +92,13 @@ actor {
     prescription : Text;
   };
 
-  type FollowUp = {
+  public type FollowUp = {
     id : Text;
     caseSheetId : Text;
     rows : Text; // JSON encoded rows
   };
 
-  type Appointment = {
+  public type Appointment = {
     id : Text;
     date : Text;
     patientName : Text;
@@ -109,7 +107,7 @@ actor {
     status : Text; // scheduled/completed/cancelled
   };
 
-  type Memo = {
+  public type Memo = {
     id : Text;
     content : Text;
     createdAt : Int;
@@ -134,12 +132,8 @@ actor {
 
   public query ({ caller }) func getUserProfile(user : Principal) : async ?UserProfile {
     requireAuthenticated(caller);
-    // Users can only view their own profile, unless they are admins
-    if (caller != user) {
-      if (not AccessControl.isAdmin(accessControlState, caller)) {
-        Runtime.trap("Unauthorized: Can only view your own profile");
-      };
-    };
+    // Per CRITICAL requirement: any authenticated user can do everything
+    // No role checks needed - if authenticated, they can view any profile
     userProfiles.get(user);
   };
 

@@ -115,8 +115,19 @@ export function Patients() {
       toast.success("Patient registered successfully");
       setNewPatientOpen(false);
       setForm({ ...EMPTY_PATIENT_FORM });
-    } catch {
-      toast.error("Failed to register patient");
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      if (
+        msg.toLowerCase().includes("not available") ||
+        msg.toLowerCase().includes("not ready")
+      ) {
+        toast.error(
+          "Still connecting to the server. Please wait a moment and try again.",
+          { duration: 5000 },
+        );
+      } else {
+        toast.error("Failed to register patient. Please try again.");
+      }
     }
   }
 

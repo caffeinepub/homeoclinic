@@ -12,6 +12,30 @@ import type {
 } from "../backend.d";
 import { useActor } from "./useActor";
 
+/** Wait up to `maxWaitMs` for the actor to become available by polling.
+ *  Also triggers a retry of the actor query if it remains null. */
+async function waitForActor(
+  getActor: () => backendInterface | null,
+  retryActorQuery: () => void,
+  maxWaitMs = 15000,
+): Promise<backendInterface> {
+  const start = Date.now();
+  let retried = false;
+  while (Date.now() - start < maxWaitMs) {
+    const a = getActor();
+    if (a) return a;
+    // After 2s of waiting, trigger a query retry in case it errored
+    if (!retried && Date.now() - start > 2000) {
+      retried = true;
+      retryActorQuery();
+    }
+    await new Promise((r) => setTimeout(r, 400));
+  }
+  throw new Error(
+    "Unable to connect to the server. Please refresh the page and try again.",
+  );
+}
+
 /** Returns true if the error is an access-control / not-registered error */
 function isAuthError(err: unknown): boolean {
   const msg = (err instanceof Error ? err.message : String(err)).toLowerCase();
@@ -167,11 +191,19 @@ export function useSearchPatients(name: string) {
 
 export function useRegisterPatient() {
   const { actor } = useActor();
+  const actorRef = useRef<backendInterface | null>(null);
+  actorRef.current = actor;
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (patient: Patient) => {
-      if (!actor) throw new Error("Not ready");
-      await safeMutate(actor, () => actor.createPatient(patient));
+      // Wait for actor, retrying the query if it's stuck in error state
+      const resolvedActor = await waitForActor(
+        () => actorRef.current,
+        () => qc.invalidateQueries({ queryKey: ["actor"] }),
+      );
+      await safeMutate(resolvedActor, () =>
+        resolvedActor.createPatient(patient),
+      );
     },
     onSuccess: () => {
       void qc.invalidateQueries({ queryKey: ["patients"] });

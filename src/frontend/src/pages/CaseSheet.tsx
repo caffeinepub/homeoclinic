@@ -14,6 +14,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Link, useParams } from "@tanstack/react-router";
 import {
   ArrowLeft,
+  Brain,
+  CheckCircle,
   ClipboardList,
   FileText,
   Info,
@@ -21,6 +23,7 @@ import {
   Pill,
   Plus,
   Save,
+  Stethoscope,
   Trash2,
   X,
 } from "lucide-react";
@@ -42,6 +45,8 @@ import {
   useUpdateFollowUp,
   useUpdatePrescription,
 } from "../hooks/useQueries";
+import type { RemedySuggestion } from "../utils/caseAnalysis";
+import { analyseCase } from "../utils/caseAnalysis";
 import { formatDate, generateId, todayISO } from "../utils/helpers";
 
 // ─── Remedy lookup utility ────────────────────────────────────────────────────
@@ -1166,6 +1171,345 @@ function PreviousPrescriptionsTable({
   );
 }
 
+// ─── Case Analysis Panel ──────────────────────────────────────────────────────
+
+const MIASM_COLORS_ANALYSIS: Record<string, string> = {
+  psori: "0.38 0.14 193",
+  sycot: "0.38 0.14 150",
+  syphil: "0.50 0.20 25",
+  tuberc: "0.45 0.16 45",
+};
+
+function getMiasmColorAnalysis(miasm: string): string {
+  const m = miasm.toLowerCase();
+  for (const [kw, color] of Object.entries(MIASM_COLORS_ANALYSIS)) {
+    if (m.includes(kw)) return color;
+  }
+  return "0.45 0.15 260";
+}
+
+function CaseAnalysisPanel({
+  isOpen,
+  isLoading,
+  results,
+  onClose,
+  onPrescribe,
+  onViewDetails,
+}: {
+  isOpen: boolean;
+  isLoading: boolean;
+  results: RemedySuggestion[];
+  onClose: () => void;
+  onPrescribe: (remedyName: string) => void;
+  onViewDetails: (remedy: RemedyData) => void;
+}) {
+  // Close on Escape key
+  useEffect(() => {
+    if (!isOpen) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") onClose();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isOpen, onClose]);
+
+  if (!isOpen) return null;
+
+  return (
+    <>
+      {/* Backdrop */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        className="fixed inset-0 z-40"
+        style={{ background: "rgba(0,0,0,0.35)" }}
+        onClick={onClose}
+        aria-hidden="true"
+      />
+
+      {/* Side Panel */}
+      <motion.div
+        data-ocid="case.analysis.panel"
+        initial={{ x: "100%" }}
+        animate={{ x: 0 }}
+        exit={{ x: "100%" }}
+        transition={{ type: "spring", stiffness: 340, damping: 32 }}
+        className="fixed right-0 top-0 bottom-0 z-50 flex flex-col w-full max-w-sm"
+        style={{
+          background: "oklch(var(--card))",
+          borderLeft: "1px solid oklch(var(--border))",
+          boxShadow: "-8px 0 40px oklch(0.10 0.008 240 / 0.16)",
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Panel Header */}
+        <div
+          className="flex items-start justify-between px-4 py-4 border-b shrink-0"
+          style={{
+            background: "oklch(0.45 0.15 280 / 0.06)",
+            borderColor: "oklch(0.45 0.15 280 / 0.20)",
+          }}
+        >
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-0.5">
+              <div
+                className="w-7 h-7 rounded-lg flex items-center justify-center"
+                style={{ background: "oklch(0.45 0.15 280 / 0.12)" }}
+              >
+                <Brain
+                  className="w-4 h-4"
+                  style={{ color: "oklch(0.45 0.15 280)" }}
+                />
+              </div>
+              <h2
+                className="font-display font-bold text-base"
+                style={{ color: "oklch(var(--foreground))" }}
+              >
+                Case Analysis
+              </h2>
+            </div>
+            <p
+              className="text-xs leading-relaxed mt-1"
+              style={{ color: "oklch(var(--muted-foreground))" }}
+            >
+              Top remedy suggestions based on recorded symptoms
+            </p>
+          </div>
+          <button
+            type="button"
+            data-ocid="case.analysis.close_button"
+            onClick={onClose}
+            aria-label="Close analysis panel"
+            className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ml-3 hover:opacity-75 transition-opacity"
+            style={{
+              background: "oklch(var(--muted))",
+              color: "oklch(var(--muted-foreground))",
+            }}
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* Scrollable Body */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-3">
+          {/* Loading State */}
+          {isLoading && (
+            <div
+              data-ocid="case.analysis.loading_state"
+              className="flex flex-col items-center justify-center py-12 gap-3"
+            >
+              <div
+                className="w-12 h-12 rounded-full flex items-center justify-center"
+                style={{ background: "oklch(0.45 0.15 280 / 0.10)" }}
+              >
+                <Stethoscope
+                  className="w-6 h-6 animate-pulse"
+                  style={{ color: "oklch(0.45 0.15 280)" }}
+                />
+              </div>
+              <p
+                className="text-sm font-medium"
+                style={{ color: "oklch(var(--foreground))" }}
+              >
+                Analysing case…
+              </p>
+              <p
+                className="text-xs text-center max-w-[180px]"
+                style={{ color: "oklch(var(--muted-foreground))" }}
+              >
+                Correlating symptoms with Materia Medica &amp; Synoptic Key
+              </p>
+            </div>
+          )}
+
+          {/* Empty State */}
+          {!isLoading && results.length === 0 && (
+            <div
+              data-ocid="case.analysis.empty_state"
+              className="flex flex-col items-center justify-center py-10 gap-3 text-center px-2"
+            >
+              <div
+                className="w-12 h-12 rounded-full flex items-center justify-center"
+                style={{ background: "oklch(var(--muted))" }}
+              >
+                <Brain
+                  className="w-5 h-5"
+                  style={{ color: "oklch(var(--muted-foreground))" }}
+                />
+              </div>
+              <p
+                className="text-sm font-medium"
+                style={{ color: "oklch(var(--foreground))" }}
+              >
+                No strong matches found
+              </p>
+              <p
+                className="text-xs leading-relaxed"
+                style={{ color: "oklch(var(--muted-foreground))" }}
+              >
+                Fill in more symptom sections (Chief Complaint, Mental &amp;
+                Physical Generals, Miasmatic Analysis) for better results.
+              </p>
+            </div>
+          )}
+
+          {/* Results */}
+          {!isLoading && results.length > 0 && (
+            <>
+              <p
+                className="text-xs font-semibold uppercase tracking-widest"
+                style={{ color: "oklch(0.45 0.15 280)" }}
+              >
+                {results.length} Remedies Suggested
+              </p>
+              {results.map((suggestion, idx) => {
+                const color = getMiasmColorAnalysis(
+                  suggestion.remedy.miasmaticClassification,
+                );
+                return (
+                  <motion.div
+                    key={suggestion.remedy.name}
+                    data-ocid={`case.analysis.suggestion.item.${idx + 1}`}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.06 }}
+                    className="rounded-xl border p-3.5 space-y-2.5"
+                    style={{
+                      background:
+                        idx === 0
+                          ? "oklch(0.45 0.15 280 / 0.04)"
+                          : "oklch(var(--card))",
+                      borderColor:
+                        idx === 0
+                          ? "oklch(0.45 0.15 280 / 0.25)"
+                          : "oklch(var(--border))",
+                    }}
+                  >
+                    {/* Remedy Header */}
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          {idx === 0 && (
+                            <CheckCircle
+                              className="w-3.5 h-3.5 shrink-0"
+                              style={{ color: "oklch(0.45 0.15 280)" }}
+                            />
+                          )}
+                          <span
+                            className="font-display font-bold text-sm"
+                            style={{ color: "oklch(var(--foreground))" }}
+                          >
+                            {suggestion.remedy.name}
+                          </span>
+                          <span
+                            className="text-xs font-mono font-semibold"
+                            style={{ color: `oklch(${color})` }}
+                          >
+                            {suggestion.remedy.abbreviation}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1.5 mt-1 flex-wrap">
+                          <Badge
+                            variant="outline"
+                            className="text-xs py-0 h-5"
+                            style={{
+                              borderColor: `oklch(${color} / 0.35)`,
+                              color: `oklch(${color})`,
+                              fontSize: "0.65rem",
+                            }}
+                          >
+                            {
+                              suggestion.remedy.miasmaticClassification.split(
+                                /[\s,+]/,
+                              )[0]
+                            }
+                          </Badge>
+                          <span
+                            className="text-xs font-semibold"
+                            style={{ color: "oklch(0.45 0.15 280)" }}
+                          >
+                            {suggestion.score} matching factors
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Matched Reasons */}
+                    <div className="space-y-1">
+                      {suggestion.reasons.slice(0, 5).map((reason) => (
+                        <div
+                          key={reason}
+                          className="flex items-start gap-1.5 text-xs"
+                          style={{ color: "oklch(var(--foreground))" }}
+                        >
+                          <span
+                            className="w-1 h-1 rounded-full mt-1.5 shrink-0"
+                            style={{ background: `oklch(${color})` }}
+                          />
+                          <span className="leading-relaxed">{reason}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex gap-1.5 pt-0.5">
+                      <Button
+                        type="button"
+                        size="sm"
+                        data-ocid={`case.analysis.prescribe.button.${idx + 1}`}
+                        onClick={() => onPrescribe(suggestion.remedy.name)}
+                        className="flex-1 h-7 text-xs font-semibold gap-1"
+                        style={{
+                          background: "oklch(0.45 0.15 280)",
+                          color: "oklch(0.99 0 0)",
+                          border: "none",
+                        }}
+                      >
+                        <Pill className="w-3 h-3" />
+                        Prescribe
+                      </Button>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        data-ocid={`case.analysis.view_detail.button.${idx + 1}`}
+                        onClick={() => onViewDetails(suggestion.remedy)}
+                        className="flex-1 h-7 text-xs gap-1"
+                        style={{
+                          borderColor: `oklch(${color} / 0.35)`,
+                          color: `oklch(${color})`,
+                        }}
+                      >
+                        <Info className="w-3 h-3" />
+                        View Details
+                      </Button>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </>
+          )}
+        </div>
+
+        {/* Footer */}
+        <div
+          className="px-4 py-3 border-t shrink-0"
+          style={{ borderColor: "oklch(var(--border))" }}
+        >
+          <p
+            className="text-xs italic text-center"
+            style={{ color: "oklch(var(--muted-foreground))" }}
+          >
+            Based on Boericke, Synoptic Key &amp; Kent's Repertory
+          </p>
+        </div>
+      </motion.div>
+    </>
+  );
+}
+
 // ─── Prescription Table (inline) ──────────────────────────────────────────────
 
 function PrescriptionTable({
@@ -1920,6 +2264,15 @@ export function CaseSheet() {
   );
   const [followUpRows, setFollowUpRows] = useState<FollowUpRow[]>([]);
 
+  // ── Case Analysis state ──────────────────────────────────────────────────
+  const [analysisPanelOpen, setAnalysisPanelOpen] = useState(false);
+  const [analysisResults, setAnalysisResults] = useState<RemedySuggestion[]>(
+    [],
+  );
+  const [analysisLoading, setAnalysisLoading] = useState(false);
+  const [analysisPopupRemedy, setAnalysisPopupRemedy] =
+    useState<RemedyData | null>(null);
+
   useEffect(() => {
     if (caseData) {
       setHpi(caseData.hpi ?? "");
@@ -1965,6 +2318,45 @@ export function CaseSheet() {
       }
     }
   }, [savedFollowUps]);
+
+  function handleAnalyseCase() {
+    const input = {
+      chiefComplaint: JSON.stringify(complaintRows),
+      hpi,
+      pastHistory,
+      familyHistory,
+      mentalGenerals,
+      physicalGenerals,
+      personalHistory: JSON.stringify(personalHistory),
+      miasmaticAnalysis,
+      totality,
+      repertorialFindings,
+    };
+    setAnalysisResults([]);
+    setAnalysisLoading(true);
+    setAnalysisPanelOpen(true);
+    // Short UX delay for "analysing" feel
+    setTimeout(() => {
+      const results = analyseCase(input, SEED_REMEDIES);
+      setAnalysisResults(results);
+      setAnalysisLoading(false);
+    }, 600);
+  }
+
+  function handlePrescribeFromAnalysis(remedyName: string) {
+    const newRx: PrescriptionRow = {
+      date: todayISO(),
+      remedy: remedyName,
+      potency: "",
+      dosage: "",
+      frequency: "",
+      duration: "",
+      instructions: "",
+    };
+    setPrescriptionRows((prev) => [...prev, newRx]);
+    setAnalysisPanelOpen(false);
+    toast.success(`${remedyName} added to prescription`);
+  }
 
   async function handleSave() {
     if (!caseData) return;
@@ -2128,23 +2520,39 @@ export function CaseSheet() {
               </p>
             )}
           </div>
-          <Button
-            data-ocid="case.save.primary_button"
-            onClick={handleSave}
-            disabled={updateCase.isPending}
-            className="gap-1.5 h-9"
-            style={{
-              background: "oklch(var(--teal))",
-              color: "oklch(0.99 0 0)",
-            }}
-          >
-            {updateCase.isPending ? (
-              <Loader2 className="w-3.5 h-3.5 animate-spin" />
-            ) : (
-              <Save className="w-3.5 h-3.5" />
-            )}
-            {updateCase.isPending ? "Saving..." : "Save Case Sheet"}
-          </Button>
+          <div className="flex items-center gap-2 flex-wrap">
+            <Button
+              type="button"
+              data-ocid="case.analyse.primary_button"
+              onClick={handleAnalyseCase}
+              className="gap-1.5 h-9"
+              style={{
+                background: "oklch(0.45 0.15 280)",
+                color: "oklch(0.99 0 0)",
+                border: "none",
+              }}
+            >
+              <Brain className="w-3.5 h-3.5" />
+              Analyse Case
+            </Button>
+            <Button
+              data-ocid="case.save.primary_button"
+              onClick={handleSave}
+              disabled={updateCase.isPending}
+              className="gap-1.5 h-9"
+              style={{
+                background: "oklch(var(--teal))",
+                color: "oklch(0.99 0 0)",
+              }}
+            >
+              {updateCase.isPending ? (
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              ) : (
+                <Save className="w-3.5 h-3.5" />
+              )}
+              {updateCase.isPending ? "Saving..." : "Save Case Sheet"}
+            </Button>
+          </div>
         </div>
       </motion.div>
 
@@ -2624,7 +3032,21 @@ Simillimum:`}
       </motion.div>
 
       {/* Bottom Save Button */}
-      <div className="mt-6 flex justify-end">
+      <div className="mt-6 flex justify-end gap-2 flex-wrap">
+        <Button
+          type="button"
+          data-ocid="case.analyse_bottom.primary_button"
+          onClick={handleAnalyseCase}
+          className="gap-1.5"
+          style={{
+            background: "oklch(0.45 0.15 280)",
+            color: "oklch(0.99 0 0)",
+            border: "none",
+          }}
+        >
+          <Brain className="w-4 h-4" />
+          Analyse Case
+        </Button>
         <Button
           data-ocid="case.save_bottom.primary_button"
           onClick={handleSave}
@@ -2643,6 +3065,32 @@ Simillimum:`}
           {updateCase.isPending ? "Saving..." : "Save Case Sheet"}
         </Button>
       </div>
+
+      {/* Case Analysis Panel */}
+      <AnimatePresence>
+        {analysisPanelOpen && (
+          <CaseAnalysisPanel
+            isOpen={analysisPanelOpen}
+            isLoading={analysisLoading}
+            results={analysisResults}
+            onClose={() => setAnalysisPanelOpen(false)}
+            onPrescribe={handlePrescribeFromAnalysis}
+            onViewDetails={(remedy) => {
+              setAnalysisPopupRemedy(remedy);
+            }}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Remedy detail popup triggered from analysis panel */}
+      <AnimatePresence>
+        {analysisPopupRemedy && (
+          <RemedyPopup
+            remedy={analysisPopupRemedy}
+            onClose={() => setAnalysisPopupRemedy(null)}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

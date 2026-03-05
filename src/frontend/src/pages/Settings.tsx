@@ -1,10 +1,40 @@
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
-import { Moon, Settings as SettingsIcon, Sun, User } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Moon,
+  Pencil,
+  Settings as SettingsIcon,
+  Stethoscope,
+  Sun,
+  User,
+  X,
+} from "lucide-react";
 import { motion } from "motion/react";
+import { useEffect, useState } from "react";
 import { useTheme } from "../context/ThemeContext";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
+
+interface DoctorProfile {
+  name: string;
+  qualification: string;
+  regNo: string;
+  phone: string;
+  clinicName: string;
+  clinicAddress: string;
+}
+
+const EMPTY_PROFILE: DoctorProfile = {
+  name: "",
+  qualification: "",
+  regNo: "",
+  phone: "",
+  clinicName: "",
+  clinicAddress: "",
+};
 
 export function Settings() {
   const { identity } = useInternetIdentity();
@@ -14,6 +44,71 @@ export function Settings() {
   const shortPrincipal = principal
     ? `${principal.slice(0, 12)}...${principal.slice(-8)}`
     : "Not connected";
+
+  const storageKey = principal ? `doctorProfile_${principal}` : null;
+
+  const [doctorProfile, setDoctorProfile] =
+    useState<DoctorProfile>(EMPTY_PROFILE);
+  const [editProfile, setEditProfile] = useState<DoctorProfile>(EMPTY_PROFILE);
+  const [isEditing, setIsEditing] = useState(false);
+
+  // Load saved profile from localStorage on mount / principal change
+  useEffect(() => {
+    if (!storageKey) return;
+    try {
+      const saved = localStorage.getItem(storageKey);
+      if (saved) {
+        const parsed = JSON.parse(saved) as DoctorProfile;
+        setDoctorProfile(parsed);
+      }
+    } catch {
+      // ignore parse errors
+    }
+  }, [storageKey]);
+
+  const handleEdit = () => {
+    setEditProfile({ ...doctorProfile });
+    setIsEditing(true);
+  };
+
+  const handleCancel = () => {
+    setIsEditing(false);
+  };
+
+  const handleSave = () => {
+    if (!storageKey) return;
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(editProfile));
+      setDoctorProfile({ ...editProfile });
+      setIsEditing(false);
+    } catch {
+      // ignore storage errors
+    }
+  };
+
+  const profileFields: {
+    label: string;
+    key: keyof DoctorProfile;
+    placeholder: string;
+  }[] = [
+    { label: "Full Name", key: "name", placeholder: "Dr. Your Name" },
+    {
+      label: "Qualification",
+      key: "qualification",
+      placeholder: "BHMS, MD (Hom)",
+    },
+    {
+      label: "Registration No.",
+      key: "regNo",
+      placeholder: "e.g. KAR/HOM/12345",
+    },
+    { label: "Phone Number", key: "phone", placeholder: "+91 98765 43210" },
+    {
+      label: "Clinic Name",
+      key: "clinicName",
+      placeholder: "Your Clinic Name",
+    },
+  ];
 
   return (
     <div className="p-6 max-w-2xl mx-auto">
@@ -101,6 +196,211 @@ export function Settings() {
               </div>
             </div>
           </div>
+        </div>
+      </motion.div>
+
+      {/* Doctor Profile Card */}
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.08 }}
+        className="rounded-xl border mb-4"
+        style={{
+          background: "oklch(var(--card))",
+          borderColor: "oklch(var(--border))",
+          boxShadow: "var(--card-shadow)",
+        }}
+      >
+        {/* Card Header */}
+        <div
+          className="px-5 py-4 border-b flex items-center justify-between"
+          style={{ borderColor: "oklch(var(--border))" }}
+        >
+          <div className="flex items-center gap-2">
+            <div
+              className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
+              style={{ background: "oklch(var(--teal) / 0.12)" }}
+            >
+              <Stethoscope
+                className="w-3.5 h-3.5"
+                style={{ color: "oklch(var(--teal))" }}
+              />
+            </div>
+            <h2
+              className="text-sm font-semibold font-display"
+              style={{ color: "oklch(var(--foreground))" }}
+            >
+              Doctor Profile
+            </h2>
+          </div>
+          {!isEditing && (
+            <button
+              type="button"
+              data-ocid="settings.doctor_profile.edit_button"
+              onClick={handleEdit}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
+              style={{
+                background: "oklch(var(--muted))",
+                color: "oklch(var(--foreground))",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.background =
+                  "oklch(var(--teal) / 0.12)";
+                (e.currentTarget as HTMLButtonElement).style.color =
+                  "oklch(var(--teal))";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.background =
+                  "oklch(var(--muted))";
+                (e.currentTarget as HTMLButtonElement).style.color =
+                  "oklch(var(--foreground))";
+              }}
+            >
+              <Pencil className="w-3 h-3" />
+              Edit
+            </button>
+          )}
+        </div>
+
+        {/* Card Body */}
+        <div className="p-5">
+          {!isEditing ? (
+            /* View Mode */
+            <div className="space-y-3.5">
+              {profileFields.map(({ label, key }) => (
+                <div key={key} className="flex items-start gap-3">
+                  <span
+                    className="text-xs font-semibold w-32 flex-shrink-0 pt-0.5"
+                    style={{ color: "oklch(var(--muted-foreground))" }}
+                  >
+                    {label}
+                  </span>
+                  <span
+                    className="text-sm"
+                    style={{
+                      color: doctorProfile[key]
+                        ? "oklch(var(--foreground))"
+                        : "oklch(var(--muted-foreground))",
+                      fontStyle: doctorProfile[key] ? "normal" : "italic",
+                    }}
+                  >
+                    {doctorProfile[key] || "Not set"}
+                  </span>
+                </div>
+              ))}
+              <div className="flex items-start gap-3">
+                <span
+                  className="text-xs font-semibold w-32 flex-shrink-0 pt-0.5"
+                  style={{ color: "oklch(var(--muted-foreground))" }}
+                >
+                  Clinic Address
+                </span>
+                <span
+                  className="text-sm whitespace-pre-wrap"
+                  style={{
+                    color: doctorProfile.clinicAddress
+                      ? "oklch(var(--foreground))"
+                      : "oklch(var(--muted-foreground))",
+                    fontStyle: doctorProfile.clinicAddress
+                      ? "normal"
+                      : "italic",
+                  }}
+                >
+                  {doctorProfile.clinicAddress || "Not set"}
+                </span>
+              </div>
+              {!Object.values(doctorProfile).some(Boolean) && (
+                <p
+                  className="text-xs mt-2 pt-2 border-t"
+                  style={{
+                    color: "oklch(var(--muted-foreground))",
+                    borderColor: "oklch(var(--border))",
+                  }}
+                >
+                  Click <strong>Edit</strong> to add your clinic details.
+                </p>
+              )}
+            </div>
+          ) : (
+            /* Edit Mode */
+            <div className="space-y-4">
+              {profileFields.map(({ label, key, placeholder }) => (
+                <div key={key} className="space-y-1.5">
+                  <Label
+                    htmlFor={`doctor-${key}`}
+                    className="text-xs font-semibold"
+                    style={{ color: "oklch(var(--muted-foreground))" }}
+                  >
+                    {label}
+                  </Label>
+                  <Input
+                    id={`doctor-${key}`}
+                    data-ocid={`settings.doctor_profile.${key.replace(/([A-Z])/g, "_$1").toLowerCase()}.input`}
+                    value={editProfile[key]}
+                    onChange={(e) =>
+                      setEditProfile((prev) => ({
+                        ...prev,
+                        [key]: e.target.value,
+                      }))
+                    }
+                    placeholder={placeholder}
+                    className="text-sm"
+                  />
+                </div>
+              ))}
+              <div className="space-y-1.5">
+                <Label
+                  htmlFor="doctor-clinicAddress"
+                  className="text-xs font-semibold"
+                  style={{ color: "oklch(var(--muted-foreground))" }}
+                >
+                  Clinic Address
+                </Label>
+                <Textarea
+                  id="doctor-clinicAddress"
+                  data-ocid="settings.doctor_profile.clinic_address.textarea"
+                  value={editProfile.clinicAddress}
+                  onChange={(e) =>
+                    setEditProfile((prev) => ({
+                      ...prev,
+                      clinicAddress: e.target.value,
+                    }))
+                  }
+                  placeholder="Street, City, State, PIN"
+                  rows={3}
+                  className="text-sm resize-none"
+                />
+              </div>
+
+              <Separator style={{ background: "oklch(var(--border))" }} />
+
+              {/* Action Buttons */}
+              <div className="flex items-center gap-3 pt-1">
+                <Button
+                  data-ocid="settings.doctor_profile.save_button"
+                  size="sm"
+                  onClick={handleSave}
+                  className="flex-1 text-sm"
+                  style={{
+                    background: "oklch(var(--teal))",
+                    color: "oklch(var(--primary-foreground))",
+                  }}
+                >
+                  Save Profile
+                </Button>
+                <Button
+                  data-ocid="settings.doctor_profile.cancel_button"
+                  size="sm"
+                  variant="outline"
+                  onClick={handleCancel}
+                  className="gap-1.5 text-sm"
+                >
+                  <X className="w-3.5 h-3.5" />
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </motion.div>
 
