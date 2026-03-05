@@ -8,20 +8,28 @@ import {
 } from "@tanstack/react-router";
 import { AppLayout } from "./components/AppLayout";
 import { LoginPage } from "./components/LoginPage";
+import {
+  AccessControlProvider,
+  useAccessControl,
+} from "./context/AccessControlContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import { useInternetIdentity } from "./hooks/useInternetIdentity";
 import { Appointments } from "./pages/Appointments";
 import { CaseSheet } from "./pages/CaseSheet";
 import { Dashboard } from "./pages/Dashboard";
+import { DeniedPage } from "./pages/DeniedPage";
 import { Memos } from "./pages/Memos";
 import { PatientDetail } from "./pages/PatientDetail";
 import { Patients } from "./pages/Patients";
+import { PendingApprovalPage } from "./pages/PendingApprovalPage";
 import { Remedies } from "./pages/Remedies";
+import { RequestAccessPage } from "./pages/RequestAccessPage";
 import { Settings } from "./pages/Settings";
 
-// Root layout with auth guard — ThemeProvider wraps everything
+// Root layout with auth guard + access control gate
 function RootLayout() {
   const { identity, isInitializing } = useInternetIdentity();
+  const { accessState } = useAccessControl();
 
   if (isInitializing) {
     return (
@@ -52,6 +60,45 @@ function RootLayout() {
     return <LoginPage />;
   }
 
+  // Access control gate
+  if (accessState === "loading") {
+    return (
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ background: "oklch(var(--background))" }}
+      >
+        <div className="flex items-center gap-3">
+          <div
+            className="w-5 h-5 border-2 rounded-full animate-spin"
+            style={{
+              borderColor: "oklch(var(--teal) / 0.3)",
+              borderTopColor: "oklch(var(--teal))",
+            }}
+          />
+          <span
+            className="text-sm"
+            style={{ color: "oklch(var(--muted-foreground))" }}
+          >
+            Checking access…
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  if (accessState === "unknown") {
+    return <RequestAccessPage />;
+  }
+
+  if (accessState === "pending") {
+    return <PendingApprovalPage />;
+  }
+
+  if (accessState === "denied") {
+    return <DeniedPage />;
+  }
+
+  // accessState === "approved" | "admin"
   return (
     <AppLayout>
       <Outlet />
@@ -132,8 +179,10 @@ declare module "@tanstack/react-router" {
 export default function App() {
   return (
     <ThemeProvider>
-      <RouterProvider router={router} />
-      <Toaster />
+      <AccessControlProvider>
+        <RouterProvider router={router} />
+        <Toaster />
+      </AccessControlProvider>
     </ThemeProvider>
   );
 }

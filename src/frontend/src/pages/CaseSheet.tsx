@@ -32,6 +32,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import type { CaseSheet as BackendCaseSheet } from "../backend.d";
+import { useAccessControl } from "../context/AccessControlContext";
 import type { RemedyData } from "../data/remedyDatabase";
 import { SEED_REMEDIES } from "../data/remedySeeds";
 import {
@@ -2592,6 +2593,7 @@ function FollowUpTable({
 
 export function CaseSheet() {
   const { id } = useParams({ from: "/cases/$id" });
+  const { isReadOnly } = useAccessControl();
   const { data: caseData, isLoading } = useCase(id);
   const { data: patient } = usePatient(caseData?.patientId ?? "");
   const { data: allCaseSheets = [] } = useCasesByPatient(
@@ -2935,37 +2937,41 @@ export function CaseSheet() {
               <Brain className="w-3.5 h-3.5" />
               Analyse Case
             </Button>
-            <Button
-              type="button"
-              data-ocid="case.investigations.open_modal_button"
-              onClick={handleSuggestInvestigations}
-              className="gap-1.5 h-9"
-              style={{
-                background: "oklch(0.40 0.14 175)",
-                color: "oklch(0.99 0 0)",
-                border: "none",
-              }}
-            >
-              <FlaskConical className="w-3.5 h-3.5" />
-              Suggest Investigations
-            </Button>
-            <Button
-              data-ocid="case.save.primary_button"
-              onClick={handleSave}
-              disabled={updateCase.isPending}
-              className="gap-1.5 h-9"
-              style={{
-                background: "oklch(var(--teal))",
-                color: "oklch(0.99 0 0)",
-              }}
-            >
-              {updateCase.isPending ? (
-                <Loader2 className="w-3.5 h-3.5 animate-spin" />
-              ) : (
-                <Save className="w-3.5 h-3.5" />
-              )}
-              {updateCase.isPending ? "Saving..." : "Save Case Sheet"}
-            </Button>
+            {!isReadOnly && (
+              <>
+                <Button
+                  type="button"
+                  data-ocid="case.investigations.open_modal_button"
+                  onClick={handleSuggestInvestigations}
+                  className="gap-1.5 h-9"
+                  style={{
+                    background: "oklch(0.40 0.14 175)",
+                    color: "oklch(0.99 0 0)",
+                    border: "none",
+                  }}
+                >
+                  <FlaskConical className="w-3.5 h-3.5" />
+                  Suggest Investigations
+                </Button>
+                <Button
+                  data-ocid="case.save.primary_button"
+                  onClick={handleSave}
+                  disabled={updateCase.isPending}
+                  className="gap-1.5 h-9"
+                  style={{
+                    background: "oklch(var(--teal))",
+                    color: "oklch(0.99 0 0)",
+                  }}
+                >
+                  {updateCase.isPending ? (
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  ) : (
+                    <Save className="w-3.5 h-3.5" />
+                  )}
+                  {updateCase.isPending ? "Saving..." : "Save Case Sheet"}
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </motion.div>
@@ -3461,37 +3467,41 @@ Simillimum:`}
           <Brain className="w-4 h-4" />
           Analyse Case
         </Button>
-        <Button
-          type="button"
-          data-ocid="case.investigations_bottom.open_modal_button"
-          onClick={handleSuggestInvestigations}
-          className="gap-1.5"
-          style={{
-            background: "oklch(0.40 0.14 175)",
-            color: "oklch(0.99 0 0)",
-            border: "none",
-          }}
-        >
-          <FlaskConical className="w-4 h-4" />
-          Suggest Investigations
-        </Button>
-        <Button
-          data-ocid="case.save_bottom.primary_button"
-          onClick={handleSave}
-          disabled={updateCase.isPending}
-          className="gap-1.5"
-          style={{
-            background: "oklch(var(--teal))",
-            color: "oklch(0.99 0 0)",
-          }}
-        >
-          {updateCase.isPending ? (
-            <Loader2 className="w-4 h-4 animate-spin" />
-          ) : (
-            <Save className="w-4 h-4" />
-          )}
-          {updateCase.isPending ? "Saving..." : "Save Case Sheet"}
-        </Button>
+        {!isReadOnly && (
+          <>
+            <Button
+              type="button"
+              data-ocid="case.investigations_bottom.open_modal_button"
+              onClick={handleSuggestInvestigations}
+              className="gap-1.5"
+              style={{
+                background: "oklch(0.40 0.14 175)",
+                color: "oklch(0.99 0 0)",
+                border: "none",
+              }}
+            >
+              <FlaskConical className="w-4 h-4" />
+              Suggest Investigations
+            </Button>
+            <Button
+              data-ocid="case.save_bottom.primary_button"
+              onClick={handleSave}
+              disabled={updateCase.isPending}
+              className="gap-1.5"
+              style={{
+                background: "oklch(var(--teal))",
+                color: "oklch(0.99 0 0)",
+              }}
+            >
+              {updateCase.isPending ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Save className="w-4 h-4" />
+              )}
+              {updateCase.isPending ? "Saving..." : "Save Case Sheet"}
+            </Button>
+          </>
+        )}
       </div>
 
       {/* Case Analysis Panel */}

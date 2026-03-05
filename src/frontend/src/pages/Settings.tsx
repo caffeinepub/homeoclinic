@@ -1,6 +1,8 @@
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
@@ -24,6 +26,12 @@ import {
 import { motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import {
+  ADMIN_PASSPHRASE,
+  type UserRole,
+  setAdminSession,
+  useAccessControl,
+} from "../context/AccessControlContext";
 import { useTheme } from "../context/ThemeContext";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
 
@@ -45,34 +53,13 @@ const EMPTY_PROFILE: DoctorProfile = {
   clinicAddress: "",
 };
 
-// ─── Access Control (localStorage-based, passphrase-protected) ─────────────
-// Admin unlocks the panel by entering the correct passphrase (Krishna@132).
-// Once unlocked in this session, admin manages allowed principals.
-// Non-admin users see their own Principal ID to copy and share with admin.
-
-const ADMIN_PASSPHRASE = "Krishna@132";
 const ADMIN_SESSION_KEY = "homeo_admin_unlocked";
-const ALLOWED_KEY = "homeo_allowed_principals";
-const PENDING_KEY = "homeo_pending_requests";
-
-function getAllowed(): string[] {
-  try {
-    return JSON.parse(localStorage.getItem(ALLOWED_KEY) || "[]");
-  } catch {
-    return [];
-  }
-}
-function getPending(): string[] {
-  try {
-    return JSON.parse(localStorage.getItem(PENDING_KEY) || "[]");
-  } catch {
-    return [];
-  }
-}
 
 export function Settings() {
   const { identity } = useInternetIdentity();
   const { theme, setTheme, isDark } = useTheme();
+  const { allRequests, approveRequest, denyRequest, changeRole, revokeAccess } =
+    useAccessControl();
 
   const principal = identity?.getPrincipal().toString() ?? "";
   const shortPrincipal = principal
@@ -91,34 +78,23 @@ export function Settings() {
   const [passphraseInput, setPassphraseInput] = useState("");
   const [showPassphrase, setShowPassphrase] = useState(false);
   const [passphraseError, setPassphraseError] = useState(false);
-  const [allowed, setAllowed] = useState<string[]>([]);
-  const [pending, setPending] = useState<string[]>([]);
   const [newPrincipal, setNewPrincipal] = useState("");
+  const [newPrincipalRole, setNewPrincipalRole] = useState<UserRole>("doctor");
 
-  // Check if admin session is active (within this browser session)
+  // Per-pending-row approval role state
+  const [pendingApprovalRoles, setPendingApprovalRoles] = useState<
+    Record<string, UserRole>
+  >({});
+  const [pendingApprovalExpanded, setPendingApprovalExpanded] = useState<
+    Record<string, boolean>
+  >({});
+
   useEffect(() => {
     const unlocked = sessionStorage.getItem(ADMIN_SESSION_KEY) === "1";
     setIsAdminUnlocked(unlocked);
-    setAllowed(getAllowed());
-    setPending(getPending());
   }, []);
 
-  // Auto-submit pending request for current user if not already allowed/pending
-  useEffect(() => {
-    if (!principal) return;
-    const currentAllowed = getAllowed();
-    const currentPending = getPending();
-    if (
-      !currentAllowed.includes(principal) &&
-      !currentPending.includes(principal)
-    ) {
-      const updated = [...currentPending, principal];
-      localStorage.setItem(PENDING_KEY, JSON.stringify(updated));
-      setPending(updated);
-    }
-  }, [principal]);
-
-  // Load saved profile from localStorage on mount / principal change
+  // Load saved profile
   useEffect(() => {
     if (!storageKey) return;
     try {
@@ -156,12 +132,10 @@ export function Settings() {
   // ─── Admin Unlock ──────────────────────────────────────────
   function handleUnlock() {
     if (passphraseInput === ADMIN_PASSPHRASE) {
-      sessionStorage.setItem(ADMIN_SESSION_KEY, "1");
+      setAdminSession(true);
       setIsAdminUnlocked(true);
       setPassphraseError(false);
       setPassphraseInput("");
-      setAllowed(getAllowed());
-      setPending(getPending());
       toast.success("Admin panel unlocked");
     } else {
       setPassphraseError(true);
@@ -170,51 +144,67 @@ export function Settings() {
   }
 
   function handleLock() {
-    sessionStorage.removeItem(ADMIN_SESSION_KEY);
+    setAdminSession(false);
     setIsAdminUnlocked(false);
     toast.success("Admin panel locked");
   }
 
   // ─── Access Control Actions ────────────────────────────────
-  function approveUser(p: string) {
-    const updatedAllowed = [...allowed, p];
-    const updatedPending = pending.filter((x) => x !== p);
-    localStorage.setItem(ALLOWED_KEY, JSON.stringify(updatedAllowed));
-    localStorage.setItem(PENDING_KEY, JSON.stringify(updatedPending));
-    setAllowed(updatedAllowed);
-    setPending(updatedPending);
-    toast.success("User approved");
+  async function handleApprovePending(p: string) {
+    const role = pendingApprovalRoles[p] ?? "doctor";
+    try {
+      await approveRequest(p, role);
+      toast.success(`User approved as ${role}`);
+      setPendingApprovalExpanded((prev) => ({ ...prev, [p]: false }));
+    } catch {
+      toast.error("Failed to approve. Please try again.");
+    }
   }
 
-  function revokeUser(p: string) {
-    const updatedAllowed = allowed.filter((x) => x !== p);
-    localStorage.setItem(ALLOWED_KEY, JSON.stringify(updatedAllowed));
-    setAllowed(updatedAllowed);
-    toast.success("Access revoked");
+  async function handleDenyPending(p: string) {
+    try {
+      await denyRequest(p);
+      toast.success("Request denied");
+    } catch {
+      toast.error("Failed to deny. Please try again.");
+    }
   }
 
-  function denyPending(p: string) {
-    const updatedPending = pending.filter((x) => x !== p);
-    localStorage.setItem(PENDING_KEY, JSON.stringify(updatedPending));
-    setPending(updatedPending);
-    toast.success("Request denied");
+  async function handleChangeRole(p: string, role: UserRole) {
+    try {
+      await changeRole(p, role);
+      toast.success(`Role changed to ${role}`);
+    } catch {
+      toast.error("Failed to change role.");
+    }
   }
 
-  function addManual() {
+  async function handleRevoke(p: string) {
+    try {
+      await revokeAccess(p);
+      toast.success("Access revoked");
+    } catch {
+      toast.error("Failed to revoke access.");
+    }
+  }
+
+  async function handleAddManual() {
     const p = newPrincipal.trim();
     if (!p) return;
-    if (allowed.includes(p)) {
-      toast.error("Already in allowed list");
+    const exists = allRequests.find(
+      (r) => r.principal === p && r.status === "approved",
+    );
+    if (exists) {
+      toast.error("Already in approved list");
       return;
     }
-    const updatedAllowed = [...allowed, p];
-    const updatedPending = pending.filter((x) => x !== p);
-    localStorage.setItem(ALLOWED_KEY, JSON.stringify(updatedAllowed));
-    localStorage.setItem(PENDING_KEY, JSON.stringify(updatedPending));
-    setAllowed(updatedAllowed);
-    setPending(updatedPending);
-    setNewPrincipal("");
-    toast.success("User added");
+    try {
+      await approveRequest(p, newPrincipalRole);
+      setNewPrincipal("");
+      toast.success(`User added as ${newPrincipalRole}`);
+    } catch {
+      toast.error("Failed to add user. Check the Principal ID and try again.");
+    }
   }
 
   function copyPrincipal() {
@@ -224,6 +214,9 @@ export function Settings() {
       });
     }
   }
+
+  const pendingRequests = allRequests.filter((r) => r.status === "pending");
+  const approvedUsers = allRequests.filter((r) => r.status === "approved");
 
   const profileFields: {
     label: string;
@@ -717,16 +710,16 @@ export function Settings() {
           ) : (
             /* Admin Panel (unlocked) */
             <>
-              {/* Pending Requests */}
+              {/* ── Pending Requests ── */}
               <div>
                 <p
                   className="text-xs font-semibold uppercase tracking-wider mb-3"
                   style={{ color: "oklch(0.55 0.14 30)" }}
                 >
                   Pending Access Requests{" "}
-                  {pending.length > 0 && `(${pending.length})`}
+                  {pendingRequests.length > 0 && `(${pendingRequests.length})`}
                 </p>
-                {pending.length === 0 ? (
+                {pendingRequests.length === 0 ? (
                   <p
                     className="text-xs italic"
                     style={{ color: "oklch(var(--muted-foreground))" }}
@@ -734,51 +727,189 @@ export function Settings() {
                     No pending requests.
                   </p>
                 ) : (
-                  <div className="space-y-2">
-                    {pending.map((p, i) => (
+                  <div className="space-y-3">
+                    {pendingRequests.map((req, i) => (
                       <div
-                        key={p}
+                        key={req.principal}
                         data-ocid={`settings.access.pending.item.${i + 1}`}
-                        className="flex items-center gap-2 p-3 rounded-lg border"
+                        className="rounded-lg border overflow-hidden"
                         style={{
-                          background: "oklch(0.55 0.14 30 / 0.05)",
-                          borderColor: "oklch(0.55 0.14 30 / 0.2)",
+                          background: "oklch(0.55 0.14 30 / 0.04)",
+                          borderColor: "oklch(0.55 0.14 30 / 0.18)",
                         }}
                       >
-                        <UserX
-                          className="w-4 h-4 flex-shrink-0"
-                          style={{ color: "oklch(0.55 0.14 30)" }}
-                        />
-                        <span
-                          className="text-xs font-mono flex-1 truncate"
-                          style={{ color: "oklch(var(--foreground))" }}
+                        {/* Request info */}
+                        <div className="p-3 space-y-1.5">
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="flex items-center gap-2">
+                              <UserX
+                                className="w-4 h-4 flex-shrink-0"
+                                style={{ color: "oklch(0.55 0.14 30)" }}
+                              />
+                              <div>
+                                <p
+                                  className="text-sm font-semibold"
+                                  style={{ color: "oklch(var(--foreground))" }}
+                                >
+                                  {req.name}
+                                </p>
+                                <p
+                                  className="text-xs"
+                                  style={{
+                                    color: "oklch(var(--muted-foreground))",
+                                  }}
+                                >
+                                  {req.qualification}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          {req.reason && (
+                            <p
+                              className="text-xs italic pl-6"
+                              style={{
+                                color: "oklch(var(--muted-foreground))",
+                              }}
+                            >
+                              &ldquo;{req.reason}&rdquo;
+                            </p>
+                          )}
+                          <p
+                            className="text-xs font-mono pl-6 truncate"
+                            style={{ color: "oklch(var(--muted-foreground))" }}
+                          >
+                            {req.principal.slice(0, 20)}…
+                          </p>
+                        </div>
+
+                        {/* Approval controls */}
+                        <div
+                          className="px-3 pb-3 pt-2 border-t"
+                          style={{ borderColor: "oklch(0.55 0.14 30 / 0.12)" }}
                         >
-                          {p}
-                        </span>
-                        <button
-                          type="button"
-                          data-ocid={`settings.access.approve.button.${i + 1}`}
-                          onClick={() => approveUser(p)}
-                          className="flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium"
-                          style={{
-                            background: "oklch(var(--teal) / 0.12)",
-                            color: "oklch(var(--teal))",
-                          }}
-                        >
-                          <CheckCircle2 className="w-3 h-3" /> Approve
-                        </button>
-                        <button
-                          type="button"
-                          data-ocid={`settings.access.deny.button.${i + 1}`}
-                          onClick={() => denyPending(p)}
-                          className="flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium"
-                          style={{
-                            background: "oklch(var(--destructive) / 0.10)",
-                            color: "oklch(var(--destructive))",
-                          }}
-                        >
-                          <X className="w-3 h-3" /> Deny
-                        </button>
+                          {pendingApprovalExpanded[req.principal] ? (
+                            <div className="space-y-2">
+                              <p
+                                className="text-xs font-semibold"
+                                style={{
+                                  color: "oklch(var(--muted-foreground))",
+                                }}
+                              >
+                                Assign Role:
+                              </p>
+                              <RadioGroup
+                                value={
+                                  pendingApprovalRoles[req.principal] ??
+                                  "doctor"
+                                }
+                                onValueChange={(v) =>
+                                  setPendingApprovalRoles((prev) => ({
+                                    ...prev,
+                                    [req.principal]: v as UserRole,
+                                  }))
+                                }
+                                className="flex gap-4"
+                              >
+                                <div className="flex items-center gap-1.5">
+                                  <RadioGroupItem
+                                    value="doctor"
+                                    id={`role-doctor-${i}`}
+                                  />
+                                  <Label
+                                    htmlFor={`role-doctor-${i}`}
+                                    className="text-xs cursor-pointer"
+                                    style={{
+                                      color: "oklch(var(--foreground))",
+                                    }}
+                                  >
+                                    Doctor
+                                  </Label>
+                                </div>
+                                <div className="flex items-center gap-1.5">
+                                  <RadioGroupItem
+                                    value="viewer"
+                                    id={`role-viewer-${i}`}
+                                  />
+                                  <Label
+                                    htmlFor={`role-viewer-${i}`}
+                                    className="text-xs cursor-pointer"
+                                    style={{
+                                      color: "oklch(var(--foreground))",
+                                    }}
+                                  >
+                                    Viewer
+                                  </Label>
+                                </div>
+                              </RadioGroup>
+                              <div className="flex gap-2 mt-1">
+                                <button
+                                  type="button"
+                                  data-ocid={`settings.access.approve.button.${i + 1}`}
+                                  onClick={() =>
+                                    handleApprovePending(req.principal)
+                                  }
+                                  className="flex items-center gap-1 px-3 py-1.5 rounded-md text-xs font-medium"
+                                  style={{
+                                    background: "oklch(var(--teal) / 0.12)",
+                                    color: "oklch(var(--teal))",
+                                  }}
+                                >
+                                  <CheckCircle2 className="w-3 h-3" /> Confirm
+                                  Approve
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    setPendingApprovalExpanded((prev) => ({
+                                      ...prev,
+                                      [req.principal]: false,
+                                    }))
+                                  }
+                                  className="px-3 py-1.5 rounded-md text-xs font-medium"
+                                  style={{
+                                    background: "oklch(var(--muted))",
+                                    color: "oklch(var(--muted-foreground))",
+                                  }}
+                                >
+                                  Cancel
+                                </button>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="flex gap-2">
+                              <button
+                                type="button"
+                                data-ocid={`settings.access.approve.button.${i + 1}`}
+                                onClick={() =>
+                                  setPendingApprovalExpanded((prev) => ({
+                                    ...prev,
+                                    [req.principal]: true,
+                                  }))
+                                }
+                                className="flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium"
+                                style={{
+                                  background: "oklch(var(--teal) / 0.12)",
+                                  color: "oklch(var(--teal))",
+                                }}
+                              >
+                                <CheckCircle2 className="w-3 h-3" /> Approve
+                              </button>
+                              <button
+                                type="button"
+                                data-ocid={`settings.access.deny.button.${i + 1}`}
+                                onClick={() => handleDenyPending(req.principal)}
+                                className="flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium"
+                                style={{
+                                  background:
+                                    "oklch(var(--destructive) / 0.10)",
+                                  color: "oklch(var(--destructive))",
+                                }}
+                              >
+                                <X className="w-3 h-3" /> Deny
+                              </button>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -787,15 +918,16 @@ export function Settings() {
 
               <Separator style={{ background: "oklch(var(--border))" }} />
 
-              {/* Allowed Users */}
+              {/* ── Approved Users ── */}
               <div>
                 <p
                   className="text-xs font-semibold uppercase tracking-wider mb-3"
                   style={{ color: "oklch(var(--muted-foreground))" }}
                 >
-                  Approved Users {allowed.length > 0 && `(${allowed.length})`}
+                  Approved Users{" "}
+                  {approvedUsers.length > 0 && `(${approvedUsers.length})`}
                 </p>
-                {allowed.length === 0 ? (
+                {approvedUsers.length === 0 ? (
                   <p
                     className="text-xs italic"
                     style={{ color: "oklch(var(--muted-foreground))" }}
@@ -804,39 +936,101 @@ export function Settings() {
                   </p>
                 ) : (
                   <div className="space-y-2">
-                    {allowed.map((p, i) => (
+                    {approvedUsers.map((req, i) => (
                       <div
-                        key={p}
+                        key={req.principal}
                         data-ocid={`settings.access.allowed.item.${i + 1}`}
-                        className="flex items-center gap-2 p-3 rounded-lg border"
+                        className="flex items-start gap-2 p-3 rounded-lg border"
                         style={{
                           background: "oklch(var(--teal) / 0.04)",
                           borderColor: "oklch(var(--teal) / 0.15)",
                         }}
                       >
                         <UserCheck
-                          className="w-4 h-4 flex-shrink-0"
+                          className="w-4 h-4 flex-shrink-0 mt-0.5"
                           style={{ color: "oklch(var(--teal))" }}
                         />
-                        <span
-                          className="text-xs font-mono flex-1 truncate"
-                          style={{ color: "oklch(var(--foreground))" }}
-                        >
-                          {p}
-                          {p === principal && (
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
                             <span
-                              className="ml-2 text-xs"
-                              style={{ color: "oklch(var(--teal))" }}
+                              className="text-sm font-medium"
+                              style={{ color: "oklch(var(--foreground))" }}
                             >
-                              (you)
+                              {req.name}
                             </span>
-                          )}
-                        </span>
+                            {req.qualification && (
+                              <span
+                                className="text-xs"
+                                style={{
+                                  color: "oklch(var(--muted-foreground))",
+                                }}
+                              >
+                                {req.qualification}
+                              </span>
+                            )}
+                            {req.principal === principal && (
+                              <span
+                                className="text-xs"
+                                style={{ color: "oklch(var(--teal))" }}
+                              >
+                                (you)
+                              </span>
+                            )}
+                          </div>
+                          <p
+                            className="text-xs font-mono mt-0.5 truncate"
+                            style={{ color: "oklch(var(--muted-foreground))" }}
+                          >
+                            {req.principal.slice(0, 20)}…
+                          </p>
+                          {/* Role badge + change */}
+                          <div className="flex items-center gap-2 mt-2 flex-wrap">
+                            <Badge
+                              variant="outline"
+                              className="text-xs"
+                              style={
+                                req.role === "doctor"
+                                  ? {
+                                      borderColor: "oklch(0.45 0.14 193 / 0.4)",
+                                      color: "oklch(0.45 0.14 193)",
+                                      background: "oklch(0.45 0.14 193 / 0.07)",
+                                    }
+                                  : {
+                                      borderColor:
+                                        "oklch(var(--muted-foreground) / 0.4)",
+                                      color: "oklch(var(--muted-foreground))",
+                                      background: "oklch(var(--muted))",
+                                    }
+                              }
+                            >
+                              {req.role === "doctor" ? "Doctor" : "Viewer"}
+                            </Badge>
+                            <select
+                              data-ocid={`settings.access.role_select.${i + 1}`}
+                              value={req.role ?? "doctor"}
+                              onChange={(e) =>
+                                handleChangeRole(
+                                  req.principal,
+                                  e.target.value as UserRole,
+                                )
+                              }
+                              className="text-xs rounded px-1.5 py-0.5 border"
+                              style={{
+                                background: "oklch(var(--muted))",
+                                borderColor: "oklch(var(--border))",
+                                color: "oklch(var(--foreground))",
+                              }}
+                            >
+                              <option value="doctor">Doctor</option>
+                              <option value="viewer">Viewer</option>
+                            </select>
+                          </div>
+                        </div>
                         <button
                           type="button"
                           data-ocid={`settings.access.revoke.button.${i + 1}`}
-                          onClick={() => revokeUser(p)}
-                          className="w-7 h-7 rounded-md flex items-center justify-center"
+                          onClick={() => handleRevoke(req.principal)}
+                          className="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0"
                           style={{
                             background: "oklch(var(--destructive) / 0.08)",
                             color: "oklch(var(--destructive))",
@@ -852,44 +1046,72 @@ export function Settings() {
 
               <Separator style={{ background: "oklch(var(--border))" }} />
 
-              {/* Add manually */}
+              {/* ── Add User Manually ── */}
               <div>
                 <p
-                  className="text-xs font-semibold uppercase tracking-wider mb-2"
+                  className="text-xs font-semibold uppercase tracking-wider mb-3"
                   style={{ color: "oklch(var(--muted-foreground))" }}
                 >
                   Add User by Principal ID
                 </p>
-                <div className="flex gap-2">
+                <div className="space-y-3">
                   <Input
-                    data-ocid="settings.access.add.input"
+                    data-ocid="settings.access.manual_add.input"
                     value={newPrincipal}
                     onChange={(e) => setNewPrincipal(e.target.value)}
                     placeholder="Paste principal ID here..."
                     className="text-xs font-mono"
                     onKeyDown={(e) => {
-                      if (e.key === "Enter") addManual();
+                      if (e.key === "Enter") handleAddManual();
                     }}
                   />
-                  <Button
-                    data-ocid="settings.access.add.button"
-                    size="sm"
-                    onClick={addManual}
-                    style={{
-                      background: "oklch(0.55 0.14 260)",
-                      color: "oklch(0.99 0 0)",
-                    }}
+                  <div className="flex items-center gap-3">
+                    <RadioGroup
+                      value={newPrincipalRole}
+                      onValueChange={(v) => setNewPrincipalRole(v as UserRole)}
+                      className="flex gap-4"
+                    >
+                      <div className="flex items-center gap-1.5">
+                        <RadioGroupItem value="doctor" id="new-role-doctor" />
+                        <Label
+                          htmlFor="new-role-doctor"
+                          className="text-xs cursor-pointer"
+                          style={{ color: "oklch(var(--foreground))" }}
+                        >
+                          Doctor
+                        </Label>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <RadioGroupItem value="viewer" id="new-role-viewer" />
+                        <Label
+                          htmlFor="new-role-viewer"
+                          className="text-xs cursor-pointer"
+                          style={{ color: "oklch(var(--foreground))" }}
+                        >
+                          Viewer
+                        </Label>
+                      </div>
+                    </RadioGroup>
+                    <Button
+                      data-ocid="settings.access.manual_add.button"
+                      size="sm"
+                      onClick={handleAddManual}
+                      style={{
+                        background: "oklch(0.55 0.14 260)",
+                        color: "oklch(0.99 0 0)",
+                      }}
+                    >
+                      Add
+                    </Button>
+                  </div>
+                  <p
+                    className="text-xs"
+                    style={{ color: "oklch(var(--muted-foreground))" }}
                   >
-                    Add
-                  </Button>
+                    Ask other doctors to go to Settings and copy their Principal
+                    ID, then paste it here to grant access.
+                  </p>
                 </div>
-                <p
-                  className="text-xs mt-1.5"
-                  style={{ color: "oklch(var(--muted-foreground))" }}
-                >
-                  Ask other doctors to go to Settings and copy their Principal
-                  ID, then paste it here to grant access.
-                </p>
               </div>
             </>
           )}

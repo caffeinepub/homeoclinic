@@ -43,6 +43,7 @@ import { useState } from "react";
 import type React from "react";
 import { toast } from "sonner";
 import type { Patient } from "../backend.d";
+import { useAccessControl } from "../context/AccessControlContext";
 import { useActorDirect } from "../hooks/useActorDirect";
 import {
   useAllPatients,
@@ -75,6 +76,7 @@ export function Patients() {
   const { actor, isFetching: isActorFetching } = useActorDirect();
   const registerMutation = useRegisterPatient();
   const deleteMutation = useDeletePatient();
+  const { isReadOnly } = useAccessControl();
 
   const [search, setSearch] = useState("");
   const [yearFilter, setYearFilter] = useState<number | "all">("all");
@@ -201,217 +203,219 @@ export function Patients() {
           </h1>
         </div>
 
-        <Dialog open={newPatientOpen} onOpenChange={setNewPatientOpen}>
-          <DialogTrigger asChild>
-            <Button
-              data-ocid="patients.open_modal_button"
-              className="gap-2 h-9"
-              style={{
-                background: "oklch(var(--teal))",
-                color: "oklch(0.99 0 0)",
-              }}
-            >
-              <UserPlus className="w-4 h-4" />
-              New Patient
-            </Button>
-          </DialogTrigger>
-          <DialogContent
-            data-ocid="patients.dialog"
-            className="max-w-lg max-h-[90vh] overflow-y-auto"
-            style={{
-              background: "oklch(var(--card))",
-              borderColor: "oklch(var(--border))",
-            }}
-          >
-            <DialogHeader>
-              <DialogTitle
-                className="font-display"
-                style={{ color: "oklch(var(--foreground))" }}
-              >
-                Register New Patient
-              </DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4 py-2">
-              <div className="grid grid-cols-2 gap-3">
-                <div className="col-span-2 space-y-1.5">
-                  <Label
-                    className="text-xs"
-                    style={{ color: "oklch(var(--muted-foreground))" }}
-                  >
-                    Full Name *
-                  </Label>
-                  <Input
-                    data-ocid="patients.name.input"
-                    value={form.name}
-                    onChange={(e) => handleFormChange("name", e.target.value)}
-                    placeholder="Patient's full name"
-                    style={{
-                      background: "oklch(var(--muted))",
-                      borderColor: "oklch(var(--border))",
-                      color: "oklch(var(--foreground))",
-                    }}
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label
-                    className="text-xs"
-                    style={{ color: "oklch(var(--muted-foreground))" }}
-                  >
-                    Age *
-                  </Label>
-                  <Input
-                    data-ocid="patients.age.input"
-                    type="number"
-                    value={form.age}
-                    onChange={(e) => handleFormChange("age", e.target.value)}
-                    placeholder="Age in years"
-                    style={{
-                      background: "oklch(var(--muted))",
-                      borderColor: "oklch(var(--border))",
-                      color: "oklch(var(--foreground))",
-                    }}
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label
-                    className="text-xs"
-                    style={{ color: "oklch(var(--muted-foreground))" }}
-                  >
-                    Sex *
-                  </Label>
-                  <Select
-                    value={form.sex}
-                    onValueChange={(v) => handleFormChange("sex", v)}
-                  >
-                    <SelectTrigger
-                      data-ocid="patients.sex.select"
-                      style={{
-                        background: "oklch(var(--muted))",
-                        borderColor: "oklch(var(--border))",
-                        color: "oklch(var(--foreground))",
-                      }}
-                    >
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                    <SelectContent
-                      style={{
-                        background: "oklch(var(--popover))",
-                        borderColor: "oklch(var(--border))",
-                      }}
-                    >
-                      <SelectItem value="Male">Male</SelectItem>
-                      <SelectItem value="Female">Female</SelectItem>
-                      <SelectItem value="Other">Other</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-1.5">
-                  <Label
-                    className="text-xs"
-                    style={{ color: "oklch(var(--muted-foreground))" }}
-                  >
-                    Occupation
-                  </Label>
-                  <Input
-                    data-ocid="patients.occupation.input"
-                    value={form.occupation}
-                    onChange={(e) =>
-                      handleFormChange("occupation", e.target.value)
-                    }
-                    placeholder="Occupation"
-                    style={{
-                      background: "oklch(var(--muted))",
-                      borderColor: "oklch(var(--border))",
-                      color: "oklch(var(--foreground))",
-                    }}
-                  />
-                </div>
-                <div className="col-span-2 space-y-1.5">
-                  <Label
-                    className="text-xs"
-                    style={{ color: "oklch(var(--muted-foreground))" }}
-                  >
-                    Address
-                  </Label>
-                  <Input
-                    data-ocid="patients.address.input"
-                    value={form.address}
-                    onChange={(e) =>
-                      handleFormChange("address", e.target.value)
-                    }
-                    placeholder="Full address"
-                    style={{
-                      background: "oklch(var(--muted))",
-                      borderColor: "oklch(var(--border))",
-                      color: "oklch(var(--foreground))",
-                    }}
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label
-                    className="text-xs"
-                    style={{ color: "oklch(var(--muted-foreground))" }}
-                  >
-                    Contact
-                  </Label>
-                  <Input
-                    data-ocid="patients.contact.input"
-                    value={form.contact}
-                    onChange={(e) =>
-                      handleFormChange("contact", e.target.value)
-                    }
-                    placeholder="Phone number"
-                    style={{
-                      background: "oklch(var(--muted))",
-                      borderColor: "oklch(var(--border))",
-                      color: "oklch(var(--foreground))",
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-            <DialogFooter>
-              {!isActorReady && !registerMutation.isPending && (
-                <div
-                  className="flex items-center gap-1.5 text-xs mr-auto"
-                  style={{ color: "oklch(var(--muted-foreground))" }}
-                >
-                  <Wifi className="w-3 h-3 animate-pulse" />
-                  Connecting…
-                </div>
-              )}
+        {!isReadOnly && (
+          <Dialog open={newPatientOpen} onOpenChange={setNewPatientOpen}>
+            <DialogTrigger asChild>
               <Button
-                variant="outline"
-                data-ocid="patients.cancel_button"
-                onClick={() => setNewPatientOpen(false)}
-                style={{
-                  borderColor: "oklch(var(--border))",
-                  color: "oklch(var(--muted-foreground))",
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                data-ocid="patients.submit_button"
-                onClick={handleRegister}
-                disabled={registerMutation.isPending}
+                data-ocid="patients.open_modal_button"
+                className="gap-2 h-9"
                 style={{
                   background: "oklch(var(--teal))",
                   color: "oklch(0.99 0 0)",
                 }}
               >
-                {registerMutation.isPending ? (
-                  <>
-                    <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />{" "}
-                    {isActorReady ? "Saving…" : "Connecting…"}
-                  </>
-                ) : (
-                  "Register Patient"
-                )}
+                <UserPlus className="w-4 h-4" />
+                New Patient
               </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+            </DialogTrigger>
+            <DialogContent
+              data-ocid="patients.dialog"
+              className="max-w-lg max-h-[90vh] overflow-y-auto"
+              style={{
+                background: "oklch(var(--card))",
+                borderColor: "oklch(var(--border))",
+              }}
+            >
+              <DialogHeader>
+                <DialogTitle
+                  className="font-display"
+                  style={{ color: "oklch(var(--foreground))" }}
+                >
+                  Register New Patient
+                </DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4 py-2">
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="col-span-2 space-y-1.5">
+                    <Label
+                      className="text-xs"
+                      style={{ color: "oklch(var(--muted-foreground))" }}
+                    >
+                      Full Name *
+                    </Label>
+                    <Input
+                      data-ocid="patients.name.input"
+                      value={form.name}
+                      onChange={(e) => handleFormChange("name", e.target.value)}
+                      placeholder="Patient's full name"
+                      style={{
+                        background: "oklch(var(--muted))",
+                        borderColor: "oklch(var(--border))",
+                        color: "oklch(var(--foreground))",
+                      }}
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label
+                      className="text-xs"
+                      style={{ color: "oklch(var(--muted-foreground))" }}
+                    >
+                      Age *
+                    </Label>
+                    <Input
+                      data-ocid="patients.age.input"
+                      type="number"
+                      value={form.age}
+                      onChange={(e) => handleFormChange("age", e.target.value)}
+                      placeholder="Age in years"
+                      style={{
+                        background: "oklch(var(--muted))",
+                        borderColor: "oklch(var(--border))",
+                        color: "oklch(var(--foreground))",
+                      }}
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label
+                      className="text-xs"
+                      style={{ color: "oklch(var(--muted-foreground))" }}
+                    >
+                      Sex *
+                    </Label>
+                    <Select
+                      value={form.sex}
+                      onValueChange={(v) => handleFormChange("sex", v)}
+                    >
+                      <SelectTrigger
+                        data-ocid="patients.sex.select"
+                        style={{
+                          background: "oklch(var(--muted))",
+                          borderColor: "oklch(var(--border))",
+                          color: "oklch(var(--foreground))",
+                        }}
+                      >
+                        <SelectValue placeholder="Select" />
+                      </SelectTrigger>
+                      <SelectContent
+                        style={{
+                          background: "oklch(var(--popover))",
+                          borderColor: "oklch(var(--border))",
+                        }}
+                      >
+                        <SelectItem value="Male">Male</SelectItem>
+                        <SelectItem value="Female">Female</SelectItem>
+                        <SelectItem value="Other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label
+                      className="text-xs"
+                      style={{ color: "oklch(var(--muted-foreground))" }}
+                    >
+                      Occupation
+                    </Label>
+                    <Input
+                      data-ocid="patients.occupation.input"
+                      value={form.occupation}
+                      onChange={(e) =>
+                        handleFormChange("occupation", e.target.value)
+                      }
+                      placeholder="Occupation"
+                      style={{
+                        background: "oklch(var(--muted))",
+                        borderColor: "oklch(var(--border))",
+                        color: "oklch(var(--foreground))",
+                      }}
+                    />
+                  </div>
+                  <div className="col-span-2 space-y-1.5">
+                    <Label
+                      className="text-xs"
+                      style={{ color: "oklch(var(--muted-foreground))" }}
+                    >
+                      Address
+                    </Label>
+                    <Input
+                      data-ocid="patients.address.input"
+                      value={form.address}
+                      onChange={(e) =>
+                        handleFormChange("address", e.target.value)
+                      }
+                      placeholder="Full address"
+                      style={{
+                        background: "oklch(var(--muted))",
+                        borderColor: "oklch(var(--border))",
+                        color: "oklch(var(--foreground))",
+                      }}
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label
+                      className="text-xs"
+                      style={{ color: "oklch(var(--muted-foreground))" }}
+                    >
+                      Contact
+                    </Label>
+                    <Input
+                      data-ocid="patients.contact.input"
+                      value={form.contact}
+                      onChange={(e) =>
+                        handleFormChange("contact", e.target.value)
+                      }
+                      placeholder="Phone number"
+                      style={{
+                        background: "oklch(var(--muted))",
+                        borderColor: "oklch(var(--border))",
+                        color: "oklch(var(--foreground))",
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+              <DialogFooter>
+                {!isActorReady && !registerMutation.isPending && (
+                  <div
+                    className="flex items-center gap-1.5 text-xs mr-auto"
+                    style={{ color: "oklch(var(--muted-foreground))" }}
+                  >
+                    <Wifi className="w-3 h-3 animate-pulse" />
+                    Connecting…
+                  </div>
+                )}
+                <Button
+                  variant="outline"
+                  data-ocid="patients.cancel_button"
+                  onClick={() => setNewPatientOpen(false)}
+                  style={{
+                    borderColor: "oklch(var(--border))",
+                    color: "oklch(var(--muted-foreground))",
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  data-ocid="patients.submit_button"
+                  onClick={handleRegister}
+                  disabled={registerMutation.isPending}
+                  style={{
+                    background: "oklch(var(--teal))",
+                    color: "oklch(0.99 0 0)",
+                  }}
+                >
+                  {registerMutation.isPending ? (
+                    <>
+                      <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" />{" "}
+                      {isActorReady ? "Saving…" : "Connecting…"}
+                    </>
+                  ) : (
+                    "Register Patient"
+                  )}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        )}
       </motion.div>
 
       {/* Search + Year Filter */}
@@ -626,18 +630,20 @@ export function Patients() {
                       View <ChevronRight className="w-3 h-3" />
                     </button>
                   </Link>
-                  <button
-                    type="button"
-                    data-ocid={`patients.delete_button.${i + 1}`}
-                    onClick={() => setDeleteId(patient.id)}
-                    className="w-7 h-7 rounded-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                    style={{
-                      color: "oklch(var(--destructive))",
-                      background: "oklch(var(--destructive) / 0.08)",
-                    }}
-                  >
-                    <Trash2 className="w-3.5 h-3.5" />
-                  </button>
+                  {!isReadOnly && (
+                    <button
+                      type="button"
+                      data-ocid={`patients.delete_button.${i + 1}`}
+                      onClick={() => setDeleteId(patient.id)}
+                      className="w-7 h-7 rounded-md flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                      style={{
+                        color: "oklch(var(--destructive))",
+                        background: "oklch(var(--destructive) / 0.08)",
+                      }}
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  )}
                 </div>
               </div>
             ))}
