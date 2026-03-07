@@ -19,13 +19,13 @@ import {
   setAdminSession,
   useAccessControl,
 } from "../context/AccessControlContext";
-import { useActorDirect } from "../hooks/useActorDirect";
+import { useActor } from "../hooks/useActor";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
 
 export function RequestAccessPage() {
   const { submitRequest } = useAccessControl();
   const { identity, clear } = useInternetIdentity();
-  const { actor, isFetching: actorLoading } = useActorDirect();
+  const { actor, isFetching: actorLoading } = useActor();
   const principal = identity?.getPrincipal().toString() ?? "";
   const backendReady = !!actor;
 
@@ -85,27 +85,14 @@ export function RequestAccessPage() {
       return;
     }
     setIsSubmitting(true);
-    let attempts = 0;
-    const maxAttempts = 5;
-    while (attempts < maxAttempts) {
-      try {
-        await submitRequest(name, qualification, reason);
-        setSubmitted(true);
-        setIsSubmitting(false);
-        return;
-      } catch (err) {
-        attempts++;
-        const errMsg = err instanceof Error ? err.message : String(err);
-        if (attempts < maxAttempts) {
-          // Wait a moment for the actor to be ready, then retry
-          await new Promise((res) => setTimeout(res, 1500));
-        } else {
-          toast.error(
-            `Failed to submit request: ${errMsg}. Please check your connection and try again.`,
-          );
-          setIsSubmitting(false);
-        }
-      }
+    try {
+      await submitRequest(name, qualification, reason);
+      setSubmitted(true);
+    } catch (err) {
+      const errMsg = err instanceof Error ? err.message : String(err);
+      toast.error(`Failed to submit request: ${errMsg}`);
+    } finally {
+      setIsSubmitting(false);
     }
   }
 

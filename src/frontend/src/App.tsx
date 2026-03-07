@@ -6,6 +6,7 @@ import {
   createRoute,
   createRouter,
 } from "@tanstack/react-router";
+import { useState } from "react";
 import { AppLayout } from "./components/AppLayout";
 import { LoginPage } from "./components/LoginPage";
 import {
@@ -14,6 +15,7 @@ import {
 } from "./context/AccessControlContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import { useInternetIdentity } from "./hooks/useInternetIdentity";
+import { AdminDashboard } from "./pages/AdminDashboard";
 import { Appointments } from "./pages/Appointments";
 import { CaseSheet } from "./pages/CaseSheet";
 import { Dashboard } from "./pages/Dashboard";
@@ -30,6 +32,7 @@ import { Settings } from "./pages/Settings";
 function RootLayout() {
   const { identity, isInitializing } = useInternetIdentity();
   const { accessState } = useAccessControl();
+  const [adminEnteredApp, setAdminEnteredApp] = useState(false);
 
   if (isInitializing) {
     return (
@@ -98,7 +101,12 @@ function RootLayout() {
     return <DeniedPage />;
   }
 
-  // accessState === "approved" | "admin"
+  // Admin gate: show dashboard before entering the app
+  if (accessState === "admin" && !adminEnteredApp) {
+    return <AdminDashboard onEnterApp={() => setAdminEnteredApp(true)} />;
+  }
+
+  // accessState === "approved" | "admin" (after entering app)
   return (
     <AppLayout>
       <Outlet />

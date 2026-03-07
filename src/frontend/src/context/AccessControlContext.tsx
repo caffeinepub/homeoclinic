@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 import type { backendInterface } from "../backend";
+import { createActorWithConfig } from "../config";
 import { useActorDirect } from "../hooks/useActorDirect";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
 
@@ -128,15 +129,24 @@ export function AccessControlProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const { identity } = useInternetIdentity();
-  const { actor } = useActorDirect();
-  const principal = identity?.getPrincipal().toString() ?? null;
+  const { identity, isInitializing } = useInternetIdentity();
+  const { actor, isFetching: actorFetching } = useActorDirect();
+  const isAnonymous = !identity || identity.getPrincipal().isAnonymous();
+  const principal = isAnonymous
+    ? null
+    : (identity?.getPrincipal().toString() ?? null);
 
   // Always-fresh ref to the actor so callbacks don't capture stale closures
   const actorRef = useRef<backendInterface | null>(null);
   useEffect(() => {
     actorRef.current = actor;
   }, [actor]);
+
+  // Always-fresh ref to the identity for creating actors on demand
+  const identityRef = useRef(identity);
+  useEffect(() => {
+    identityRef.current = identity;
+  }, [identity]);
 
   const [adminUnlocked, setAdminUnlocked] = useState<boolean>(() =>
     isAdminUnlockedInSession(),
@@ -155,68 +165,109 @@ export function AccessControlProvider({
 
   // Refresh status from backend whenever actor/principal changes
   useEffect(() => {
-    if (!actor || !principal || principal === "anonymous") {
-      if (!principal) setOwnStatus("loading");
+    // Still initializing Internet Identity — wait
+    if (isInitializing) {
+      setOwnStatus("loading");
       return;
     }
 
+    // Not logged in at all — not "loading", just not authenticated
+    if (!principal) {
+      setOwnStatus("unknown");
+      return;
+    }
+
+    // Actor still being created — show loading but with a hard timeout
+    if (!actor) {
+      if (!actorFetching) {
+        // Actor fetch finished but returned nothing — treat as error
+        setOwnStatus("unknown");
+        return;
+      }
+      // Actor is fetching — wait up to 10s
+      const timeout = setTimeout(() => {
+        setOwnStatus("unknown");
+      }, 10000);
+      return () => clearTimeout(timeout);
+    }
+
     // Re-fetch whenever actor, principal, or refreshTick changes
-    // refreshTick is used as a trigger - referencing it here satisfies linter
     lastPrincipalRef.current = `${principal}:${refreshTick}`;
 
     let cancelled = false;
     async function fetchStatus() {
       try {
-        // Use getCallerUserRole to check if user has been assigned a role by admin
-        const role = await actor!.getCallerUserRole();
+        // Step 1: check canister role
+        let canisterRole: string | null = null;
+        try {
+          canisterRole = await actor!.getCallerUserRole();
+        } catch {
+          // getCallerUserRole traps if this principal was never initialized
+          // (i.e. _initializeAccessControlWithSecret was never called for them yet)
+          canisterRole = null;
+        }
         if (cancelled) return;
 
-        // Map backend role to access status
-        // UserRole.user = approved, UserRole.admin = admin, UserRole.guest = check profile for pending/denied
-        if (role === "admin") {
+        // Admin in canister → full admin access, no profile check needed
+        if (canisterRole === "admin") {
           setOwnStatus("approved");
           setOwnRole("doctor");
           return;
         }
 
-        if (role === "user") {
-          // Approved by admin - check their stored role preference in profile
-          const profile = await actor!.getCallerUserProfile();
-          if (cancelled) return;
-          if (profile && profile.role === "viewer") {
-            setOwnRole("viewer");
-          } else {
-            setOwnRole("doctor");
-          }
-          setOwnStatus("approved");
-          return;
-        }
-
-        // role === "guest" - check profile for pending/denied status
+        // Step 2: always check the profile as the primary source of truth for
+        // the approval workflow. The canister auto-assigns #user to all new
+        // principals, so canisterRole === "user" alone does NOT mean approved.
         const profile = await actor!.getCallerUserProfile();
         if (cancelled) return;
 
+        // If canister role is explicitly "guest", user was denied by admin
+        if (canisterRole === "guest") {
+          setOwnStatus("denied");
+          setOwnRole(null);
+          return;
+        }
+
         if (!profile) {
-          // Never submitted a request
+          // No profile at all — never submitted a request
           setOwnStatus("unknown");
           setOwnRole(null);
           return;
         }
 
         if (profile.role === "pending") {
-          setOwnStatus("pending");
-          setOwnRole(null);
+          // Profile says pending. Check local cache (set by admin on their device)
+          // to see if admin approved this user. This gives instant feedback when
+          // admin and user share the same device/browser. For cross-device scenarios,
+          // the user stays pending until admin manually adds them by principal ID.
+          const cached = loadRequestsCache();
+          const cachedEntry = cached.find((r) => r.principal === principal);
+          if (cachedEntry && cachedEntry.status === "approved") {
+            // Admin approved from this device — grant access
+            setOwnStatus("approved");
+            setOwnRole(cachedEntry.role ?? "doctor");
+          } else {
+            setOwnStatus("pending");
+            setOwnRole(null);
+          }
         } else if (profile.role === "denied") {
           setOwnStatus("denied");
           setOwnRole(null);
+        } else if (
+          profile.role === "approved" ||
+          profile.role === "doctor" ||
+          profile.role === "viewer"
+        ) {
+          // Profile explicitly marked as approved/doctor/viewer by admin flow
+          setOwnStatus("approved");
+          setOwnRole(profile.role === "viewer" ? "viewer" : "doctor");
         } else {
-          // Has some profile but unknown status - treat as pending
-          setOwnStatus("pending");
+          // Unknown profile role — treat as needing to submit request
+          setOwnStatus("unknown");
           setOwnRole(null);
         }
       } catch {
         if (cancelled) return;
-        // If any error, treat as unknown (needs to submit request)
         setOwnStatus("unknown");
         setOwnRole(null);
       }
@@ -226,7 +277,7 @@ export function AccessControlProvider({
     return () => {
       cancelled = true;
     };
-  }, [actor, principal, refreshTick]);
+  }, [actor, principal, refreshTick, isInitializing, actorFetching]);
 
   // Poll for status updates when pending (every 10 seconds)
   useEffect(() => {
@@ -253,7 +304,11 @@ export function AccessControlProvider({
   // Derived access state
   const accessState: AccessStatus = (() => {
     if (adminUnlocked) return "admin";
-    if (!principal) return "loading";
+    // Still initializing auth — show loading
+    if (isInitializing) return "loading";
+    // Not logged in — App.tsx will show login page (no access state needed)
+    if (!principal) return "unknown";
+    // Logged in but waiting for canister response
     if (ownStatus === "loading") return "loading";
     return ownStatus;
   })();
@@ -274,19 +329,25 @@ export function AccessControlProvider({
   const submitRequest = useCallback(
     async (name: string, qualification: string, reason: string) => {
       if (!principal) throw new Error("Not logged in");
-      // Wait for actor to be ready (up to 20 seconds) using the ref for freshest value
+
+      // Get a live actor — prefer the cached one, otherwise create a fresh one
       let currentActor = actorRef.current;
       if (!currentActor) {
-        for (let i = 0; i < 40; i++) {
-          await new Promise((res) => setTimeout(res, 500));
-          currentActor = actorRef.current;
-          if (currentActor) break;
+        const currentIdentity = identityRef.current;
+        if (!currentIdentity || currentIdentity.getPrincipal().isAnonymous()) {
+          throw new Error("Not logged in. Please refresh and try again.");
+        }
+        try {
+          currentActor = await createActorWithConfig({
+            agentOptions: { identity: currentIdentity },
+          });
+        } catch (actorErr) {
+          const msg =
+            actorErr instanceof Error ? actorErr.message : String(actorErr);
+          throw new Error(`Could not connect to backend: ${msg}`);
         }
       }
-      if (!currentActor)
-        throw new Error(
-          "Backend not ready. Please check your connection and try again.",
-        );
+
       const spec = encodeRequestSpec({
         name,
         qualification,
@@ -294,7 +355,8 @@ export function AccessControlProvider({
         submittedAt: Date.now(),
       });
       // Save to backend canister - marks this user as pending
-      // specialization is an optional field (?Text in Motoko)
+      // specialization is optional Text in Motoko; the generated backend.ts
+      // wrapper handles the Candid Opt encoding automatically
       try {
         await currentActor.saveCallerUserProfile({
           name,
