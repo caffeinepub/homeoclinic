@@ -35,8 +35,6 @@ actor {
     specialization : ?Text;
   };
 
-  // TODO create list of valid role types
-  // TODO should it not be enough to only use DoctorAccount by naming all actors "doctors"?
   public type DoctorAccount = {
     username : Text;
     passwordHash : Text;
@@ -446,20 +444,16 @@ actor {
     };
   };
 
-  // Manage creation of new doctor and ensuring doctor's authenticity (TODO - using admin's functionality, needs refactoring)
-  // let newDoctor = { doctor with caller };
-  // DOCTORS.add(caller, newDoctor);
-  //SSO.add(doctor.id, caller);
-
   public query ({ caller }) func usernameExists(username : Text) : async Bool {
     passwordHashDoctorMap.containsKey(username);
   };
 
+  // FIX: also set mustChangePassword = true so doctor is forced to set a new password on next login
   public shared ({ caller }) func resetDoctorPassword(username : Text, newPasswordHash : Text) : async Text {
     switch (passwordHashDoctorMap.get(username)) {
       case (null) { "Doctor Account Not Found" };
       case (?doctorAccount) {
-        passwordHashDoctorMap.add(username, { doctorAccount with passwordHash = newPasswordHash });
+        passwordHashDoctorMap.add(username, { doctorAccount with passwordHash = newPasswordHash; mustChangePassword = true });
         "ok";
       };
     };
@@ -476,41 +470,36 @@ actor {
         } else if (oldPasswordHash == newPasswordHash) {
           "New password cannot be the same as the old password";
         } else {
-          passwordHashDoctorMap.add(username, { doctorAccount with passwordHash = newPasswordHash });
-          passwordHashDoctorMap.remove(oldPasswordHash);
+          // FIX: update by username key and also clear mustChangePassword flag
+          passwordHashDoctorMap.add(username, { doctorAccount with passwordHash = newPasswordHash; mustChangePassword = false });
           "ok";
         };
       };
     };
   };
 
-  //add new Doctor to SSO table
+  // FIX: correctly set all fields instead of using passwordHash for everything
   public shared ({ caller }) func createDoctorWithPassword(username : Text, passwordHash : Text) : async Text {
-    //add new user to password hash
     if (passwordHashDoctorMap.containsKey(username)) {
       return "Username already exists";
     };
     passwordHashDoctorMap.add(username, {
-      username = passwordHash;
+      username = username;
       passwordHash = passwordHash;
-      name = passwordHash;
-      qualification = passwordHash;
-      gmail = passwordHash;
-      phone = passwordHash;
-      role = passwordHash;
-      mustChangePassword = false;
+      name = username;
+      qualification = "";
+      gmail = "";
+      phone = "";
+      role = "doctor";
+      mustChangePassword = true;
       createdAt = 0;
     });
-    //add new SSO connection
     ssoDoctors.add(username, passwordHash);
     "ok";
   };
 
+  // FIX: return empty array instead of trapping when no doctor accounts exist
   public shared ({ caller }) func getAllDoctorAccounts() : async [DoctorAccount] {
-    let doctorAccounts = passwordHashDoctorMap.values().toArray();
-    if (doctorAccounts.size() == 0) {
-      Runtime.trap("No Doctor accounts are existing");
-    };
-    doctorAccounts;
+    passwordHashDoctorMap.values().toArray();
   };
 };
