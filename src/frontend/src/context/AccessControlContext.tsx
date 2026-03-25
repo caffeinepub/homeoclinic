@@ -325,6 +325,14 @@ export function AccessControlProvider({
           return;
         }
 
+        // Bug #3 fix: canister role "user" means admin has approved this II user
+        // This works cross-device since the canister is the source of truth
+        if (canisterRole === "user") {
+          setIiStatus("approved");
+          setIiRole("doctor");
+          return;
+        }
+
         const profile = await actor!.getCallerUserProfile();
         if (cancelled) return;
 

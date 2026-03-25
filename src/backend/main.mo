@@ -490,7 +490,7 @@ actor {
       qualification = "";
       gmail = "";
       phone = "";
-      role = "doctor";
+      role = "approved_doctor";
       mustChangePassword = true;
       createdAt = 0;
     });

@@ -27,6 +27,7 @@ import {
   FileText,
   Loader2,
   Plus,
+  Printer,
   User,
 } from "lucide-react";
 import { motion } from "motion/react";
@@ -269,6 +270,19 @@ export function PatientDetail() {
             </div>
           </div>
           <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              data-ocid="patient_detail.print.primary_button"
+              onClick={() => window.print()}
+              className="gap-1.5 h-8 text-xs no-print"
+              style={{
+                borderColor: "oklch(var(--border))",
+                color: "oklch(var(--muted-foreground))",
+              }}
+            >
+              <Printer className="w-3 h-3" /> Print
+            </Button>
             <Button
               variant="outline"
               size="sm"

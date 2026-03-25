@@ -30,6 +30,7 @@ import {
   Loader2,
   Pill,
   Plus,
+  Printer,
   Save,
   Stethoscope,
   Trash2,
@@ -39,9 +40,14 @@ import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import type { CaseSheet as BackendCaseSheet } from "../backend.d";
+import {
+  type DoctorProfile,
+  PrintCaseSheet,
+} from "../components/PrintCaseSheet";
 import { useAccessControl } from "../context/AccessControlContext";
 import type { RemedyData } from "../data/remedyDatabase";
 import { SEED_REMEDIES } from "../data/remedySeeds";
+import { useInternetIdentity } from "../hooks/useInternetIdentity";
 import {
   useCase,
   useCasesByPatient,
@@ -2648,6 +2654,17 @@ function FollowUpTable({
 export function CaseSheet() {
   const { id } = useParams({ from: "/cases/$id" });
   const { isReadOnly } = useAccessControl();
+  const { identity } = useInternetIdentity();
+  const doctorProfile: DoctorProfile = (() => {
+    try {
+      const principal = identity?.getPrincipal().toString();
+      return JSON.parse(
+        localStorage.getItem(`doctorProfile_${principal}`) || "{}",
+      ) as DoctorProfile;
+    } catch {
+      return {};
+    }
+  })();
   const { data: caseData, isLoading } = useCase(id);
   const { data: patient } = usePatient(caseData?.patientId ?? "");
   const { data: allCaseSheets = [] } = useCasesByPatient(
@@ -2977,6 +2994,16 @@ export function CaseSheet() {
             )}
           </div>
           <div className="flex items-center gap-2 flex-wrap">
+            <Button
+              type="button"
+              data-ocid="case.print.primary_button"
+              onClick={() => window.print()}
+              variant="outline"
+              className="gap-1.5 h-9"
+            >
+              <Printer className="w-3.5 h-3.5" />
+              Print / Export PDF
+            </Button>
             <Button
               type="button"
               data-ocid="case.analyse.primary_button"
@@ -3595,6 +3622,35 @@ Simillimum:`}
           />
         )}
       </AnimatePresence>
+
+      {/* Print-only case sheet — hidden on screen, visible only when printing */}
+      <PrintCaseSheet
+        patient={{
+          name: patient?.name ?? "",
+          age: patient?.age,
+          sex: patient?.sex,
+          address: patient?.address,
+          contact: patient?.contact,
+          occupation: patient?.occupation,
+        }}
+        caseData={{
+          chiefComplaint: complaintRows,
+          hpi,
+          pastHistory,
+          familyHistory,
+          personalHistory,
+          mentalGenerals,
+          physicalGenerals,
+          examination,
+          investigations,
+          miasmaticAnalysis,
+          totality: totality,
+          repertorialFindings,
+        }}
+        prescriptions={prescriptionRows}
+        followUps={followUpRows}
+        doctorProfile={doctorProfile}
+      />
     </div>
   );
 }

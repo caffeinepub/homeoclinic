@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { Columns2, Plus, X } from "lucide-react";
+import { Columns2, GitCompare, Plus, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import type { RemedyData } from "../data/remedyDatabase";
@@ -53,6 +53,113 @@ const REL_SECTIONS: {
   { key: "followsWell", label: "Follows Well" },
   { key: "followedBy", label: "Followed By" },
 ];
+
+// ---------- Diff helpers ----------
+
+/**
+ * Split a string into individual items (by newline, semicolon, or comma)
+ * to allow item-level diffing.
+ */
+function splitItems(text: string): string[] {
+  return text
+    .split(/[\n;,]+/)
+    .map((s) => s.trim().toLowerCase())
+    .filter(Boolean);
+}
+
+/**
+ * Returns true if at least one remedy in the group has different content
+ * for this field vs the others.
+ */
+function sectionHasDiffs(
+  remedies: RemedyData[],
+  key: keyof Omit<
+    RemedyData,
+    "name" | "abbreviation" | "miasmaticClassification" | "relationships"
+  >,
+): boolean {
+  if (remedies.length < 2) return false;
+  const first = remedies[0][key];
+  return remedies.some((r) => r[key] !== first);
+}
+
+function relSectionHasDiffs(
+  remedies: RemedyData[],
+  key: keyof RemedyData["relationships"],
+): boolean {
+  if (remedies.length < 2) return false;
+  const first = remedies[0].relationships[key];
+  return remedies.some((r) => r.relationships[key] !== first);
+}
+
+/**
+ * For a given text value, compute which individual items are unique to this
+ * remedy (not found in any other selected remedy's same section).
+ */
+function getUniqueItems(value: string, otherValues: string[]): Set<string> {
+  const myItems = splitItems(value);
+  const otherAllItems = new Set(otherValues.flatMap((v) => splitItems(v)));
+  const unique = new Set<string>();
+  for (const item of myItems) {
+    if (!otherAllItems.has(item)) unique.add(item);
+  }
+  return unique;
+}
+
+/**
+ * Render text with unique items highlighted using the remedy's miasm colour.
+ */
+function HighlightedText({
+  value,
+  uniqueItems,
+  miasmColor,
+}: {
+  value: string;
+  uniqueItems: Set<string>;
+  miasmColor: string;
+}) {
+  if (uniqueItems.size === 0) {
+    return (
+      <span style={{ color: "oklch(var(--foreground) / 0.85)" }}>
+        {value || "—"}
+      </span>
+    );
+  }
+
+  // Split the raw text by lines/sentences to preserve formatting
+  const lines = value.split("\n");
+  return (
+    <>
+      {lines.map((line, li) => {
+        const trimmed = line.trim();
+        const isUnique = trimmed && uniqueItems.has(trimmed.toLowerCase());
+        return (
+          <span key={`line-${li}-${line.slice(0, 20)}`}>
+            {li > 0 && <br />}
+            {isUnique ? (
+              <span
+                className="rounded px-0.5"
+                style={{
+                  background: `oklch(${miasmColor} / 0.18)`,
+                  color: `oklch(${miasmColor})`,
+                  fontWeight: 500,
+                }}
+              >
+                {line}
+              </span>
+            ) : (
+              <span style={{ color: "oklch(var(--foreground) / 0.85)" }}>
+                {line}
+              </span>
+            )}
+          </span>
+        );
+      })}
+    </>
+  );
+}
+
+// ---------- Sub-components ----------
 
 function PlaceholderCol() {
   return (
@@ -140,6 +247,8 @@ function RemedyColumnHeader({
   );
 }
 
+// ---------- Main panel ----------
+
 export interface RemedyComparePanelProps {
   onSelectRemedy?: (remedyName: string) => void;
 }
@@ -149,6 +258,7 @@ export function RemedyComparePanel({
 }: RemedyComparePanelProps) {
   const [selected, setSelected] = useState<RemedyData[]>([]);
   const [open, setOpen] = useState(false);
+  const [diffMode, setDiffMode] = useState(false);
 
   const available = SEED_REMEDIES.filter(
     (r) => !selected.some((s) => s.name === r.name),
@@ -169,9 +279,39 @@ export function RemedyComparePanel({
     (key, i) => ({ key, remedy: selected[i] ?? null }),
   );
 
+  // Compute which sections are identical across all selected remedies
+  const activeRemedies = selected;
+  const identicalMainSections = SECTIONS.filter(
+    (sec) =>
+      activeRemedies.length >= 2 &&
+      !sectionHasDiffs(
+        activeRemedies,
+        sec.key as keyof Omit<
+          RemedyData,
+          "name" | "abbreviation" | "miasmaticClassification" | "relationships"
+        >,
+      ),
+  );
+  const identicalRelSections = REL_SECTIONS.filter(
+    (rs) =>
+      activeRemedies.length >= 2 && !relSectionHasDiffs(activeRemedies, rs.key),
+  );
+  const hiddenCount =
+    identicalMainSections.length + identicalRelSections.length;
+
+  const visibleMainSections =
+    diffMode && activeRemedies.length >= 2
+      ? SECTIONS.filter((s) => !identicalMainSections.includes(s))
+      : SECTIONS;
+
+  const visibleRelSections =
+    diffMode && activeRemedies.length >= 2
+      ? REL_SECTIONS.filter((s) => !identicalRelSections.includes(s))
+      : REL_SECTIONS;
+
   return (
     <div className="flex flex-col gap-4">
-      {/* Selector row */}
+      {/* Selector + diff toggle row */}
       <div className="flex flex-wrap items-center gap-2">
         {selected.map((r) => (
           <motion.div
@@ -259,6 +399,47 @@ export function RemedyComparePanel({
             </PopoverContent>
           </Popover>
         )}
+
+        {/* Diff mode toggle – only visible when 2+ remedies selected */}
+        {selected.length >= 2 && (
+          <div className="flex items-center gap-2 ml-auto">
+            {diffMode && hiddenCount > 0 && (
+              <Badge
+                className="text-xs h-6 px-2"
+                style={{
+                  background: "oklch(var(--muted) / 0.6)",
+                  color: "oklch(var(--muted-foreground))",
+                  border: "1px solid oklch(var(--border))",
+                }}
+              >
+                {hiddenCount} identical section{hiddenCount !== 1 ? "s" : ""}{" "}
+                hidden
+              </Badge>
+            )}
+            <Button
+              variant={diffMode ? "default" : "outline"}
+              size="sm"
+              className="h-7 text-xs gap-1.5 transition-all"
+              onClick={() => setDiffMode((v) => !v)}
+              data-ocid="remedy_compare.diff_mode.toggle"
+              style={
+                diffMode
+                  ? {
+                      background: "oklch(var(--teal))",
+                      color: "oklch(var(--teal-foreground, 1 0 0))",
+                      border: "1px solid oklch(var(--teal) / 0.6)",
+                    }
+                  : {
+                      borderColor: "oklch(var(--teal) / 0.4)",
+                      color: "oklch(var(--teal))",
+                    }
+              }
+            >
+              <GitCompare className="w-3.5 h-3.5" />
+              {diffMode ? "Show All Sections" : "Show Differentiating Features"}
+            </Button>
+          </div>
+        )}
       </div>
 
       {selected.length === 0 ? (
@@ -290,6 +471,27 @@ export function RemedyComparePanel({
               background: "oklch(var(--card))",
             }}
           >
+            {/* Diff mode banner */}
+            {diffMode && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                className="flex items-center gap-2 px-4 py-2 text-xs border-b"
+                style={{
+                  background: "oklch(var(--teal) / 0.07)",
+                  borderColor: "oklch(var(--teal) / 0.2)",
+                  color: "oklch(var(--teal))",
+                }}
+              >
+                <GitCompare className="w-3.5 h-3.5 flex-shrink-0" />
+                <span>
+                  <strong>Differentiating view</strong> — highlighted items are
+                  unique to that remedy. Identical sections are hidden.
+                </span>
+              </motion.div>
+            )}
+
             {/* Column headers */}
             <div
               className="grid gap-3 p-3 border-b"
@@ -320,96 +522,179 @@ export function RemedyComparePanel({
             </div>
 
             {/* Main sections */}
-            {SECTIONS.map((sec, sIdx) => (
+            {visibleMainSections.length === 0 && diffMode ? (
               <div
-                key={sec.key}
-                className="grid gap-3 p-3"
-                style={{
-                  gridTemplateColumns: "160px repeat(3, 1fr)",
-                  borderBottom:
-                    sIdx < SECTIONS.length - 1
-                      ? "1px solid oklch(var(--border) / 0.5)"
-                      : undefined,
-                  background:
-                    sIdx % 2 === 1
-                      ? "oklch(var(--muted) / 0.15)"
-                      : "transparent",
-                }}
+                className="py-8 text-center text-sm"
+                style={{ color: "oklch(var(--muted-foreground))" }}
+                data-ocid="remedy_compare.diff_no_differences.empty_state"
               >
-                <div
-                  className="text-xs font-semibold pt-1"
-                  style={{ color: "oklch(var(--foreground) / 0.7)" }}
-                >
-                  {sec.label}
-                </div>
-                {columns.map(({ key, remedy }) =>
-                  remedy ? (
-                    <div
-                      key={remedy.name}
-                      className="text-xs leading-relaxed"
-                      style={{ color: "oklch(var(--foreground) / 0.85)" }}
-                    >
-                      {remedy[sec.key]}
-                    </div>
-                  ) : (
-                    <div
-                      key={key}
-                      className="text-xs"
-                      style={{ color: "oklch(var(--muted-foreground) / 0.4)" }}
-                    >
-                      —
-                    </div>
-                  ),
-                )}
+                All main sections are identical across selected remedies.
               </div>
-            ))}
+            ) : (
+              visibleMainSections.map((sec, sIdx) => (
+                <div
+                  key={sec.key}
+                  className="grid gap-3 p-3"
+                  style={{
+                    gridTemplateColumns: "160px repeat(3, 1fr)",
+                    borderBottom:
+                      sIdx < visibleMainSections.length - 1
+                        ? "1px solid oklch(var(--border) / 0.5)"
+                        : undefined,
+                    background:
+                      sIdx % 2 === 1
+                        ? "oklch(var(--muted) / 0.15)"
+                        : "transparent",
+                  }}
+                >
+                  <div
+                    className="text-xs font-semibold pt-1"
+                    style={{ color: "oklch(var(--foreground) / 0.7)" }}
+                  >
+                    {sec.label}
+                  </div>
+                  {columns.map(({ key, remedy }) =>
+                    remedy ? (
+                      <div
+                        key={remedy.name}
+                        className="text-xs leading-relaxed"
+                      >
+                        {diffMode ? (
+                          <HighlightedText
+                            value={remedy[sec.key]}
+                            uniqueItems={getUniqueItems(
+                              remedy[sec.key],
+                              activeRemedies
+                                .filter((r) => r.name !== remedy.name)
+                                .map((r) => r[sec.key]),
+                            )}
+                            miasmColor={getMiasmColor(
+                              remedy.miasmaticClassification,
+                            )}
+                          />
+                        ) : (
+                          <span
+                            style={{
+                              color: "oklch(var(--foreground) / 0.85)",
+                            }}
+                          >
+                            {remedy[sec.key]}
+                          </span>
+                        )}
+                      </div>
+                    ) : (
+                      <div
+                        key={key}
+                        className="text-xs"
+                        style={{
+                          color: "oklch(var(--muted-foreground) / 0.4)",
+                        }}
+                      >
+                        —
+                      </div>
+                    ),
+                  )}
+                </div>
+              ))
+            )}
 
             {/* Relationships section */}
-            <div
-              className="grid gap-3 p-3 border-t"
-              style={{
-                gridTemplateColumns: "160px repeat(3, 1fr)",
-                borderColor: "oklch(var(--border))",
-                background: "oklch(var(--muted) / 0.25)",
-              }}
-            >
+            {visibleRelSections.length > 0 && (
               <div
-                className="text-xs font-semibold uppercase tracking-wider pt-1"
-                style={{ color: "oklch(var(--muted-foreground))" }}
+                className="border-t"
+                style={{ borderColor: "oklch(var(--border))" }}
               >
-                Relationships
-              </div>
-              {columns.map(({ key, remedy }) =>
-                remedy ? (
-                  <div key={remedy.name} className="flex flex-col gap-1.5">
-                    {REL_SECTIONS.map((rs) => (
-                      <div key={rs.key}>
-                        <span
-                          className="text-xs font-medium"
-                          style={{ color: "oklch(var(--foreground) / 0.55)" }}
-                        >
-                          {rs.label}:{" "}
-                        </span>
-                        <span
-                          className="text-xs"
-                          style={{ color: "oklch(var(--foreground) / 0.85)" }}
-                        >
-                          {remedy.relationships[rs.key] || "—"}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
+                <div
+                  className="grid gap-3 p-3"
+                  style={{
+                    gridTemplateColumns: "160px repeat(3, 1fr)",
+                    background: "oklch(var(--muted) / 0.25)",
+                  }}
+                >
                   <div
-                    key={key}
-                    className="text-xs"
-                    style={{ color: "oklch(var(--muted-foreground) / 0.4)" }}
+                    className="text-xs font-semibold uppercase tracking-wider pt-1"
+                    style={{ color: "oklch(var(--muted-foreground))" }}
                   >
-                    —
+                    Relationships
                   </div>
-                ),
+                  {columns.map(({ key, remedy }) =>
+                    remedy ? (
+                      <div key={remedy.name} className="flex flex-col gap-1.5">
+                        {visibleRelSections.map((rs) => {
+                          const val = remedy.relationships[rs.key] || "—";
+                          const uniqueItems = diffMode
+                            ? getUniqueItems(
+                                val,
+                                activeRemedies
+                                  .filter((r) => r.name !== remedy.name)
+                                  .map((r) => r.relationships[rs.key] || ""),
+                              )
+                            : new Set<string>();
+                          return (
+                            <div key={rs.key}>
+                              <span
+                                className="text-xs font-medium"
+                                style={{
+                                  color: "oklch(var(--foreground) / 0.55)",
+                                }}
+                              >
+                                {rs.label}:{" "}
+                              </span>
+                              {diffMode ? (
+                                <span className="text-xs">
+                                  <HighlightedText
+                                    value={val}
+                                    uniqueItems={uniqueItems}
+                                    miasmColor={getMiasmColor(
+                                      remedy.miasmaticClassification,
+                                    )}
+                                  />
+                                </span>
+                              ) : (
+                                <span
+                                  className="text-xs"
+                                  style={{
+                                    color: "oklch(var(--foreground) / 0.85)",
+                                  }}
+                                >
+                                  {val}
+                                </span>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <div
+                        key={key}
+                        className="text-xs"
+                        style={{
+                          color: "oklch(var(--muted-foreground) / 0.4)",
+                        }}
+                      >
+                        —
+                      </div>
+                    ),
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* If diff mode hides all relationships too */}
+            {diffMode &&
+              visibleRelSections.length === 0 &&
+              visibleMainSections.length > 0 && (
+                <div
+                  className="px-4 py-2 text-xs border-t"
+                  style={{
+                    color: "oklch(var(--muted-foreground))",
+                    borderColor: "oklch(var(--border))",
+                    background: "oklch(var(--muted) / 0.1)",
+                  }}
+                >
+                  All relationship sections are identical — hidden in diff view.
+                </div>
               )}
-            </div>
           </motion.div>
         </AnimatePresence>
       )}

@@ -1,28 +1,38 @@
 # HomeoClinic
 
 ## Current State
-Full homeopathic clinical management app with:
-- Patient registration, case sheets, prescriptions, follow-ups
-- Remedy reference (60+ remedies with Boericke/Synoptic Key data)
-- Appointments, memos, doctor settings
-- Light/dark theme
-- Analyse Case feature with remedy suggestions
-- Previous prescriptions table on case sheet
-
-The recurring bug: `access-control.mo` calls `Runtime.trap("User is not registered")` in `getUserRole` when a new principal hasn't been initialized yet. This blocks all operations for new logins.
+- Full homeopathic clinic management system with HMCC case sheets, 78+ remedies, prescription integration, investigation suggestions, remedy comparison tool
+- Doctor profile stored in localStorage (fields: name, qualification, regNo, phone, clinicName, clinicAddress)
+- Login page shows stale "58+ polychrests" text (should be 78+)
+- No PDF export feature exists anywhere in the app
+- CaseSheet.tsx (~3600 lines) contains full case sheet UI with all HMCC sections, prescriptions, follow-ups
+- PatientDetail.tsx (~836 lines) shows patient profile and their case list
+- Settings.tsx stores/reads doctor profile from localStorage key `doctorProfile_${principal}`
 
 ## Requested Changes (Diff)
 
 ### Add
-- Nothing new
+- PDF export button on the CaseSheet page (top area near existing action buttons)
+- PDF export button on the PatientDetail page (near patient info header)
+- A print-ready view that includes:
+  - Header: Doctor name, qualification, registration number, clinic name, clinic address (from localStorage doctorProfile)
+  - Patient info: name, age, sex, address, contact
+  - Full HMCC case sheet all sections
+  - Prescription table (remedy, potency, dosage, frequency, duration)
+  - Follow-up history table
+- Use browser print API (window.print()) with a dedicated print CSS stylesheet or inline print styles
+- No external PDF library needed -- use `@media print` CSS to show only the printable content
 
 ### Modify
-- Fix `getUserRole` in access-control to auto-register new authenticated principals as `#user` instead of trapping -- any non-anonymous principal that isn't in the roles map should be silently added as `#user` and returned
+- LoginPage.tsx (at `src/frontend/src/components/LoginPage.tsx` line 591): change "58+ polychrests" to "78+ polychrests"
 
 ### Remove
 - Nothing
 
 ## Implementation Plan
-1. Regenerate backend with the same data model and API surface as current `main.mo`, but with the access-control fix: in the `getUserRole` function (or equivalent), when a non-anonymous principal is not found in `userRoles`, auto-add them as `#user` and return `#user` instead of trapping.
-2. All existing endpoints (patients, case sheets, prescriptions, follow-ups, appointments, memos, user profiles) must be preserved exactly.
-3. Keep `requireAuthenticated` logic: only reject anonymous callers.
+1. Fix the stale text in LoginPage.tsx: "58+ polychrests" → "78+ polychrests"
+2. Create a `PrintCaseSheet` component (or inline print function) that assembles the full printable document from case sheet data, patient info, prescriptions, follow-ups, and doctor profile
+3. Add print-specific CSS (either via `@media print` in index.css or a dedicated stylesheet) that hides all sidebar/navigation/buttons and shows only the print content
+4. Add "Export PDF" / "Print" button in CaseSheet.tsx (near Save/Analyse buttons at the top)
+5. Add "Export PDF" / "Print" button in PatientDetail.tsx (near patient header)
+6. The print button triggers window.print() after injecting/showing the printable content in a hidden print-only div

@@ -291,3 +291,24 @@
     color: oklch(var(--muted-foreground));
   }
 }
+
+/* ─── Print / Export PDF ──────────────────────────────────────────────────── */
+.print-only {
+  display: none;
+}
+
+@media print {
+  body > * {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  /* Ensure the print view is visible in the shadow DOM / portal */
+  #root .print-only {
+    display: block !important;
+  }
+}

@@ -588,7 +588,7 @@ export function LoginPage({ forceStep2 = false }: LoginPageProps) {
               { icon: Shield, text: "Year-wise patient record organization" },
               {
                 icon: Stethoscope,
-                text: "Remedy reference with 58+ polychrests",
+                text: "Remedy reference with 78+ polychrests",
               },
               { icon: UserPlus, text: "Role-based access control" },
               {
