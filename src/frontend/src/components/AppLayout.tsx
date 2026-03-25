@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Link, useRouter } from "@tanstack/react-router";
 import {
   CalendarDays,
+  Columns2,
   FlaskConical,
   LayoutDashboard,
   LogOut,
@@ -20,6 +21,7 @@ const NAV_ITEMS = [
   { href: "/", icon: LayoutDashboard, label: "Dashboard" },
   { href: "/patients", icon: Users, label: "Patients" },
   { href: "/remedies", icon: FlaskConical, label: "Remedy Reference" },
+  { href: "/remedy-compare", icon: Columns2, label: "Compare Remedies" },
   { href: "/appointments", icon: CalendarDays, label: "Appointments" },
   { href: "/memos", icon: StickyNote, label: "Memos" },
 ];

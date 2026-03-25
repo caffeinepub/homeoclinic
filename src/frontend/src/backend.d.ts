@@ -7,6 +7,16 @@ export interface None {
     __kind__: "None";
 }
 export type Option<T> = Some<T> | None;
+export interface Patient {
+    id: string;
+    age: bigint;
+    sex: string;
+    occupation: string;
+    contact: string;
+    name: string;
+    address: string;
+    registrationYear: bigint;
+}
 export interface CaseSheet {
     id: string;
     hpi: string;
@@ -49,20 +59,21 @@ export interface Prescription {
     rows: string;
     caseSheetId: string;
 }
+export interface DoctorAccount {
+    username: string;
+    name: string;
+    createdAt: bigint;
+    role: string;
+    gmail: string;
+    passwordHash: string;
+    phone: string;
+    qualification: string;
+    mustChangePassword: boolean;
+}
 export interface UserProfile {
     name: string;
     role: string;
     specialization?: string;
-}
-export interface Patient {
-    id: string;
-    age: bigint;
-    sex: string;
-    occupation: string;
-    contact: string;
-    name: string;
-    address: string;
-    registrationYear: bigint;
 }
 export enum UserRole {
     admin = "admin",
@@ -71,8 +82,10 @@ export enum UserRole {
 }
 export interface backendInterface {
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
+    changeOwnPassword(username: string, oldPasswordHash: string, newPasswordHash: string): Promise<string>;
     createAppointment(appointment: Appointment): Promise<string>;
     createCaseSheet(caseSheet: CaseSheet): Promise<string>;
+    createDoctorWithPassword(username: string, passwordHash: string): Promise<string>;
     createFollowUp(followUp: FollowUp): Promise<string>;
     createMemo(memo: Memo): Promise<string>;
     createPatient(patient: Patient): Promise<string>;
@@ -84,6 +97,7 @@ export interface backendInterface {
     deletePatient(id: string): Promise<void>;
     deletePrescription(id: string): Promise<void>;
     getAllAppointments(): Promise<Array<Appointment>>;
+    getAllDoctorAccounts(): Promise<Array<DoctorAccount>>;
     getAllMemos(): Promise<Array<Memo>>;
     getAllPatients(): Promise<Array<Patient>>;
     getAppointment(id: string): Promise<Appointment>;
@@ -100,11 +114,16 @@ export interface backendInterface {
     getPrescriptionsByCaseSheet(caseSheetId: string): Promise<Array<Prescription>>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
     isCallerAdmin(): Promise<boolean>;
+    loginWithPassword(username: string, passwordHash: string): Promise<DoctorAccount | null>;
+    registerWithPassword(username: string, passwordHash: string, name: string, qualification: string, gmail: string, phone: string): Promise<string>;
+    resetDoctorPassword(username: string, newPasswordHash: string): Promise<string>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
     updateAppointment(id: string, appointment: Appointment): Promise<void>;
     updateCaseSheet(id: string, caseSheet: CaseSheet): Promise<void>;
+    updateDoctorAccountRole(username: string, newRole: string): Promise<string>;
     updateFollowUp(id: string, followUp: FollowUp): Promise<void>;
     updateMemo(id: string, memo: Memo): Promise<void>;
     updatePatient(id: string, patient: Patient): Promise<void>;
     updatePrescription(id: string, prescription: Prescription): Promise<void>;
+    usernameExists(username: string): Promise<boolean>;
 }

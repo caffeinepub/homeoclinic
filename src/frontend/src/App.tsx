@@ -6,7 +6,7 @@ import {
   createRoute,
   createRouter,
 } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AppLayout } from "./components/AppLayout";
 import { LoginPage } from "./components/LoginPage";
 import {
@@ -20,93 +20,135 @@ import { Appointments } from "./pages/Appointments";
 import { CaseSheet } from "./pages/CaseSheet";
 import { Dashboard } from "./pages/Dashboard";
 import { DeniedPage } from "./pages/DeniedPage";
+import { ForceChangePasswordPage } from "./pages/ForceChangePasswordPage";
+import { ForgotPasswordPage } from "./pages/ForgotPasswordPage";
 import { Memos } from "./pages/Memos";
 import { PatientDetail } from "./pages/PatientDetail";
 import { Patients } from "./pages/Patients";
 import { PendingApprovalPage } from "./pages/PendingApprovalPage";
+import { RegistrationPage } from "./pages/RegistrationPage";
 import { Remedies } from "./pages/Remedies";
+import { RemedyCompare } from "./pages/RemedyCompare";
 import { RequestAccessPage } from "./pages/RequestAccessPage";
 import { Settings } from "./pages/Settings";
 
-// Root layout with auth guard + access control gate
+type AppPage = "login" | "register" | "forgot";
+
+function Spinner({ label }: { label: string }) {
+  return (
+    <div
+      className="min-h-screen flex items-center justify-center"
+      style={{ background: "oklch(var(--background))" }}
+    >
+      <div className="flex items-center gap-3">
+        <div
+          className="w-5 h-5 border-2 rounded-full animate-spin"
+          style={{
+            borderColor: "oklch(var(--teal) / 0.3)",
+            borderTopColor: "oklch(var(--teal))",
+          }}
+        />
+        <span
+          className="text-sm"
+          style={{ color: "oklch(var(--muted-foreground))" }}
+        >
+          {label}
+        </span>
+      </div>
+    </div>
+  );
+}
+
 function RootLayout() {
   const { identity, isInitializing } = useInternetIdentity();
-  const { accessState } = useAccessControl();
+  const { accessState, passwordSession } = useAccessControl();
   const [adminEnteredApp, setAdminEnteredApp] = useState(false);
+  const [currentPage, setCurrentPage] = useState<AppPage>("login");
+
+  // Listen for navigation events from LoginPage
+  useEffect(() => {
+    function handleNavigate(e: Event) {
+      const detail = (e as CustomEvent<string>).detail;
+      if (detail === "register") setCurrentPage("register");
+      else if (detail === "forgot") setCurrentPage("forgot");
+      else setCurrentPage("login");
+    }
+    window.addEventListener("homeo_navigate", handleNavigate);
+    return () => window.removeEventListener("homeo_navigate", handleNavigate);
+  }, []);
+
+  // Reset page nav when we have a valid session
+  useEffect(() => {
+    if (accessState === "approved" || accessState === "admin") {
+      setCurrentPage("login");
+    }
+  }, [accessState]);
 
   if (isInitializing) {
-    return (
-      <div
-        className="min-h-screen flex items-center justify-center"
-        style={{ background: "oklch(var(--background))" }}
-      >
-        <div className="flex items-center gap-3">
-          <div
-            className="w-5 h-5 border-2 rounded-full animate-spin"
-            style={{
-              borderColor: "oklch(var(--teal) / 0.3)",
-              borderTopColor: "oklch(var(--teal))",
-            }}
-          />
-          <span
-            className="text-sm"
-            style={{ color: "oklch(var(--muted-foreground))" }}
-          >
-            Initializing…
-          </span>
-        </div>
-      </div>
-    );
+    return <Spinner label="Initializing…" />;
   }
 
-  if (!identity) {
+  // — Pre-login pages (always available regardless of session) —
+  if (currentPage === "register") {
+    return <RegistrationPage onGoToLogin={() => setCurrentPage("login")} />;
+  }
+  if (currentPage === "forgot") {
+    return <ForgotPasswordPage onGoToLogin={() => setCurrentPage("login")} />;
+  }
+
+  // — No session at all —
+  if (!identity && !passwordSession) {
     return <LoginPage />;
   }
 
-  // Access control gate
-  if (accessState === "loading") {
+  // — Admin session —
+  if (accessState === "admin") {
+    if (!adminEnteredApp) {
+      return <AdminDashboard onEnterApp={() => setAdminEnteredApp(true)} />;
+    }
     return (
-      <div
-        className="min-h-screen flex items-center justify-center"
-        style={{ background: "oklch(var(--background))" }}
-      >
-        <div className="flex items-center gap-3">
-          <div
-            className="w-5 h-5 border-2 rounded-full animate-spin"
-            style={{
-              borderColor: "oklch(var(--teal) / 0.3)",
-              borderTopColor: "oklch(var(--teal))",
-            }}
-          />
-          <span
-            className="text-sm"
-            style={{ color: "oklch(var(--muted-foreground))" }}
-          >
-            Checking access…
-          </span>
-        </div>
-      </div>
+      <AppLayout>
+        <Outlet />
+      </AppLayout>
     );
   }
 
-  if (accessState === "unknown") {
-    return <RequestAccessPage />;
+  // — Loading —
+  if (accessState === "loading") {
+    return <Spinner label="Checking access…" />;
   }
 
+  // — Password session needs II —
+  if (accessState === "need_ii" || (passwordSession && !identity)) {
+    return <LoginPage forceStep2 />;
+  }
+
+  // — Must change password —
+  if (accessState === "must_change_password") {
+    return <ForceChangePasswordPage />;
+  }
+
+  // — Pending —
   if (accessState === "pending") {
     return <PendingApprovalPage />;
   }
 
+  // — Denied —
   if (accessState === "denied") {
     return <DeniedPage />;
   }
 
-  // Admin gate: show dashboard before entering the app
-  if (accessState === "admin" && !adminEnteredApp) {
-    return <AdminDashboard onEnterApp={() => setAdminEnteredApp(true)} />;
+  // — II user with no profile —
+  if (accessState === "unknown" && identity && !passwordSession) {
+    return <RequestAccessPage />;
   }
 
-  // accessState === "approved" | "admin" (after entering app)
+  // — Unknown without session — show login
+  if (accessState === "unknown") {
+    return <LoginPage />;
+  }
+
+  // — Approved —
   return (
     <AppLayout>
       <Outlet />
@@ -122,43 +164,41 @@ const indexRoute = createRoute({
   path: "/",
   component: Dashboard,
 });
-
 const patientsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/patients",
   component: Patients,
 });
-
 const patientDetailRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/patients/$id",
   component: PatientDetail,
 });
-
 const caseSheetRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/cases/$id",
   component: CaseSheet,
 });
-
 const remediesRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/remedies",
   component: Remedies,
 });
-
+const remedyCompareRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/remedy-compare",
+  component: RemedyCompare,
+});
 const appointmentsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/appointments",
   component: Appointments,
 });
-
 const memosRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/memos",
   component: Memos,
 });
-
 const settingsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/settings",
@@ -171,6 +211,7 @@ const routeTree = rootRoute.addChildren([
   patientDetailRoute,
   caseSheetRoute,
   remediesRoute,
+  remedyCompareRoute,
   appointmentsRoute,
   memosRoute,
   settingsRoute,

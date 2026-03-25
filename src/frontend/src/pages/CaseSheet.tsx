@@ -8,6 +8,12 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
@@ -17,6 +23,7 @@ import {
   Brain,
   CheckCircle,
   ClipboardList,
+  Columns2,
   FileText,
   FlaskConical,
   Info,
@@ -52,6 +59,7 @@ import { analyseCase } from "../utils/caseAnalysis";
 import { formatDate, generateId, todayISO } from "../utils/helpers";
 import type { InvestigationSuggestion } from "../utils/investigationSuggestions";
 import { suggestInvestigations } from "../utils/investigationSuggestions";
+import { RemedyComparePanel } from "./RemedyCompare";
 
 // ─── Remedy lookup utility ────────────────────────────────────────────────────
 
@@ -1892,6 +1900,7 @@ function PrescriptionTable({
   const [newRow, setNewRow] = useState<PrescriptionRow>({ ...EMPTY_RX_ROW });
   const [popupRemedy, setPopupRemedy] = useState<RemedyData | null>(null);
   const [showAutocomplete, setShowAutocomplete] = useState(false);
+  const [compareOpen, setCompareOpen] = useState(false);
   const autocompleteRef = useRef<HTMLDivElement>(null);
   const remedyInputRef = useRef<HTMLInputElement>(null);
 
@@ -1936,7 +1945,52 @@ function PrescriptionTable({
   return (
     <>
       <div className="clinical-form-wrapper">
-        <div className="clinical-section-header">Prescription Record</div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexWrap: "wrap",
+            gap: "8px",
+          }}
+        >
+          <div className="clinical-section-header" style={{ margin: 0 }}>
+            Prescription Record
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-7 text-xs gap-1.5"
+            data-ocid="case.compare_remedies.open_modal_button"
+            onClick={() => setCompareOpen(true)}
+            style={{
+              borderColor: "oklch(var(--teal) / 0.4)",
+              color: "oklch(var(--teal))",
+            }}
+          >
+            <Columns2 className="w-3.5 h-3.5" />
+            Compare Remedies
+          </Button>
+        </div>
+        <Sheet open={compareOpen} onOpenChange={setCompareOpen}>
+          <SheetContent
+            side="right"
+            className="w-full sm:max-w-3xl overflow-y-auto"
+            data-ocid="case.compare_remedies.sheet"
+          >
+            <SheetHeader>
+              <SheetTitle>Remedy Comparison</SheetTitle>
+            </SheetHeader>
+            <div className="mt-4">
+              <RemedyComparePanel
+                onSelectRemedy={(name) => {
+                  updateNew("remedy", name);
+                  setCompareOpen(false);
+                }}
+              />
+            </div>
+          </SheetContent>
+        </Sheet>
         <div style={{ overflowX: "auto" }}>
           <table className="clinical-form-table">
             <thead>

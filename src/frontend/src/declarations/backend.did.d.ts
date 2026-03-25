@@ -37,6 +37,17 @@ export interface CaseSheet {
   'investigations' : string,
   'chiefComplaint' : string,
 }
+export interface DoctorAccount {
+  'username' : string,
+  'name' : string,
+  'createdAt' : bigint,
+  'role' : string,
+  'gmail' : string,
+  'passwordHash' : string,
+  'phone' : string,
+  'qualification' : string,
+  'mustChangePassword' : boolean,
+}
 export interface FollowUp {
   'id' : string,
   'rows' : string,
@@ -73,8 +84,10 @@ export type UserRole = { 'admin' : null } |
 export interface _SERVICE {
   '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
   'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
+  'changeOwnPassword' : ActorMethod<[string, string, string], string>,
   'createAppointment' : ActorMethod<[Appointment], string>,
   'createCaseSheet' : ActorMethod<[CaseSheet], string>,
+  'createDoctorWithPassword' : ActorMethod<[string, string], string>,
   'createFollowUp' : ActorMethod<[FollowUp], string>,
   'createMemo' : ActorMethod<[Memo], string>,
   'createPatient' : ActorMethod<[Patient], string>,
@@ -86,6 +99,7 @@ export interface _SERVICE {
   'deletePatient' : ActorMethod<[string], undefined>,
   'deletePrescription' : ActorMethod<[string], undefined>,
   'getAllAppointments' : ActorMethod<[], Array<Appointment>>,
+  'getAllDoctorAccounts' : ActorMethod<[], Array<DoctorAccount>>,
   'getAllMemos' : ActorMethod<[], Array<Memo>>,
   'getAllPatients' : ActorMethod<[], Array<Patient>>,
   'getAppointment' : ActorMethod<[string], Appointment>,
@@ -102,13 +116,21 @@ export interface _SERVICE {
   'getPrescriptionsByCaseSheet' : ActorMethod<[string], Array<Prescription>>,
   'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
   'isCallerAdmin' : ActorMethod<[], boolean>,
+  'loginWithPassword' : ActorMethod<[string, string], [] | [DoctorAccount]>,
+  'registerWithPassword' : ActorMethod<
+    [string, string, string, string, string, string],
+    string
+  >,
+  'resetDoctorPassword' : ActorMethod<[string, string], string>,
   'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
   'updateAppointment' : ActorMethod<[string, Appointment], undefined>,
   'updateCaseSheet' : ActorMethod<[string, CaseSheet], undefined>,
+  'updateDoctorAccountRole' : ActorMethod<[string, string], string>,
   'updateFollowUp' : ActorMethod<[string, FollowUp], undefined>,
   'updateMemo' : ActorMethod<[string, Memo], undefined>,
   'updatePatient' : ActorMethod<[string, Patient], undefined>,
   'updatePrescription' : ActorMethod<[string, Prescription], undefined>,
+  'usernameExists' : ActorMethod<[string], boolean>,
 }
 export declare const idlService: IDL.ServiceClass;
 export declare const idlInitArgs: IDL.Type[];

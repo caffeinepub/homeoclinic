@@ -1279,4 +1279,445 @@ export const SEED_REMEDIES: RemedyData[] = [
       followedBy: "Sulphur, Lycopodium",
     },
   },
+
+  {
+    name: "Agaricus Muscarius",
+    abbreviation: "Agar",
+    miasmaticClassification: "Syphilitic + Tubercular",
+    keynotes:
+      "Twitching, jerking, trembling — choreic and spasmodic movements. Itching, burning, redness of skin as if frostbitten. Diagonal symptoms (right arm + left leg affected). Sensitiveness of spine — cannot bear touch or pressure. Mental excitement alternating with depression. Delirium with singing, dancing, and loquacity.",
+    materiaMedicaSummary:
+      "Agaricus muscarius (fly agarite mushroom) acts powerfully on the nervous system. Mind: delirium with singing, shouting, cheerfulness alternating with depression; makes verses, prophesies; indifference to loved ones. Head: headache with nausea and stiffness of neck. Eyes: twitching of lids; involuntary movements. Spine: extremely sensitive — cannot bear touch on dorsal spine; caries of spine. Chorea: twitching worse in sleep; whole body in constant motion; trembling after exertion. Chilblains: burning, itching, redness of toes and fingers as if frostbitten. Aggravated: cold air, coition, after eating, pressure on spine. Ameliorated: moving about slowly.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Diagonal symptoms — right arm and left leg, or vice versa. 2) Twitching of muscles — choreic movements. 3) Burning, itching of parts as if frostbitten. 4) Spine sensitive to touch and pressure. 5) Mental excitement with loquacity and cheerfulness. 6) Trembling after eating or exertion.",
+    clinicalIndications:
+      "Chorea. Epilepsy. Spinal irritation. Chilblains. Tremors. Senile dementia. Locomotor ataxia. Delirium tremens. Twitching of eyelids. Tic douloureux.",
+    rubrics:
+      "EXTREMITIES — TWITCHING; BACK — SENSITIVE — dorsal; SKIN — ITCHING — burning; MIND — LOQUACITY; GENERALS — COLD — air, agg",
+    relationships: {
+      complementary: "Tarentula hispanica",
+      antidotes: "Camphor, Coffee",
+      inimical: "None noted",
+      followsWell: "Rhus tox, Belladonna",
+      followedBy: "Calcarea carb, Sulphur",
+    },
+  },
+  {
+    name: "Alumina",
+    abbreviation: "Alum",
+    miasmaticClassification: "Psoric + Syphilitic",
+    keynotes:
+      "Extreme dryness of mucous membranes and skin. Constipation — no desire for days; must strain even for soft stool. Slow, sluggish functions — everything is slowed. Confusion of identity — does not know who he is. Worse on alternate days. Falling tendency — staggers when closing eyes.",
+    materiaMedicaSummary:
+      "Alumina is the remedy for extreme constitutional dryness. The patient is elderly, thin, and dried up. Nervous system: staggers when walking with eyes closed; locomotor ataxia; loss of muscular control. Rectum: no desire for days; great straining for soft stool; dryness and inactivity. Mind: confusion about identity — wonders whose voice he hears, whose limbs are his; time moves very slowly; hurried yet does things slowly. Throat: dry, raw; food must be swallowed with difficulty. Skin: dry, rough, itching without eruption. Aggravated: alternate days, potatoes, periodically, morning on waking. Ameliorated: in open air, warm drinks, evening.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Constipation with no desire for stool even when soft. 2) Dryness everywhere — skin, mucous membranes. 3) Slow in all functions — mental and physical. 4) Staggers when walking with eyes closed (ataxia). 5) Confusion of identity. 6) Worse alternate days.",
+    clinicalIndications:
+      "Constipation. Locomotor ataxia. Senile conditions. Dryness of skin and mucous membranes. Laryngitis with dryness. Progressive muscular atrophy. Dementia. Difficulty swallowing.",
+    rubrics:
+      "RECTUM — CONSTIPATION — soft stool, even; GENERALS — DRYNESS; MIND — IDENTITY — confusion of; EXTREMITIES — STAGGERING; GENERALS — ALTERNATING — days",
+    relationships: {
+      complementary: "Bryonia, Ferrum",
+      antidotes: "Bryonia, Ipecac",
+      inimical: "Belladonna",
+      followsWell: "Bryonia, Lachesis, Sulphur",
+      followedBy: "Bryonia, Calc carb",
+    },
+  },
+  {
+    name: "Antimonium Crudum",
+    abbreviation: "Ant-c",
+    miasmaticClassification: "Psoric + Sycotic",
+    keynotes:
+      "Thick white coating on tongue — like whitewash. Disposition to grow fat. Sentimental, lovelorn mood — especially in moonlight. Nails and skin of fingers split and horny. Cannot bear heat of sun or cold bathing. Gastric complaints from overindulgence. Warts on palms and soles.",
+    materiaMedicaSummary:
+      "Antimonium crudum suits fat, chubby children and adults who are fretful, whining, and sentimental. Tongue: thickly coated white — never clean. Stomach: loss of appetite after the slightest food; nausea; vomiting after overeating; loathing of food and smell of food. Skin: warts on palms; nails deformed, brittle, broken; horny skin of fingers. Mind: sentimental mood in moonlight; cannot bear being touched or looked at; irritable children who want to be carried. Feet: sensitive soles from corns and callosities. Aggravated: heat of sun, cold bathing, cold food, after eating, wine. Ameliorated: rest, open air.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) White thick coating on tongue — pathognomonic. 2) Sentimental by moonlight. 3) Warts on soles and palms. 4) Nails deformed and brittle. 5) Gastric complaints from overeating. 6) Cannot bear heat of sun. 7) Fretful, peevish children.",
+    clinicalIndications:
+      "Gastric disorders. Skin warts. Nail disorders. Corns and calluses. Obesity. Eczema. Indigestion. Sentimental depression. Children with feeding difficulties.",
+    rubrics:
+      "MOUTH — TONGUE — white coated; MIND — SENTIMENTAL — moonlight; SKIN — WARTS — palms; NAILS — DEFORMED; GENERALS — BATHING — cold, agg",
+    relationships: {
+      complementary: "Sulphur, Squilla",
+      antidotes: "Hepar sulph",
+      inimical: "None noted",
+      followsWell: "Mercurius, Pulsatilla",
+      followedBy: "Calcarea carb, Sulphur",
+    },
+  },
+  {
+    name: "Berberis Vulgaris",
+    abbreviation: "Berb",
+    miasmaticClassification: "Sycotic",
+    keynotes:
+      "Radiating pains — from a center outward in all directions. Renal and biliary colic. Bubbling sensation in kidneys. Rapidly changing symptoms — pains change in character and locality rapidly. Jaundice with liver disease. Pale yellowish complexion. Worse jar and movement.",
+    materiaMedicaSummary:
+      "Berberis vulgaris (barberry) is a leading remedy for urinary and biliary calculi. Kidneys: bubbling or boiling sensation; stitching, burning pain radiating in all directions from the kidneys; pain from kidney into bladder and urethra. Urine: pale, turbid, with yellowish-red deposits; mucus sediment. Gall bladder: biliary colic, jaundice, liver pain radiating to right shoulder. Back: lumbago with stitching, radiating pains worse movement and standing. Joints: gout with uric acid deposits. Skin: pale yellowish waxy complexion. Aggravated: motion, standing, jarring, fatigue. Ameliorated: rest, lying on opposite side.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Radiating pains in all directions from a fixed center. 2) Bubbling sensation in renal region. 3) Biliary and renal calculi with colic. 4) Pale yellowish complexion. 5) Rapidly alternating symptoms. 6) Lumbago with radiation to hips and thighs.",
+    clinicalIndications:
+      "Renal calculi. Biliary calculi. Gout. Jaundice. Lumbago. Cystitis. Prostatitis. Hepatic disorders. Gall bladder disease. Radiating back pain.",
+    rubrics:
+      "KIDNEYS — PAIN — radiating; BACK — PAIN — lumbar — radiating; GENERALS — PAIN — radiating; URINE — TURBID; ABDOMEN — PAIN — gall bladder",
+    relationships: {
+      complementary: "Lycopodium, Kali bich",
+      antidotes: "Camphor, Belladonna",
+      inimical: "None noted",
+      followsWell: "Calcarea carb, Nux vomica",
+      followedBy: "Lycopodium, Sulphur",
+    },
+  },
+  {
+    name: "Calcarea Phosphorica",
+    abbreviation: "Calc-p",
+    miasmaticClassification: "Tubercular",
+    keynotes:
+      "Defective nutrition and assimilation in children and old people. Slow development, delayed teething, fontanelles slow to close. Growing pains in long bones. Peevish, fretful children who want to go somewhere. Anemia with weakness. School headache from mental exertion.",
+    materiaMedicaSummary:
+      "Calcarea phosphorica is the tissue remedy of growth and nutrition. Children: emaciated; cold extremities; head sweats; teeth late; fontanelles slow to close; soft, brittle bones; rachitis. Growing pains in the limbs of adolescents. Anemia: bloodless, pale, waxy. Mind: restless, wants change; children want to travel, go somewhere; school headache. Digestion: desire for smoked or salted meat; diarrhea in teething children; flatus with every stool. Spine: curvature; neck complaints. Aggravated: cold, wet weather, motion, fruits. Ameliorated: warmth, summer, rest.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Imperfect development and growth in children. 2) Non-union of fractures. 3) School headache from mental exertion. 4) Desire to travel — restless disposition. 5) Slow dentition and fontanelle closure. 6) Growing pains in long bones. 7) Anemia in children with cold extremities.",
+    clinicalIndications:
+      "Rickets. Delayed dentition. Non-union of fractures. Anemia. Growing pains. Spinal weakness. School headache. Diarrhea in children. Convalescence after illness.",
+    rubrics:
+      "TEETH — DELAYED; BONES — WEAKNESS; MIND — RESTLESSNESS — travel, desire; GENERALS — GROWTH — impaired; HEAD — PAIN — exertion, mental",
+    relationships: {
+      complementary: "Ruta, Hepar sulph",
+      antidotes: "None noted",
+      inimical: "None noted",
+      followsWell: "Ferrum phos, Kali phos",
+      followedBy: "Silicea, Sulphur",
+    },
+  },
+  {
+    name: "Cantharis",
+    abbreviation: "Canth",
+    miasmaticClassification: "Sycotic",
+    keynotes:
+      "Violent burning and cutting pains in urinary tract. Intolerable urging — constant desire to urinate with burning pains. Burns and scalds of skin. Violent inflammation with rapid destruction of tissue. Sexual mania — excessively strong sexual desire. Membranous exudation.",
+    materiaMedicaSummary:
+      "Cantharis acts primarily on urinary mucous membranes and skin. Urinary: constant urging with intolerable burning cutting pain; urine passed drop by drop; nephritis; cystitis; scalding urine. Genitals: intense sexual excitement; priapism; inflammation. Gastric: burning from mouth to stomach; violent thirst with aversion to water. Skin: burns, scalds, erysipelas with large blisters; burning rawness. Respiration: pleurisy with burning. Aggravated: from drinking coffee, urinating, touch. Ameliorated: warmth of stomach, rest.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Intense burning cutting pain in bladder and urethra. 2) Constant urging with passage of only drops. 3) Burns and scalds with large blisters. 4) Violent sexual excitement. 5) Rapid destructive inflammation. 6) Membranous exudation.",
+    clinicalIndications:
+      "Cystitis. Urethritis. Nephritis. Burns and scalds. Erysipelas with blisters. Pyelonephritis. Priapism. Nymphomanis. Gastritis with burning.",
+    rubrics:
+      "BLADDER — URGING — constant; BLADDER — PAIN — burning; URINE — SCANTY — droplets; SKIN — BURNS; MALE — SEXUAL DESIRE — increased",
+    relationships: {
+      complementary: "Camphora",
+      antidotes: "Camphora",
+      inimical: "None noted",
+      followsWell: "Aconite, Belladonna",
+      followedBy: "Arsenicum, Mercurius",
+    },
+  },
+  {
+    name: "Coffea Cruda",
+    abbreviation: "Coff",
+    miasmaticClassification: "Psoric",
+    keynotes:
+      "Hypersensitiveness — extreme sensitiveness of all senses. Toothache relieved by holding cold water in mouth. Sleeplessness from overflow of ideas and plans; mind full of thoughts. Pain intolerable — pain makes her weep and tremble. Exhilaration; excessive cheerfulness with over-activity.",
+    materiaMedicaSummary:
+      "Coffea cruda is the antidote to all stimulant excess and suits states of excessive stimulation. Mind: wide-awake sleeplessness; cannot stop the flow of ideas; plans and mental activity at night; over-joy; excessive laughter; weeps from joy; great sensitivity. Pain: hypersensitive to pain — cannot bear it; pain drives to despair. Teeth: toothache during menses better from ice water in mouth (unusual amelioration by cold). Head: one-sided headache as if nail were driven in, worse noise, smell, open air. Heart: palpitations from excitement, joy. Aggravated: excessive emotions, noise, touch, narcotics, strong smells. Ameliorated: sleep, warmth, ice water (for toothache).",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Toothache better from ice cold water. 2) Sleeplessness from excessive mental activity. 3) Hypersensitive to pain — intolerable. 4) Excessive emotional states — joy, weeping, excitement. 5) Antidote to many remedies including Nux vomica, Chamomilla, Ignatia.",
+    clinicalIndications:
+      "Insomnia from mental excitement. Toothache. Neuralgia. Palpitations from excitement. Hypersensitivity. Menstrual pain with over-sensitiveness. Headache from excessive mental activity.",
+    rubrics:
+      "SLEEP — SLEEPLESSNESS — thoughts, from; MIND — SENSITIVE — pain, to; TEETH — PAIN — cold water ameliorates; MIND — CHEERFULNESS — excessive; HEART — PALPITATIONS — emotions, from",
+    relationships: {
+      complementary: "None noted",
+      antidotes: "Nux vomica, Chamomilla, Ignatia",
+      inimical: "None noted",
+      followsWell: "Aconite, Ignatia",
+      followedBy: "Nux vomica",
+    },
+  },
+  {
+    name: "Conium Maculatum",
+    abbreviation: "Con",
+    miasmaticClassification: "Syphilitic",
+    keynotes:
+      "Ascending paralysis — paralysis beginning from below and going upward. Giddiness from motion of the head, especially turning the head sideways. Suppressed sexual instinct leads to mental and physical diseases. Hard, non-tender glandular tumors. Trembling and weakness of old age. Breast tumors (scirrhous type).",
+    materiaMedicaSummary:
+      "Conium maculatum (poison hemlock) acts on the nervous system causing ascending paralysis. Nervous system: paralysis ascending from feet upward; trembling; weakness; staggering gait; loss of will power. Glands: hard, stony, indurated enlargements especially in breast and testes; scirrhous tumors; after bruises. Vertigo: worse from slightest motion, turning head, lying down, turning in bed. Urinary: intermittent stream — starts and stops. Sexual: suppressed desire causes mental symptoms; hard painful testes; prostate enlargement. Aggravated: lying down, turning sideways, looking up, cold. Ameliorated: warmth, walking, fasting.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Ascending paralysis — from below upward. 2) Vertigo worse slightest motion of head. 3) Hard indurated glands and tumors. 4) Intermittent stream of urine. 5) Old age ailments with trembling. 6) Suppressed sexual instinct causing disease.",
+    clinicalIndications:
+      "Paralysis. Breast tumors (scirrhous). Prostate enlargement. Testicular induration. Vertigo. Parkinson's disease. Tumors of glands. Ovarian cysts. Senile conditions. Cataract.",
+    rubrics:
+      "GENERALS — PARALYSIS — ascending; VERTIGO — MOTION — head, on moving; GLANDS — INDURATED; BLADDER — URINATION — intermittent stream; BREAST — TUMORS",
+    relationships: {
+      complementary: "Baryta carb, Phosphorus",
+      antidotes: "Coffea, Tobacco",
+      inimical: "None noted",
+      followsWell: "Baryta carb, Rhus tox, Psorinum",
+      followedBy: "Phosphorus, Sulphur",
+    },
+  },
+  {
+    name: "Euphrasia",
+    abbreviation: "Euph",
+    miasmaticClassification: "Psoric",
+    keynotes:
+      "Profuse acrid lachrymation with bland coryza — opposite of Allium cepa. Intense photophobia with eye inflammation. Catarrhal conditions of conjunctiva and cornea. Abundant watery discharge from eyes — excoriating. Hawking of mucus in the morning. Better in open air.",
+    materiaMedicaSummary:
+      "Euphrasia (eyebright) acts predominantly on the eyes and mucous membranes of the upper respiratory tract. Eyes: acrid watery discharge causing redness and burning of lids; photophobia; corneal ulcers; cataract; blepharitis; intense inflammation with excoriating tears. Nose: bland watery coryza (non-irritating) in contrast to eye discharge. Compare Allium cepa — reverse modality. Head: headache with eye complaints; worse sunlight. Cough: fluent bland discharge from nose; cough worse in the daytime. Menses: short, painful, appearing only in the daytime. Aggravated: sunlight, wind, warmth of room, evening, indoors. Ameliorated: open air, dark room, coffee.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Acrid excoriating eye discharge with bland coryza. 2) Photophobia intense. 3) Corneal ulcers and opacities. 4) Opposite of Allium cepa — eye discharge acrid, nasal bland. 5) Cough with profuse fluent discharge. 6) Better in open air.",
+    clinicalIndications:
+      "Conjunctivitis. Keratitis. Corneal ulcers. Blepharitis. Hay fever. Photophobia. Catarrhal conditions. Cataract (early). Optic neuritis.",
+    rubrics:
+      "EYE — DISCHARGE — acrid; EYE — PHOTOPHOBIA; NOSE — CORYZA — bland; EYE — INFLAMMATION — conjunctiva; GENERALS — AIR — open, ameliorates",
+    relationships: {
+      complementary: "Allium cepa (opposite picture)",
+      antidotes: "Camphor, Pulsatilla",
+      inimical: "None noted",
+      followsWell: "Allium cepa (after bland coryza phase)",
+      followedBy: "Calcarea carb, Sulphur",
+    },
+  },
+  {
+    name: "Fluoric Acid",
+    abbreviation: "Fl-ac",
+    miasmaticClassification: "Syphilitic",
+    keynotes:
+      "Increased ability to exercise without fatigue. Varicose veins with burning. Indifference to loved ones — cares only for strangers. Rapid growth of nails and hair. Caries and necrosis of bone. Old scars re-open. Patient feels generally better while walking fast.",
+    materiaMedicaSummary:
+      "Fluoric acid acts on bones, teeth, veins, and skin. Bones: caries, necrosis, fistulous openings; long bones affected; destruction without repair; syphilitic bone disease. Teeth: crumble, decay rapidly at roots; black stumps. Veins: varicose veins with burning and itching; better from cold. Skin: old scars become red and re-open; fistulae; ulcers with callous edges. Nails and hair: grow too rapidly; nails brittle and crumble. Mind: indifference to family; increased sexual desire; cheerful; full of energy despite pathology. Aggravated: warmth. Ameliorated: cold bathing, cold applications.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Necrosis and caries of bone — especially long bones. 2) Varicose veins better cold water. 3) Rapid growth of nails and hair. 4) Old scars open again. 5) Syphilitic bone disease. 6) Mental indifference to family. 7) Increased physical energy.",
+    clinicalIndications:
+      "Osteitis. Bone caries. Varicose veins. Varicose ulcers. Dental caries. Fistulae. Syphilitic bone disease. Alopecia (with rapid hair re-growth). Old unhealed ulcers.",
+    rubrics:
+      "BONES — CARIES; VEINS — VARICOSE; SKIN — ULCERS — fistulous; GENERALS — ENERGY — increased; NAILS — BRITTLE",
+    relationships: {
+      complementary: "Silica (antidote to Silica's excessive suppuration)",
+      antidotes: "Silicea",
+      inimical: "Silicea (antidotal relationship)",
+      followsWell: "Silicea, Kali carb",
+      followedBy: "Calc fluor, Phosphorus",
+    },
+  },
+  {
+    name: "Glonoine",
+    abbreviation: "Glon",
+    miasmaticClassification: "Psoric",
+    keynotes:
+      "Rush of blood to head — congestive headaches with bursting, pulsating character. Sun headache — headache from exposure to sun. Cannot bear anything on the head. Confusion of places — loses his way in familiar streets. Heart: labored, visible pulsations. Worse going uphill, jar, sun.",
+    materiaMedicaSummary:
+      "Glonoine (nitroglycerine) produces intense cerebral congestion and cardiovascular symptoms. Head: bursting, throbbing, pulsating headaches; feels as if top of head would fly off; cannot bear hat or pressure; sunstroke; congestive headache from overexposure. Mind: confused — does not know familiar streets; sudden loss of consciousness; excitement. Heart: violent palpitations; labored heart action; angina pectoris. Face: flushed, red, hot. Hypertension: surging of blood upward. Aggravated: sun, heat, jar, going uphill, stooping, 3–6 PM. Ameliorated: brandy, vinegar, cold applications to head, uncovering.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Congestive throbbing headache worse sun. 2) Cannot bear anything on the head. 3) Confused about familiar places. 4) Labored, visible pulsations. 5) Sunstroke and heat exhaustion. 6) Rush of blood upward.",
+    clinicalIndications:
+      "Sunstroke. Hypertension. Angina pectoris. Congestive headache. Heat exhaustion. Meningeal congestion. Cerebral apoplexy. Sun headache.",
+    rubrics:
+      "HEAD — PAIN — congestive; HEAD — PAIN — sun, from; HEAD — CONSTRICTION — hat, from; MIND — CONFUSION — localities; HEART — PALPITATIONS — violent",
+    relationships: {
+      complementary: "Aconite, Belladonna",
+      antidotes: "Aconite, Camphor",
+      inimical: "None noted",
+      followsWell: "Belladonna",
+      followedBy: "Belladonna, Gelsemium",
+    },
+  },
+  {
+    name: "Kali Phosphoricum",
+    abbreviation: "Kali-p",
+    miasmaticClassification: "Psoric + Tubercular",
+    keynotes:
+      "Great nervous exhaustion and prostration — nervous debility. Brain fatigue from overwork or study. Humming and buzzing in ears. Septic conditions — putrid, offensive discharges. Yellow, golden-hued or honey-colored discharge from any orifice. Extreme sensitiveness, especially to noise. Nerve remedy par excellence.",
+    materiaMedicaSummary:
+      "Kali phosphoricum is the chief nerve nutrient and anti-septic tissue salt. Mind: extreme nervous exhaustion; depression from overwork; nervous dread; fear; sensitive; night terrors in children. Head: occipital headache from mental strain; brain fag. Nerves: prostration; locomotor ataxia; neurasthenia. Digestion: desire for cold drinks; diarrhea with putrid, offensive, asafoetida-like stools. Discharges: yellow-golden offensive from any orifice. Urinary: bed-wetting from nervous weakness. Fever: typhoid states with extreme prostration. Aggravated: mental exertion, excitement, overwork, cold. Ameliorated: warmth, rest, nourishment.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Nervous exhaustion — brain fag. 2) Honey-colored or golden putrid discharges. 3) Humming in ears from nerve weakness. 4) Night terrors in children. 5) Septic states with putrid odor. 6) Extreme sensitiveness to noise.",
+    clinicalIndications:
+      "Neurasthenia. Brain fatigue. Depression. Night terrors. Bed-wetting. Typhoid. Septic fevers. Putrid discharges. Locomotor ataxia. Vertigo from overwork.",
+    rubrics:
+      "MIND — EXHAUSTION — mental; DISCHARGES — PUTRID; EAR — NOISES — humming; URINE — NOCTURNAL — enuresis; MIND — FEAR — nervous",
+    relationships: {
+      complementary: "Ferrum phos, Calc phos",
+      antidotes: "Camphor",
+      inimical: "None noted",
+      followsWell: "Gelsemium, Ignatia",
+      followedBy: "Calc phos, Phosphorus",
+    },
+  },
+  {
+    name: "Natrum Sulphuricum",
+    abbreviation: "Nat-s",
+    miasmaticClassification: "Sycotic",
+    keynotes:
+      "Chief anti-sycotic remedy after Thuja. Worse in wet weather and wet places. Never well since a head injury. Greenish-yellow morning diarrhea. Moist asthma. Suicidal tendency — must exert will to restrain. Liver complaints. All complaints worse dampness.",
+    materiaMedicaSummary:
+      "Natrum sulphuricum is the leading sycotic remedy for ailments from damp weather. Head: ailments from head injuries (concussion) — neuralgia, depression, mental symptoms; suicidal tendency after head injury. Chest: asthma worse in damp weather; moist rattling cough; greenish expectoration. Liver: hepatitis; jaundice; liver pain worse lying on left side. Rectum: morning diarrhea — 5 AM; flatus; green stool. Mind: fixed ideas; delirium in fevers; suicidal depression; music makes him weep. Aggravated: damp weather, lying on left side, music. Ameliorated: dry weather, pressure, open air.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Worse from all dampness — damp weather, damp dwellings. 2) Ailments since head injuries. 3) Morning diarrhea — greenish, 5 AM. 4) Moist asthma worse in wet weather. 5) Sycotic miasm — removes sycotic stigma. 6) Suicidal tendency from depression.",
+    clinicalIndications:
+      "Asthma. Liver disease. Jaundice. Diarrhea. Head injury sequelae. Depression. Sycotic conditions. Warts. Condylomata. Post-concussion syndrome.",
+    rubrics:
+      "GENERALS — WET — weather agg; HEAD — INJURY — effects of; RECTUM — DIARRHEA — morning; MIND — SUICIDAL — tendency; CHEST — ASTHMA — damp weather",
+    relationships: {
+      complementary: "Thuja, Arsenicum",
+      antidotes: "Camphor",
+      inimical: "None noted",
+      followsWell: "Thuja, Medorrhinum",
+      followedBy: "Thuja, Sulphur",
+    },
+  },
+  {
+    name: "Opium",
+    abbreviation: "Op",
+    miasmaticClassification: "Syphilitic + Psoric",
+    keynotes:
+      "Painlessness of complaints that would normally be painful. Deep stupor — complete insensibility. Hot, sweating, besotted look. Constipation from inaction of intestines. Visions of frightful things; after fright or grief with insensibility. Complaints following fright or sudden joy.",
+    materiaMedicaSummary:
+      "Opium acts by causing complete narcosis and insensibility of the nervous system. Complaints are characterized by painlessness and stupor. Mind: dull, heavy stupor; besotted look; eyes half-closed; visions of spectres, ghosts; complaints from fright; ailments from pleasant or sudden good news. Respiration: slow, loud, stertorous; Cheyne-Stokes breathing. Constipation: from inactive bowels — no urging; feces like black balls. Fever: hot, dry burning skin with profuse sweating; no thirst. Old people: profound stupor; apoplexy. Aggravated: sleep, heat, stimulants, during and after sleep. Ameliorated: cold applications, constant walking.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Painlessness — even in conditions requiring pain. 2) Besotted, stuporous expression. 3) Constipation from intestinal inactivity — black balls. 4) Ailments from fright or sudden emotions. 5) Stertorous breathing — Cheyne-Stokes. 6) Hot dry skin with profuse sweat.",
+    clinicalIndications:
+      "Apoplexy. Coma. Constipation. Post-fright ailments. Acute alcohol poisoning. Senile constipation. Respiratory failure. Shock. Post-operative ileus.",
+    rubrics:
+      "GENERALS — PAIN — absence of; MIND — STUPOR; RECTUM — CONSTIPATION — inactivity; RESPIRATION — STERTOROUS; MIND — AILMENTS FROM — fright",
+    relationships: {
+      complementary: "Belladonna",
+      antidotes: "Nux vomica, Camphor",
+      inimical: "None noted",
+      followsWell: "Belladonna, Hyoscyamus",
+      followedBy: "Nux vomica, Sulphur",
+    },
+  },
+  {
+    name: "Platina",
+    abbreviation: "Plat",
+    miasmaticClassification: "Syphilitic",
+    keynotes:
+      "Haughty, proud, contemptuous disposition — everyone seems small, inferior to her. Excessive sexual desire in women with hypersensitiveness of genitals. Numbness with or after pains. Cramping, constrictive pains that increase and decrease gradually (like Stannum). Feels she is getting taller and bigger.",
+    materiaMedicaSummary:
+      "Platina (platinum) affects primarily the mind and female sexual sphere. Mind: extreme pride and haughtiness; contemptuous of everyone; feels all others are inferior; delusions of grandeur; alternating mental states — laughing and crying; hysterical symptoms. Female: hypersensitiveness of external genitals; vaginismus; ovarian pain with bearing down; nymphomania; excessive sexual desire. Pains: cramping, griping pains that increase gradually and decrease gradually. Numbness of parts that have been painful. Constipation in strangers or new places (travel constipation). Aggravated: exertion, emotions, sitting, sexual excitement. Ameliorated: walking in open air.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Haughty, proud, contemptuous. 2) Hypersensitiveness of genitalia. 3) Pains increase and decrease gradually. 4) Numbness during and after pain. 5) Constipation while traveling. 6) Nymphomania. 7) Mental and physical alternations.",
+    clinicalIndications:
+      "Nymphomania. Ovarian pain. Vaginismus. Hysteria. Depression with pride. Constipation. Cramping pains. Numbness. Sexual neurosis.",
+    rubrics:
+      "MIND — HAUGHTY; MIND — CONTEMPTUOUS; FEMALE — SEXUAL DESIRE — increased; GENITALIA — SENSITIVE — extreme; PAINS — GRADUAL — increase and decrease",
+    relationships: {
+      complementary: "Pulsatilla",
+      antidotes: "Pulsatilla, Sepia",
+      inimical: "None noted",
+      followsWell: "Palladium",
+      followedBy: "Sepia, Pulsatilla",
+    },
+  },
+  {
+    name: "Rhododendron",
+    abbreviation: "Rhod",
+    miasmaticClassification: "Sycotic",
+    keynotes:
+      "Worse before a storm — weather prophets. Gout and rheumatism worse before thunderstorms. Testes: swelling, induration, pain especially before a storm. Toothache before a storm. Afraid of thunderstorm. Wandering pains in joints, worse at rest, better motion.",
+    materiaMedicaSummary:
+      "Rhododendron is the barometric remedy — the patient predicts weather changes by increased suffering. Joints: rheumatic pains worse before thunderstorms; worse cold, wet weather; better warmth and dry; wandering tearing pains; joints swollen. Testes: swelling, hardness, contusive pain in testes after a chill or before storms; epididymitis; orchitis. Teeth: toothache worse at night, before storms, better warm food. Gout: especially of small joints. Headache: before thunderstorm. Aggravated: rest, before storms, cold damp weather, wine. Ameliorated: motion, warmth, dry weather.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Worse before thunderstorms — barometric sensitivity. 2) Testicular induration and pain. 3) Rheumatic pains better motion, worse rest. 4) Toothache before storms. 5) Gout of small joints. 6) Fear of thunderstorms.",
+    clinicalIndications:
+      "Rheumatism. Gout. Orchitis. Epididymitis. Testicular induration. Neuralgias. Toothache. Fibrositis. Arthritis worse damp weather.",
+    rubrics:
+      "GENERALS — WEATHER — storm, before; MALE — TESTES — pain; GENERALS — RHEUMATISM; TEETH — PAIN — storm, before; GENERALS — MOTION — ameliorates",
+    relationships: {
+      complementary: "Bryonia, Rhus tox",
+      antidotes: "Bryonia",
+      inimical: "None noted",
+      followsWell: "Bryonia, Calcarea carb",
+      followedBy: "Bryonia, Sulphur",
+    },
+  },
+  {
+    name: "Sarsaparilla",
+    abbreviation: "Sars",
+    miasmaticClassification: "Sycotic + Syphilitic",
+    keynotes:
+      "Urine can be passed only in drops while standing; free flow only while standing. Severe pain at conclusion of urination. Vesical colic. Skin: herpetic eruptions, cracks at corners of mouth and fingers. Emaciation beginning from the neck. Syphilitic eruptions. Wasting in children.",
+    materiaMedicaSummary:
+      "Sarsaparilla acts on urinary organs and skin. Urinary: severe pain at the close of urination — most important keynote; urine dribbles while sitting, flows freely only when standing; urinary calculi; hematuria; turbid offensive urine. Skin: moist, itching, herpetic eruptions; cracks at corners of mouth, nose, hands; fissures; skin dirty, pale, shrivelled. Emaciation: child looks old, dried up; loses flesh from neck down. Syphilitic: secondary syphilitic eruptions; condylomata; gonorrhea. Aggravated: damp, cold, night, scratching, after urination. Ameliorated: uncovering neck, standing, eructations.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Urine flows freely only when standing. 2) Severe pain at END of urination. 3) Emaciation from neck downward. 4) Herpetic cracks at corners of mouth. 5) Urinary calculi with colic. 6) Syphilitic skin eruptions.",
+    clinicalIndications:
+      "Cystitis. Urinary calculi. Syphilitic conditions. Skin eruptions. Herpes. Rheumatism. Marasmus in children. Gonorrhea. Vesical colic.",
+    rubrics:
+      "BLADDER — URINATION — dribbling — sitting; URINE — PAIN — close of urination; GENERALS — EMACIATION — neck; SKIN — ERUPTIONS — herpetic; URINE — CALCULI",
+    relationships: {
+      complementary: "Mercury, Sepia",
+      antidotes: "Mercurius, Belladonna",
+      inimical: "None noted",
+      followsWell: "Mercurius, Sulphur, Calc carb",
+      followedBy: "Sulphur, Sepia",
+    },
+  },
+  {
+    name: "Secale Cornutum",
+    abbreviation: "Sec",
+    miasmaticClassification: "Syphilitic",
+    keynotes:
+      "Burning sensation yet patient wants to be uncovered and is BETTER from cold. Thin, watery, dark, offensive discharges. Gangrene with burning — dry gangrene in old, thin, scrawny people. Threatening abortion at third month. Contractions of the uterus. All symptoms better from cold.",
+    materiaMedicaSummary:
+      "Secale cornutum (ergot of rye) acts on blood vessels and uterine muscles. Circulation: dry gangrene in emaciated old people; vasoconstriction; thromboangiitis obliterans; Raynaud's phenomenon. Hemorrhage: thin, dark, watery, non-clotting bleeding; passive hemorrhage. Uterus: uterine inertia; threatened abortion; prolonged contractions after delivery; irregular contractions. Burning: intense burning despite wanting cold applications. Skin: formication; crawling; extreme burning yet worse heat. Aggravated: warmth, covering. Ameliorated: cold, rubbing, uncovering, fanning.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Burning heat yet BETTER cold — wants to be uncovered. 2) Dry gangrene in thin, scrawny old people. 3) Passive hemorrhage — dark, thin, non-clotting. 4) Uterine hemorrhage from atony. 5) Formication and crawling sensations. 6) Threatening abortion.",
+    clinicalIndications:
+      "Gangrene. Thromboangiitis obliterans. Uterine hemorrhage. Threatened abortion. Postpartum hemorrhage. Raynaud's disease. Ergotism. Metrorrhagia.",
+    rubrics:
+      "GENERALS — HEAT — burning, yet better cold; GENERALS — UNCOVERING — better; SKIN — GANGRENE; FEMALE — HEMORRHAGE — passive; UTERUS — CONTRACTIONS",
+    relationships: {
+      complementary: "Arsenicum (opposite in burning)",
+      antidotes: "Camphor",
+      inimical: "None noted",
+      followsWell: "Chamomilla, Pulsatilla",
+      followedBy: "China, Sulphur",
+    },
+  },
+  {
+    name: "Symphytum",
+    abbreviation: "Symph",
+    miasmaticClassification: "Psoric",
+    keynotes:
+      "Promotes union of fractured bones — knitting of bones. Eye injuries — blunt trauma to eyeball. Periosteum: irritation from mechanical injuries. Pains at site of fractures long after healing. Pricking pains in bones. Gastric ulcer.",
+    materiaMedicaSummary:
+      "Symphytum officinale (comfrey) is the specific remedy for fractured bones and eye injuries. Bones: promotes callus formation; pain at old fracture sites; periosteal irritation; non-union of fractures; traumatic periostitis. Eyes: injuries from blunt objects; pain after removal of foreign body; painful inflamed eye after a blow; glaucoma. Stomach: ulcers — gastric and duodenal; ulceration with burning; pains in stomach. Joints: stiffness from periosteal involvement after injury. Aggravated: touch, motion. Ameliorated: rest.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Fractures — promotes union; pain at old fracture sites. 2) Blunt trauma to eye. 3) Periosteal inflammation after injury. 4) Gastric ulcers. 5) Pricks and pains in bones long after injury. 6) Non-union of fractures.",
+    clinicalIndications:
+      "Fractures (healing). Non-union of fractures. Blunt eye injuries. Periostitis. Gastric ulcers. Duodenal ulcers. Traumatic arthritis. Bone pains after old injuries.",
+    rubrics:
+      "BONES — FRACTURES — promotes union; EYES — INJURIES — blunt trauma; STOMACH — ULCERS; PERIOSTEUM — IRRITATION; BONES — PAIN — old injuries",
+    relationships: {
+      complementary: "Calcarea phos, Ruta",
+      antidotes: "Camphor",
+      inimical: "None noted",
+      followsWell: "Arnica, Ruta",
+      followedBy: "Calc phos, Silicea",
+    },
+  },
+  {
+    name: "Zincum Metallicum",
+    abbreviation: "Zinc",
+    miasmaticClassification: "Psoric + Syphilitic",
+    keynotes:
+      "Restless feet — constant motion of feet and legs. Brain and nerve exhaustion with hypersensitiveness. Child repeats everything said to it — echolalia. Suppressed eruptions or discharges causing brain symptoms. Trembling, twitching, jerking. Sweating on occiput. Weakness of memory.",
+    materiaMedicaSummary:
+      "Zincum metallicum acts on the nervous system and brain. Nervous system: great nervous exhaustion; restless, fidgety feet — must move them constantly; trembling and twitching; convulsions; chorea. Brain: exhaustion from over-study or over-exertion; inability to develop exanthemata; suppression causing cerebral complications. Mind: weak memory; slow to answer; echolalia; brain fag. Skin: cannot develop eruptions — eruptions go in or fail to appear. Spine: spinal irritation with weakness. Aggravated: touch, noise, wine, stimulants, during menses. Ameliorated: eating, motion, open air.",
+    synopticKeyHighlights:
+      "Per Synoptic Key (Bhanja): 1) Restless feet — constant fidgety motion. 2) Suppressed eruptions causing brain symptoms. 3) Echolalia — repeats what is said to him. 4) Brain exhaustion from overwork. 5) Trembling and jerking. 6) Sweating on occiput. 7) Cannot develop natural eruptions.",
+    clinicalIndications:
+      "Chorea. Epilepsy. Brain exhaustion. Restless legs syndrome. Suppressed exanthemata complications. Neurasthenia. Tremors. Echolalia. Spinal weakness.",
+    rubrics:
+      "EXTREMITIES — RESTLESSNESS — legs; MIND — REPEATING — echolalia; MIND — EXHAUSTION — mental; SKIN — ERUPTIONS — suppressed; GENERALS — TREMBLING",
+    relationships: {
+      complementary: "Ignatia",
+      antidotes: "Hepar sulph, Nux vomica",
+      inimical: "Nux vomica",
+      followsWell: "Ignatia, Calcarea carb",
+      followedBy: "Ignatia, Sulphur",
+    },
+  },
 ];

@@ -89,6 +89,16 @@ export class ExternalBlob {
         return this;
     }
 }
+export interface Patient {
+    id: string;
+    age: bigint;
+    sex: string;
+    occupation: string;
+    contact: string;
+    name: string;
+    address: string;
+    registrationYear: bigint;
+}
 export interface CaseSheet {
     id: string;
     hpi: string;
@@ -131,20 +141,21 @@ export interface Prescription {
     rows: string;
     caseSheetId: string;
 }
+export interface DoctorAccount {
+    username: string;
+    name: string;
+    createdAt: bigint;
+    role: string;
+    gmail: string;
+    passwordHash: string;
+    phone: string;
+    qualification: string;
+    mustChangePassword: boolean;
+}
 export interface UserProfile {
     name: string;
     role: string;
     specialization?: string;
-}
-export interface Patient {
-    id: string;
-    age: bigint;
-    sex: string;
-    occupation: string;
-    contact: string;
-    name: string;
-    address: string;
-    registrationYear: bigint;
 }
 export enum UserRole {
     admin = "admin",
@@ -154,8 +165,10 @@ export enum UserRole {
 export interface backendInterface {
     _initializeAccessControlWithSecret(userSecret: string): Promise<void>;
     assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
+    changeOwnPassword(username: string, oldPasswordHash: string, newPasswordHash: string): Promise<string>;
     createAppointment(appointment: Appointment): Promise<string>;
     createCaseSheet(caseSheet: CaseSheet): Promise<string>;
+    createDoctorWithPassword(username: string, passwordHash: string): Promise<string>;
     createFollowUp(followUp: FollowUp): Promise<string>;
     createMemo(memo: Memo): Promise<string>;
     createPatient(patient: Patient): Promise<string>;
@@ -167,6 +180,7 @@ export interface backendInterface {
     deletePatient(id: string): Promise<void>;
     deletePrescription(id: string): Promise<void>;
     getAllAppointments(): Promise<Array<Appointment>>;
+    getAllDoctorAccounts(): Promise<Array<DoctorAccount>>;
     getAllMemos(): Promise<Array<Memo>>;
     getAllPatients(): Promise<Array<Patient>>;
     getAppointment(id: string): Promise<Appointment>;
@@ -183,15 +197,20 @@ export interface backendInterface {
     getPrescriptionsByCaseSheet(caseSheetId: string): Promise<Array<Prescription>>;
     getUserProfile(user: Principal): Promise<UserProfile | null>;
     isCallerAdmin(): Promise<boolean>;
+    loginWithPassword(username: string, passwordHash: string): Promise<DoctorAccount | null>;
+    registerWithPassword(username: string, passwordHash: string, name: string, qualification: string, gmail: string, phone: string): Promise<string>;
+    resetDoctorPassword(username: string, newPasswordHash: string): Promise<string>;
     saveCallerUserProfile(profile: UserProfile): Promise<void>;
     updateAppointment(id: string, appointment: Appointment): Promise<void>;
     updateCaseSheet(id: string, caseSheet: CaseSheet): Promise<void>;
+    updateDoctorAccountRole(username: string, newRole: string): Promise<string>;
     updateFollowUp(id: string, followUp: FollowUp): Promise<void>;
     updateMemo(id: string, memo: Memo): Promise<void>;
     updatePatient(id: string, patient: Patient): Promise<void>;
     updatePrescription(id: string, prescription: Prescription): Promise<void>;
+    usernameExists(username: string): Promise<boolean>;
 }
-import type { UserProfile as _UserProfile, UserRole as _UserRole } from "./declarations/backend.did.d.ts";
+import type { DoctorAccount as _DoctorAccount, UserProfile as _UserProfile, UserRole as _UserRole } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
     async _initializeAccessControlWithSecret(arg0: string): Promise<void> {
@@ -222,6 +241,20 @@ export class Backend implements backendInterface {
             return result;
         }
     }
+    async changeOwnPassword(arg0: string, arg1: string, arg2: string): Promise<string> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.changeOwnPassword(arg0, arg1, arg2);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.changeOwnPassword(arg0, arg1, arg2);
+            return result;
+        }
+    }
     async createAppointment(arg0: Appointment): Promise<string> {
         if (this.processError) {
             try {
@@ -247,6 +280,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.createCaseSheet(arg0);
+            return result;
+        }
+    }
+    async createDoctorWithPassword(arg0: string, arg1: string): Promise<string> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.createDoctorWithPassword(arg0, arg1);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.createDoctorWithPassword(arg0, arg1);
             return result;
         }
     }
@@ -401,6 +448,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.getAllAppointments();
+            return result;
+        }
+    }
+    async getAllDoctorAccounts(): Promise<Array<DoctorAccount>> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getAllDoctorAccounts();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getAllDoctorAccounts();
             return result;
         }
     }
@@ -628,17 +689,59 @@ export class Backend implements backendInterface {
             return result;
         }
     }
-    async saveCallerUserProfile(arg0: UserProfile): Promise<void> {
+    async loginWithPassword(arg0: string, arg1: string): Promise<DoctorAccount | null> {
         if (this.processError) {
             try {
-                const result = await this.actor.saveCallerUserProfile(to_candid_UserProfile_n9(this._uploadFile, this._downloadFile, arg0));
+                const result = await this.actor.loginWithPassword(arg0, arg1);
+                return from_candid_opt_n9(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.loginWithPassword(arg0, arg1);
+            return from_candid_opt_n9(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async registerWithPassword(arg0: string, arg1: string, arg2: string, arg3: string, arg4: string, arg5: string): Promise<string> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.registerWithPassword(arg0, arg1, arg2, arg3, arg4, arg5);
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.saveCallerUserProfile(to_candid_UserProfile_n9(this._uploadFile, this._downloadFile, arg0));
+            const result = await this.actor.registerWithPassword(arg0, arg1, arg2, arg3, arg4, arg5);
+            return result;
+        }
+    }
+    async resetDoctorPassword(arg0: string, arg1: string): Promise<string> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.resetDoctorPassword(arg0, arg1);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.resetDoctorPassword(arg0, arg1);
+            return result;
+        }
+    }
+    async saveCallerUserProfile(arg0: UserProfile): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.saveCallerUserProfile(to_candid_UserProfile_n10(this._uploadFile, this._downloadFile, arg0));
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.saveCallerUserProfile(to_candid_UserProfile_n10(this._uploadFile, this._downloadFile, arg0));
             return result;
         }
     }
@@ -667,6 +770,20 @@ export class Backend implements backendInterface {
             }
         } else {
             const result = await this.actor.updateCaseSheet(arg0, arg1);
+            return result;
+        }
+    }
+    async updateDoctorAccountRole(arg0: string, arg1: string): Promise<string> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.updateDoctorAccountRole(arg0, arg1);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.updateDoctorAccountRole(arg0, arg1);
             return result;
         }
     }
@@ -726,6 +843,20 @@ export class Backend implements backendInterface {
             return result;
         }
     }
+    async usernameExists(arg0: string): Promise<boolean> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.usernameExists(arg0);
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.usernameExists(arg0);
+            return result;
+        }
+    }
 }
 function from_candid_UserProfile_n4(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _UserProfile): UserProfile {
     return from_candid_record_n5(_uploadFile, _downloadFile, value);
@@ -737,6 +868,9 @@ function from_candid_opt_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8Ar
     return value.length === 0 ? null : from_candid_UserProfile_n4(_uploadFile, _downloadFile, value[0]);
 }
 function from_candid_opt_n6(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [string]): string | null {
+    return value.length === 0 ? null : value[0];
+}
+function from_candid_opt_n9(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_DoctorAccount]): DoctorAccount | null {
     return value.length === 0 ? null : value[0];
 }
 function from_candid_record_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
@@ -763,13 +897,13 @@ function from_candid_variant_n8(_uploadFile: (file: ExternalBlob) => Promise<Uin
 }): UserRole {
     return "admin" in value ? UserRole.admin : "user" in value ? UserRole.user : "guest" in value ? UserRole.guest : value;
 }
-function to_candid_UserProfile_n9(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: UserProfile): _UserProfile {
-    return to_candid_record_n10(_uploadFile, _downloadFile, value);
+function to_candid_UserProfile_n10(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: UserProfile): _UserProfile {
+    return to_candid_record_n11(_uploadFile, _downloadFile, value);
 }
 function to_candid_UserRole_n1(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: UserRole): _UserRole {
     return to_candid_variant_n2(_uploadFile, _downloadFile, value);
 }
-function to_candid_record_n10(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+function to_candid_record_n11(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
     name: string;
     role: string;
     specialization?: string;

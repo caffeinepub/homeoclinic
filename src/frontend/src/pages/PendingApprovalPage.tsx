@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  Copy,
   Eye,
   EyeOff,
   RefreshCw,
@@ -17,53 +16,189 @@ import {
   setAdminSession,
   useAccessControl,
 } from "../context/AccessControlContext";
+import { useActorDirect } from "../hooks/useActorDirect";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
 
-export function PendingApprovalPage() {
-  const { allRequests, refreshStatus } = useAccessControl();
-  const { identity, clear } = useInternetIdentity();
-  const principal = identity?.getPrincipal().toString() ?? "";
-  const [isRefreshing, setIsRefreshing] = useState(false);
-
-  // Admin unlock modal
-  const [showAdminModal, setShowAdminModal] = useState(false);
-  const [adminPassphrase, setAdminPassphrase] = useState("");
-  const [showAdminPass, setShowAdminPass] = useState(false);
-  const [adminLoading, setAdminLoading] = useState(false);
+function AdminModal({ onClose }: { onClose: () => void }) {
+  const [passphrase, setPassphrase] = useState("");
+  const [showPass, setShowPass] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { login, identity } = useInternetIdentity();
 
   async function handleAdminLogin() {
-    if (!adminPassphrase.trim()) {
+    if (!passphrase.trim()) {
       toast.error("Please enter the admin passphrase");
       return;
     }
-    setAdminLoading(true);
+    setLoading(true);
     await new Promise((r) => setTimeout(r, 400));
-    if (adminPassphrase === ADMIN_PASSPHRASE) {
+    if (passphrase === ADMIN_PASSPHRASE) {
       setAdminSession(true);
       toast.success("Admin access granted");
-      setShowAdminModal(false);
+      onClose();
+      if (!identity) login();
     } else {
       toast.error("Incorrect passphrase");
     }
-    setAdminLoading(false);
+    setLoading(false);
   }
 
-  const myRequest = allRequests.find((r) => r.principal === principal);
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{
+        background: "oklch(0.08 0.01 240 / 0.6)",
+        backdropFilter: "blur(4px)",
+      }}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          onClose();
+          setPassphrase("");
+        }
+      }}
+    >
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 16 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 16 }}
+        transition={{ duration: 0.2 }}
+        className="w-full max-w-sm rounded-2xl border p-6"
+        style={{
+          background: "oklch(var(--card))",
+          borderColor: "oklch(var(--border))",
+          boxShadow: "0 16px 48px oklch(0.08 0.01 240 / 0.2)",
+        }}
+        data-ocid="admin_login.modal"
+      >
+        <div className="flex items-center justify-between mb-5">
+          <div className="flex items-center gap-2">
+            <div
+              className="w-8 h-8 rounded-lg flex items-center justify-center"
+              style={{ background: "oklch(0.55 0.14 280 / 0.12)" }}
+            >
+              <ShieldCheck
+                className="w-4 h-4"
+                style={{ color: "oklch(0.55 0.14 280)" }}
+              />
+            </div>
+            <h2
+              className="text-base font-display font-semibold"
+              style={{ color: "oklch(var(--foreground))" }}
+            >
+              Admin Access
+            </h2>
+          </div>
+          <button
+            type="button"
+            data-ocid="admin_login.close_button"
+            onClick={() => {
+              onClose();
+              setPassphrase("");
+            }}
+            className="w-7 h-7 rounded-md flex items-center justify-center"
+            style={{ color: "oklch(var(--muted-foreground))" }}
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+        <p
+          className="text-sm mb-4"
+          style={{ color: "oklch(var(--muted-foreground))" }}
+        >
+          Enter the admin passphrase to unlock admin access.
+        </p>
+        <div className="relative mb-4">
+          <Input
+            data-ocid="admin_login.passphrase.input"
+            type={showPass ? "text" : "password"}
+            value={passphrase}
+            onChange={(e) => setPassphrase(e.target.value)}
+            placeholder="Enter admin passphrase"
+            autoFocus
+            onKeyDown={(e) => {
+              if (e.key === "Enter") handleAdminLogin();
+            }}
+            className="pr-10"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPass((v) => !v)}
+            className="absolute right-3 top-1/2 -translate-y-1/2"
+            style={{ color: "oklch(var(--muted-foreground))" }}
+          >
+            {showPass ? (
+              <EyeOff className="w-4 h-4" />
+            ) : (
+              <Eye className="w-4 h-4" />
+            )}
+          </button>
+        </div>
+        <Button
+          data-ocid="admin_login.submit.button"
+          onClick={handleAdminLogin}
+          disabled={loading}
+          className="w-full h-10 text-sm font-semibold"
+          style={{
+            background: "oklch(0.55 0.14 280)",
+            color: "oklch(0.99 0 0)",
+          }}
+        >
+          {loading ? (
+            "Verifying..."
+          ) : (
+            <span className="flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4" />
+              Unlock Admin Access
+            </span>
+          )}
+        </Button>
+      </motion.div>
+    </motion.div>
+  );
+}
 
-  function handleCopyPrincipal() {
-    if (principal) {
-      navigator.clipboard.writeText(principal).then(() => {
-        toast.success("Principal ID copied to clipboard");
-      });
-    }
-  }
+export function PendingApprovalPage() {
+  const { allRequests, refreshStatus, passwordSession, logout } =
+    useAccessControl();
+  const { identity, clear: clearII } = useInternetIdentity();
+  const { actor } = useActorDirect();
+  const principal = identity?.getPrincipal().toString() ?? "";
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [showAdminModal, setShowAdminModal] = useState(false);
 
-  function handleRefresh() {
+  const isPasswordUser = !!passwordSession;
+  const account = passwordSession?.account;
+  const myIIRequest = allRequests.find((r) => r.principal === principal);
+
+  async function handleRefresh() {
     setIsRefreshing(true);
-    refreshStatus();
-    setTimeout(() => {
-      setIsRefreshing(false);
-    }, 1500);
+    if (isPasswordUser && account && actor) {
+      try {
+        const accounts = await actor.getAllDoctorAccounts();
+        const found = accounts.find((a) => a.username === account.username);
+        if (found && found.role !== "pending") {
+          toast.success("Status updated! Refreshing...");
+        } else {
+          toast.info("Still pending approval");
+        }
+      } catch {
+        toast.error("Could not check status. Please try again.");
+      }
+    } else {
+      refreshStatus();
+    }
+    setTimeout(() => setIsRefreshing(false), 1500);
+  }
+
+  function handleSignOut() {
+    if (isPasswordUser) {
+      logout();
+    } else {
+      clearII();
+    }
   }
 
   return (
@@ -105,7 +240,6 @@ export function PendingApprovalPage() {
           </p>
         </div>
 
-        {/* Card */}
         <div
           className="rounded-2xl border p-6"
           style={{
@@ -114,7 +248,6 @@ export function PendingApprovalPage() {
             boxShadow: "var(--card-shadow)",
           }}
         >
-          {/* Hourglass icon */}
           <div className="flex flex-col items-center mb-6 text-center">
             <div
               className="w-16 h-16 rounded-full flex items-center justify-center mb-4"
@@ -147,12 +280,12 @@ export function PendingApprovalPage() {
             >
               Request Pending Approval
             </h2>
-            {myRequest && (
+            {(account || myIIRequest) && (
               <p
                 className="text-sm font-medium mb-1"
                 style={{ color: "oklch(var(--teal))" }}
               >
-                {myRequest.name}
+                {account?.name || myIIRequest?.name}
               </p>
             )}
             <p
@@ -160,12 +293,12 @@ export function PendingApprovalPage() {
               style={{ color: "oklch(var(--muted-foreground))" }}
             >
               Your access request has been submitted. The admin will review it
-              shortly and grant you access.
+              shortly.
             </p>
           </div>
 
-          {/* Submitted details */}
-          {myRequest && (
+          {/* Details */}
+          {isPasswordUser && account ? (
             <div
               className="rounded-lg p-4 mb-5 space-y-2"
               style={{
@@ -173,41 +306,58 @@ export function PendingApprovalPage() {
                 border: "1px solid oklch(var(--border))",
               }}
             >
-              <div className="flex justify-between text-xs">
-                <span style={{ color: "oklch(var(--muted-foreground))" }}>
-                  Name
-                </span>
-                <span
-                  className="font-medium"
-                  style={{ color: "oklch(var(--foreground))" }}
-                >
-                  {myRequest.name}
-                </span>
-              </div>
-              <div className="flex justify-between text-xs">
-                <span style={{ color: "oklch(var(--muted-foreground))" }}>
-                  Qualification
-                </span>
-                <span
-                  className="font-medium"
-                  style={{ color: "oklch(var(--foreground))" }}
-                >
-                  {myRequest.qualification || "—"}
-                </span>
-              </div>
-              <div className="flex justify-between text-xs">
-                <span style={{ color: "oklch(var(--muted-foreground))" }}>
-                  Submitted
-                </span>
-                <span
-                  className="font-medium"
-                  style={{ color: "oklch(var(--foreground))" }}
-                >
-                  {new Date(myRequest.submittedAt).toLocaleDateString()}
-                </span>
-              </div>
+              {[
+                { label: "Username", value: account.username },
+                { label: "Name", value: account.name },
+                { label: "Qualification", value: account.qualification || "—" },
+                { label: "Gmail", value: account.gmail },
+              ].map(({ label, value }) => (
+                <div key={label} className="flex justify-between text-xs">
+                  <span style={{ color: "oklch(var(--muted-foreground))" }}>
+                    {label}
+                  </span>
+                  <span
+                    className="font-medium"
+                    style={{ color: "oklch(var(--foreground))" }}
+                  >
+                    {value}
+                  </span>
+                </div>
+              ))}
             </div>
-          )}
+          ) : myIIRequest ? (
+            <div
+              className="rounded-lg p-4 mb-5 space-y-2"
+              style={{
+                background: "oklch(var(--muted) / 0.5)",
+                border: "1px solid oklch(var(--border))",
+              }}
+            >
+              {[
+                { label: "Name", value: myIIRequest.name },
+                {
+                  label: "Qualification",
+                  value: myIIRequest.qualification || "—",
+                },
+                {
+                  label: "Submitted",
+                  value: new Date(myIIRequest.submittedAt).toLocaleDateString(),
+                },
+              ].map(({ label, value }) => (
+                <div key={label} className="flex justify-between text-xs">
+                  <span style={{ color: "oklch(var(--muted-foreground))" }}>
+                    {label}
+                  </span>
+                  <span
+                    className="font-medium"
+                    style={{ color: "oklch(var(--foreground))" }}
+                  >
+                    {value}
+                  </span>
+                </div>
+              ))}
+            </div>
+          ) : null}
 
           <Button
             data-ocid="pending_approval.refresh.button"
@@ -225,50 +375,11 @@ export function PendingApprovalPage() {
             {isRefreshing ? "Checking..." : "Check Status"}
           </Button>
 
-          {/* Principal ID */}
-          <div
-            className="pt-5 border-t"
-            style={{ borderColor: "oklch(var(--border))" }}
-          >
-            <p
-              className="text-xs font-semibold mb-2"
-              style={{ color: "oklch(var(--muted-foreground))" }}
-            >
-              Your Principal ID
-            </p>
-            <div
-              className="p-3 rounded-lg border mb-2"
-              style={{
-                background: "oklch(var(--muted) / 0.5)",
-                borderColor: "oklch(var(--border))",
-              }}
-            >
-              <p
-                className="text-xs font-mono break-all"
-                style={{ color: "oklch(var(--teal))" }}
-              >
-                {principal || "Loading…"}
-              </p>
-            </div>
+          {/* Sign out + admin */}
+          <div className="mt-2 flex items-center justify-between">
             <button
               type="button"
-              data-ocid="pending_approval.copy_principal.button"
-              onClick={handleCopyPrincipal}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors"
-              style={{
-                background: "oklch(var(--muted))",
-                color: "oklch(var(--muted-foreground))",
-              }}
-            >
-              <Copy className="w-3 h-3" /> Copy Principal ID
-            </button>
-          </div>
-
-          {/* Sign out + admin unlock */}
-          <div className="mt-4 flex items-center justify-between">
-            <button
-              type="button"
-              onClick={clear}
+              onClick={handleSignOut}
               className="text-xs underline"
               style={{ color: "oklch(var(--muted-foreground))" }}
             >
@@ -303,131 +414,9 @@ export function PendingApprovalPage() {
         </div>
       </motion.div>
 
-      {/* Admin passphrase modal */}
       <AnimatePresence>
         {showAdminModal && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
-            style={{
-              background: "oklch(0.08 0.01 240 / 0.6)",
-              backdropFilter: "blur(4px)",
-            }}
-            onClick={(e) => {
-              if (e.target === e.currentTarget) {
-                setShowAdminModal(false);
-                setAdminPassphrase("");
-              }
-            }}
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 16 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 16 }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-              className="w-full max-w-sm rounded-2xl border p-6"
-              style={{
-                background: "oklch(var(--card))",
-                borderColor: "oklch(var(--border))",
-                boxShadow: "0 16px 48px oklch(0.08 0.01 240 / 0.2)",
-              }}
-              data-ocid="admin_login.modal"
-            >
-              <div className="flex items-center justify-between mb-5">
-                <div className="flex items-center gap-2">
-                  <div
-                    className="w-8 h-8 rounded-lg flex items-center justify-center"
-                    style={{ background: "oklch(0.55 0.14 280 / 0.12)" }}
-                  >
-                    <ShieldCheck
-                      className="w-4 h-4"
-                      style={{ color: "oklch(0.55 0.14 280)" }}
-                    />
-                  </div>
-                  <h2
-                    className="text-base font-display font-semibold"
-                    style={{ color: "oklch(var(--foreground))" }}
-                  >
-                    Admin Access
-                  </h2>
-                </div>
-                <button
-                  type="button"
-                  data-ocid="admin_login.close_button"
-                  onClick={() => {
-                    setShowAdminModal(false);
-                    setAdminPassphrase("");
-                  }}
-                  className="w-7 h-7 rounded-md flex items-center justify-center"
-                  style={{ color: "oklch(var(--muted-foreground))" }}
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-              <p
-                className="text-sm mb-4"
-                style={{ color: "oklch(var(--muted-foreground))" }}
-              >
-                Enter the admin passphrase to unlock admin access.
-              </p>
-              <div className="relative mb-4">
-                <Input
-                  data-ocid="admin_login.passphrase.input"
-                  type={showAdminPass ? "text" : "password"}
-                  value={adminPassphrase}
-                  onChange={(e) => setAdminPassphrase(e.target.value)}
-                  placeholder="Enter admin passphrase"
-                  autoFocus
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") handleAdminLogin();
-                  }}
-                  className="pr-10"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowAdminPass((v) => !v)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2"
-                  style={{ color: "oklch(var(--muted-foreground))" }}
-                >
-                  {showAdminPass ? (
-                    <EyeOff className="w-4 h-4" />
-                  ) : (
-                    <Eye className="w-4 h-4" />
-                  )}
-                </button>
-              </div>
-              <Button
-                data-ocid="admin_login.submit.button"
-                onClick={handleAdminLogin}
-                disabled={adminLoading}
-                className="w-full h-10 text-sm font-semibold"
-                style={{
-                  background: "oklch(0.55 0.14 280)",
-                  color: "oklch(0.99 0 0)",
-                }}
-              >
-                {adminLoading ? (
-                  <span className="flex items-center gap-2">
-                    <span
-                      className="w-4 h-4 border-2 rounded-full animate-spin"
-                      style={{
-                        borderColor: "oklch(0.99 0 0 / 0.3)",
-                        borderTopColor: "oklch(0.99 0 0)",
-                      }}
-                    />
-                    Verifying...
-                  </span>
-                ) : (
-                  <span className="flex items-center gap-2">
-                    <ShieldCheck className="w-4 h-4" />
-                    Unlock Admin Access
-                  </span>
-                )}
-              </Button>
-            </motion.div>
-          </motion.div>
+          <AdminModal onClose={() => setShowAdminModal(false)} />
         )}
       </AnimatePresence>
     </div>

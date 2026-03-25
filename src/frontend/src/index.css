@@ -1,0 +1,293 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Sora";
+  src: url("/assets/fonts/Sora[wght].woff2") format("woff2");
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "General Sans";
+  src: url("/assets/fonts/GeneralSans-Variable.woff2") format("woff2");
+  font-weight: 200 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+
+    /* Clinical Light Theme - Clean white with teal accent */
+    --background: 0.97 0.004 240;
+    --foreground: 0.15 0.01 240;
+    --card: 1.0 0 0;
+    --card-foreground: 0.15 0.01 240;
+    --popover: 1.0 0 0;
+    --popover-foreground: 0.15 0.01 240;
+    --primary: 0.45 0.14 193;
+    --primary-foreground: 0.99 0 0;
+    --secondary: 0.93 0.008 240;
+    --secondary-foreground: 0.25 0.01 240;
+    --muted: 0.95 0.006 240;
+    --muted-foreground: 0.5 0.012 240;
+    --accent: 0.92 0.01 193;
+    --accent-foreground: 0.2 0.015 193;
+    --destructive: 0.55 0.22 25;
+    --destructive-foreground: 0.99 0 0;
+    --border: 0.88 0.01 240;
+    --input: 0.94 0.008 240;
+    --ring: 0.45 0.14 193;
+    --chart-1: 0.45 0.14 193;
+    --chart-2: 0.5 0.15 150;
+    --chart-3: 0.45 0.15 260;
+    --chart-4: 0.55 0.14 90;
+    --chart-5: 0.55 0.18 30;
+    /* Sidebar stays dark for classic dark-sidebar + light-content layout */
+    --sidebar: 0.13 0.008 240;
+    --sidebar-foreground: 0.9 0.008 240;
+    --sidebar-primary: 0.72 0.14 193;
+    --sidebar-primary-foreground: 0.14 0.015 240;
+    --sidebar-accent: 0.2 0.01 240;
+    --sidebar-accent-foreground: 0.93 0.008 240;
+    --sidebar-border: 0.2 0.01 240;
+    --sidebar-ring: 0.72 0.14 193;
+
+    /* Clinical specific tokens */
+    --teal: 0.45 0.14 193;
+    --teal-dim: 0.38 0.12 193;
+    --teal-glow: 0.45 0.14 193;
+    --slate-light: 0.55 0.008 240;
+    --warning: 0.55 0.14 80;
+    --success: 0.45 0.15 150;
+
+    /* Card shadow for light mode */
+    --card-shadow: 0 1px 4px oklch(0.15 0.01 240 / 0.07);
+    --card-shadow-md: 0 2px 10px oklch(0.15 0.01 240 / 0.08);
+  }
+
+  .dark {
+    /* Dark Theme - Softer dark navy/grey */
+    --background: 0.14 0.01 240;
+    --foreground: 0.92 0.008 240;
+    --card: 0.18 0.01 240;
+    --card-foreground: 0.92 0.008 240;
+    --popover: 0.18 0.01 240;
+    --popover-foreground: 0.92 0.008 240;
+    --primary: 0.62 0.14 193;
+    --primary-foreground: 0.1 0.008 240;
+    --secondary: 0.22 0.01 240;
+    --secondary-foreground: 0.8 0.008 240;
+    --muted: 0.22 0.01 240;
+    --muted-foreground: 0.58 0.01 240;
+    --accent: 0.22 0.014 193;
+    --accent-foreground: 0.8 0.012 193;
+    --destructive: 0.52 0.2 25;
+    --destructive-foreground: 0.97 0 0;
+    --border: 0.26 0.012 240;
+    --input: 0.22 0.01 240;
+    --ring: 0.62 0.14 193;
+    --chart-1: 0.62 0.14 193;
+    --chart-2: 0.58 0.15 150;
+    --chart-3: 0.55 0.15 260;
+    --chart-4: 0.6 0.14 90;
+    --chart-5: 0.6 0.18 30;
+    /* Sidebar slightly darker than card in dark mode */
+    --sidebar: 0.11 0.008 240;
+    --sidebar-foreground: 0.9 0.008 240;
+    --sidebar-primary: 0.65 0.14 193;
+    --sidebar-primary-foreground: 0.1 0.008 240;
+    --sidebar-accent: 0.18 0.01 240;
+    --sidebar-accent-foreground: 0.85 0.008 240;
+    --sidebar-border: 0.2 0.01 240;
+    --sidebar-ring: 0.65 0.14 193;
+
+    /* Clinical tokens dark */
+    --teal: 0.65 0.14 193;
+    --teal-dim: 0.55 0.12 193;
+    --teal-glow: 0.65 0.14 193;
+    --slate-light: 0.55 0.008 240;
+    --warning: 0.65 0.14 80;
+    --success: 0.58 0.15 150;
+
+    /* Card shadow for dark mode */
+    --card-shadow: 0 1px 4px oklch(0.05 0.005 240 / 0.3);
+    --card-shadow-md: 0 2px 10px oklch(0.05 0.005 240 / 0.4);
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "General Sans", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "Sora", sans-serif;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: oklch(var(--background));
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: oklch(var(--border));
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: oklch(var(--muted-foreground));
+  }
+}
+
+/* Clinical Form / Case Sheet table styles */
+.clinical-form-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: oklch(var(--card));
+  color: oklch(var(--card-foreground));
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.clinical-form-table th {
+  background: oklch(0.22 0.018 220);
+  color: #ffffff;
+  font-weight: 600;
+  text-align: left;
+  padding: 7px 10px;
+  border: 1px solid oklch(var(--border));
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+.dark .clinical-form-table th {
+  background: oklch(0.18 0.016 220);
+}
+
+.clinical-form-table td {
+  border: 1px solid oklch(var(--border));
+  padding: 4px 6px;
+  vertical-align: top;
+  background: oklch(var(--card));
+  color: oklch(var(--card-foreground));
+}
+
+.clinical-form-table td.label-cell {
+  background: oklch(var(--muted));
+  font-weight: 600;
+  color: oklch(0.25 0.015 220);
+  white-space: nowrap;
+  width: 30%;
+}
+
+.dark .clinical-form-table td.label-cell {
+  color: oklch(0.72 0.012 220);
+}
+
+.clinical-form-table td input,
+.clinical-form-table td textarea,
+.clinical-form-table td select {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: oklch(var(--card-foreground));
+  font-size: 0.82rem;
+  font-family: inherit;
+  padding: 1px 2px;
+  resize: none;
+}
+
+.clinical-form-table td input:focus,
+.clinical-form-table td textarea:focus {
+  background: oklch(var(--muted));
+  border-radius: 2px;
+}
+
+.clinical-form-wrapper {
+  background: oklch(var(--card));
+  border: 2px solid oklch(0.22 0.018 220);
+  border-radius: 4px;
+  overflow: hidden;
+  overflow-x: auto;
+  box-shadow: var(--card-shadow-md);
+}
+
+.dark .clinical-form-wrapper {
+  border-color: oklch(0.28 0.014 220);
+}
+
+.clinical-section-header {
+  background: oklch(0.22 0.018 220);
+  color: #ffffff;
+  padding: 6px 12px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.dark .clinical-section-header {
+  background: oklch(0.18 0.016 220);
+}
+
+@layer utilities {
+  .font-display {
+    font-family: "Sora", sans-serif;
+  }
+
+  .font-body {
+    font-family: "General Sans", sans-serif;
+  }
+
+  .grain-overlay {
+    position: relative;
+  }
+
+  .grain-overlay::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+    pointer-events: none;
+    border-radius: inherit;
+    z-index: 0;
+  }
+
+  .clinical-card {
+    @apply bg-card border border-border rounded-lg;
+  }
+
+  .teal-text {
+    color: oklch(var(--teal));
+  }
+
+  .teal-glow-effect {
+    box-shadow: 0 0 20px oklch(var(--teal-glow) / 0.15);
+  }
+
+  .section-label {
+    @apply text-xs font-semibold uppercase tracking-widest;
+    color: oklch(var(--muted-foreground));
+  }
+}

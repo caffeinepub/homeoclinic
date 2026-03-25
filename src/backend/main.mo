@@ -1,13 +1,15 @@
-import Map "mo:core/Map";
-import Nat "mo:core/Nat";
-import Int "mo:core/Int";
-import Text "mo:core/Text";
-import Principal "mo:core/Principal";
-import Array "mo:core/Array";
 import Iter "mo:core/Iter";
-import Runtime "mo:core/Runtime";
 import MixinAuthorization "authorization/MixinAuthorization";
+import Map "mo:core/Map";
+import Text "mo:core/Text";
+import Nat "mo:core/Nat";
+import Principal "mo:core/Principal";
+import Runtime "mo:core/Runtime";
+import Int "mo:core/Int";
+
+import Array "mo:core/Array";
 import AccessControl "authorization/access-control";
+
 
 actor {
   let mutablePatientRecords = Map.empty<Text, Patient>();
@@ -22,10 +24,10 @@ actor {
   var nextFollowUpId = 1;
   var nextAppointmentId = 1;
   var nextMemoId = 1;
+  let userProfiles = Map.empty<Principal, UserProfile>();
 
-  // Initialize the user system state
-  let accessControlState = AccessControl.initState();
-  include MixinAuthorization(accessControlState);
+  let ssoDoctors = Map.empty<Text, Text>();
+  let passwordHashDoctorMap = Map.empty<Text, DoctorAccount>();
 
   public type UserProfile = {
     name : Text;
@@ -33,7 +35,19 @@ actor {
     specialization : ?Text;
   };
 
-  let userProfiles = Map.empty<Principal, UserProfile>();
+  // TODO create list of valid role types
+  // TODO should it not be enough to only use DoctorAccount by naming all actors "doctors"?
+  public type DoctorAccount = {
+    username : Text;
+    passwordHash : Text;
+    name : Text;
+    qualification : Text;
+    gmail : Text;
+    phone : Text;
+    role : Text;
+    mustChangePassword : Bool;
+    createdAt : Int;
+  };
 
   public type Patient = {
     id : Text;
@@ -113,36 +127,26 @@ actor {
     createdAt : Int;
   };
 
-  // Helper function to check if caller is authenticated (non-anonymous)
-  // Per CRITICAL requirement: any authenticated caller is allowed, anonymous are rejected
+  let accessControlState = AccessControl.initState();
+  include MixinAuthorization(accessControlState);
+
   private func requireAuthenticated(caller : Principal) {
     if (caller.isAnonymous()) {
       Runtime.trap("Unauthorized: Anonymous users cannot access this resource");
     };
-    // If not anonymous, caller is automatically treated as authenticated user
-    // No need to check if they're registered - auto-treat as #user
   };
 
-  // -- User Profile Management
-
   public query ({ caller }) func getCallerUserProfile() : async ?UserProfile {
-    requireAuthenticated(caller);
     userProfiles.get(caller);
   };
 
   public query ({ caller }) func getUserProfile(user : Principal) : async ?UserProfile {
-    requireAuthenticated(caller);
-    // Per CRITICAL requirement: any authenticated user can do everything
-    // No role checks needed - if authenticated, they can view any profile
     userProfiles.get(user);
   };
 
   public shared ({ caller }) func saveCallerUserProfile(profile : UserProfile) : async () {
-    requireAuthenticated(caller);
     userProfiles.add(caller, profile);
   };
-
-  // -- Patient Management
 
   public shared ({ caller }) func createPatient(patient : Patient) : async Text {
     requireAuthenticated(caller);
@@ -190,8 +194,6 @@ actor {
     };
   };
 
-  // -- CaseSheet Management
-
   public shared ({ caller }) func createCaseSheet(caseSheet : CaseSheet) : async Text {
     requireAuthenticated(caller);
     let id = nextCaseSheetId.toText();
@@ -232,8 +234,6 @@ actor {
       Runtime.trap("Case sheet does not exist");
     };
   };
-
-  // -- Prescription Management
 
   public shared ({ caller }) func createPrescription(prescription : Prescription) : async Text {
     requireAuthenticated(caller);
@@ -276,8 +276,6 @@ actor {
     };
   };
 
-  // -- FollowUp Management
-
   public shared ({ caller }) func createFollowUp(followUp : FollowUp) : async Text {
     requireAuthenticated(caller);
     let id = nextFollowUpId.toText();
@@ -318,8 +316,6 @@ actor {
       Runtime.trap("Follow-up does not exist");
     };
   };
-
-  // -- Appointment Management
 
   public shared ({ caller }) func createAppointment(appointment : Appointment) : async Text {
     requireAuthenticated(caller);
@@ -367,8 +363,6 @@ actor {
     };
   };
 
-  // -- Memo Management
-
   public shared ({ caller }) func createMemo(memo : Memo) : async Text {
     requireAuthenticated(caller);
     let id = nextMemoId.toText();
@@ -400,5 +394,123 @@ actor {
     if (not existed) {
       Runtime.trap("Memo does not exist");
     };
+  };
+
+  public shared ({ caller }) func registerWithPassword(
+    username : Text,
+    passwordHash : Text,
+    name : Text,
+    qualification : Text,
+    gmail : Text,
+    phone : Text,
+  ) : async Text {
+    let currentTimestamp = 0;
+    if (passwordHashDoctorMap.containsKey(username)) {
+      return "Username already exists";
+    };
+    let newDoctorAccount : DoctorAccount = {
+      username;
+      passwordHash;
+      name;
+      qualification;
+      gmail;
+      phone;
+      role = "pending";
+      mustChangePassword = false;
+      createdAt = currentTimestamp;
+    };
+    passwordHashDoctorMap.add(username, newDoctorAccount);
+
+    "ok";
+  };
+
+  public shared ({ caller }) func loginWithPassword(username : Text, passwordHash : Text) : async ?DoctorAccount {
+    switch (passwordHashDoctorMap.get(username)) {
+      case (null) {
+        null;
+      };
+      case (?doctorAccount) {
+        if (doctorAccount.passwordHash == passwordHash) {
+          ?doctorAccount;
+        } else {
+          null;
+        };
+      };
+    };
+  };
+
+  public shared ({ caller }) func updateDoctorAccountRole(username : Text, newRole : Text) : async Text {
+    switch (passwordHashDoctorMap.get(username)) {
+      case (null) { "Username not found" };
+      case (?doctorAccount) { passwordHashDoctorMap.add(username, { doctorAccount with role = newRole }); "ok" };
+    };
+  };
+
+  // Manage creation of new doctor and ensuring doctor's authenticity (TODO - using admin's functionality, needs refactoring)
+  // let newDoctor = { doctor with caller };
+  // DOCTORS.add(caller, newDoctor);
+  //SSO.add(doctor.id, caller);
+
+  public query ({ caller }) func usernameExists(username : Text) : async Bool {
+    passwordHashDoctorMap.containsKey(username);
+  };
+
+  public shared ({ caller }) func resetDoctorPassword(username : Text, newPasswordHash : Text) : async Text {
+    switch (passwordHashDoctorMap.get(username)) {
+      case (null) { "Doctor Account Not Found" };
+      case (?doctorAccount) {
+        passwordHashDoctorMap.add(username, { doctorAccount with passwordHash = newPasswordHash });
+        "ok";
+      };
+    };
+  };
+
+  public shared ({ caller }) func changeOwnPassword(username : Text, oldPasswordHash : Text, newPasswordHash : Text) : async Text {
+    switch (passwordHashDoctorMap.get(username)) {
+      case (null) {
+        "Doctor Account Not Found";
+      };
+      case (?doctorAccount) {
+        if (doctorAccount.passwordHash != oldPasswordHash) {
+          "Old password is incorrect";
+        } else if (oldPasswordHash == newPasswordHash) {
+          "New password cannot be the same as the old password";
+        } else {
+          passwordHashDoctorMap.add(username, { doctorAccount with passwordHash = newPasswordHash });
+          passwordHashDoctorMap.remove(oldPasswordHash);
+          "ok";
+        };
+      };
+    };
+  };
+
+  //add new Doctor to SSO table
+  public shared ({ caller }) func createDoctorWithPassword(username : Text, passwordHash : Text) : async Text {
+    //add new user to password hash
+    if (passwordHashDoctorMap.containsKey(username)) {
+      return "Username already exists";
+    };
+    passwordHashDoctorMap.add(username, {
+      username = passwordHash;
+      passwordHash = passwordHash;
+      name = passwordHash;
+      qualification = passwordHash;
+      gmail = passwordHash;
+      phone = passwordHash;
+      role = passwordHash;
+      mustChangePassword = false;
+      createdAt = 0;
+    });
+    //add new SSO connection
+    ssoDoctors.add(username, passwordHash);
+    "ok";
+  };
+
+  public shared ({ caller }) func getAllDoctorAccounts() : async [DoctorAccount] {
+    let doctorAccounts = passwordHashDoctorMap.values().toArray();
+    if (doctorAccounts.size() == 0) {
+      Runtime.trap("No Doctor accounts are existing");
+    };
+    doctorAccounts;
   };
 };

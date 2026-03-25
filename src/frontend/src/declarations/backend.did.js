@@ -65,6 +65,17 @@ export const Prescription = IDL.Record({
   'rows' : IDL.Text,
   'caseSheetId' : IDL.Text,
 });
+export const DoctorAccount = IDL.Record({
+  'username' : IDL.Text,
+  'name' : IDL.Text,
+  'createdAt' : IDL.Int,
+  'role' : IDL.Text,
+  'gmail' : IDL.Text,
+  'passwordHash' : IDL.Text,
+  'phone' : IDL.Text,
+  'qualification' : IDL.Text,
+  'mustChangePassword' : IDL.Bool,
+});
 export const UserProfile = IDL.Record({
   'name' : IDL.Text,
   'role' : IDL.Text,
@@ -74,8 +85,14 @@ export const UserProfile = IDL.Record({
 export const idlService = IDL.Service({
   '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
   'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+  'changeOwnPassword' : IDL.Func(
+      [IDL.Text, IDL.Text, IDL.Text],
+      [IDL.Text],
+      [],
+    ),
   'createAppointment' : IDL.Func([Appointment], [IDL.Text], []),
   'createCaseSheet' : IDL.Func([CaseSheet], [IDL.Text], []),
+  'createDoctorWithPassword' : IDL.Func([IDL.Text, IDL.Text], [IDL.Text], []),
   'createFollowUp' : IDL.Func([FollowUp], [IDL.Text], []),
   'createMemo' : IDL.Func([Memo], [IDL.Text], []),
   'createPatient' : IDL.Func([Patient], [IDL.Text], []),
@@ -87,6 +104,7 @@ export const idlService = IDL.Service({
   'deletePatient' : IDL.Func([IDL.Text], [], []),
   'deletePrescription' : IDL.Func([IDL.Text], [], []),
   'getAllAppointments' : IDL.Func([], [IDL.Vec(Appointment)], ['query']),
+  'getAllDoctorAccounts' : IDL.Func([], [IDL.Vec(DoctorAccount)], []),
   'getAllMemos' : IDL.Func([], [IDL.Vec(Memo)], ['query']),
   'getAllPatients' : IDL.Func([], [IDL.Vec(Patient)], ['query']),
   'getAppointment' : IDL.Func([IDL.Text], [Appointment], ['query']),
@@ -123,13 +141,26 @@ export const idlService = IDL.Service({
       ['query'],
     ),
   'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+  'loginWithPassword' : IDL.Func(
+      [IDL.Text, IDL.Text],
+      [IDL.Opt(DoctorAccount)],
+      [],
+    ),
+  'registerWithPassword' : IDL.Func(
+      [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
+      [IDL.Text],
+      [],
+    ),
+  'resetDoctorPassword' : IDL.Func([IDL.Text, IDL.Text], [IDL.Text], []),
   'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
   'updateAppointment' : IDL.Func([IDL.Text, Appointment], [], []),
   'updateCaseSheet' : IDL.Func([IDL.Text, CaseSheet], [], []),
+  'updateDoctorAccountRole' : IDL.Func([IDL.Text, IDL.Text], [IDL.Text], []),
   'updateFollowUp' : IDL.Func([IDL.Text, FollowUp], [], []),
   'updateMemo' : IDL.Func([IDL.Text, Memo], [], []),
   'updatePatient' : IDL.Func([IDL.Text, Patient], [], []),
   'updatePrescription' : IDL.Func([IDL.Text, Prescription], [], []),
+  'usernameExists' : IDL.Func([IDL.Text], [IDL.Bool], ['query']),
 });
 
 export const idlInitArgs = [];
@@ -192,6 +223,17 @@ export const idlFactory = ({ IDL }) => {
     'rows' : IDL.Text,
     'caseSheetId' : IDL.Text,
   });
+  const DoctorAccount = IDL.Record({
+    'username' : IDL.Text,
+    'name' : IDL.Text,
+    'createdAt' : IDL.Int,
+    'role' : IDL.Text,
+    'gmail' : IDL.Text,
+    'passwordHash' : IDL.Text,
+    'phone' : IDL.Text,
+    'qualification' : IDL.Text,
+    'mustChangePassword' : IDL.Bool,
+  });
   const UserProfile = IDL.Record({
     'name' : IDL.Text,
     'role' : IDL.Text,
@@ -201,8 +243,14 @@ export const idlFactory = ({ IDL }) => {
   return IDL.Service({
     '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
     'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
+    'changeOwnPassword' : IDL.Func(
+        [IDL.Text, IDL.Text, IDL.Text],
+        [IDL.Text],
+        [],
+      ),
     'createAppointment' : IDL.Func([Appointment], [IDL.Text], []),
     'createCaseSheet' : IDL.Func([CaseSheet], [IDL.Text], []),
+    'createDoctorWithPassword' : IDL.Func([IDL.Text, IDL.Text], [IDL.Text], []),
     'createFollowUp' : IDL.Func([FollowUp], [IDL.Text], []),
     'createMemo' : IDL.Func([Memo], [IDL.Text], []),
     'createPatient' : IDL.Func([Patient], [IDL.Text], []),
@@ -214,6 +262,7 @@ export const idlFactory = ({ IDL }) => {
     'deletePatient' : IDL.Func([IDL.Text], [], []),
     'deletePrescription' : IDL.Func([IDL.Text], [], []),
     'getAllAppointments' : IDL.Func([], [IDL.Vec(Appointment)], ['query']),
+    'getAllDoctorAccounts' : IDL.Func([], [IDL.Vec(DoctorAccount)], []),
     'getAllMemos' : IDL.Func([], [IDL.Vec(Memo)], ['query']),
     'getAllPatients' : IDL.Func([], [IDL.Vec(Patient)], ['query']),
     'getAppointment' : IDL.Func([IDL.Text], [Appointment], ['query']),
@@ -250,13 +299,26 @@ export const idlFactory = ({ IDL }) => {
         ['query'],
       ),
     'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+    'loginWithPassword' : IDL.Func(
+        [IDL.Text, IDL.Text],
+        [IDL.Opt(DoctorAccount)],
+        [],
+      ),
+    'registerWithPassword' : IDL.Func(
+        [IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text, IDL.Text],
+        [IDL.Text],
+        [],
+      ),
+    'resetDoctorPassword' : IDL.Func([IDL.Text, IDL.Text], [IDL.Text], []),
     'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
     'updateAppointment' : IDL.Func([IDL.Text, Appointment], [], []),
     'updateCaseSheet' : IDL.Func([IDL.Text, CaseSheet], [], []),
+    'updateDoctorAccountRole' : IDL.Func([IDL.Text, IDL.Text], [IDL.Text], []),
     'updateFollowUp' : IDL.Func([IDL.Text, FollowUp], [], []),
     'updateMemo' : IDL.Func([IDL.Text, Memo], [], []),
     'updatePatient' : IDL.Func([IDL.Text, Patient], [], []),
     'updatePrescription' : IDL.Func([IDL.Text, Prescription], [], []),
+    'usernameExists' : IDL.Func([IDL.Text], [IDL.Bool], ['query']),
   });
 };
 

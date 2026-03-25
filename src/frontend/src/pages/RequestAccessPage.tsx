@@ -31,6 +31,8 @@ export function RequestAccessPage() {
 
   const [name, setName] = useState("");
   const [qualification, setQualification] = useState("");
+  const [gmail, setGmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [reason, setReason] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -76,6 +78,10 @@ export function RequestAccessPage() {
       toast.error("Please enter your qualification");
       return;
     }
+    if (!gmail.trim() || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(gmail.trim())) {
+      toast.error("Please enter a valid Gmail address");
+      return;
+    }
     if (!reason.trim()) {
       toast.error("Please enter your reason for access");
       return;
@@ -86,7 +92,7 @@ export function RequestAccessPage() {
     }
     setIsSubmitting(true);
     try {
-      await submitRequest(name, qualification, reason);
+      await submitRequest(name, qualification, reason, gmail, phone);
       setSubmitted(true);
     } catch (err) {
       const errMsg = err instanceof Error ? err.message : String(err);
@@ -197,6 +203,49 @@ export function RequestAccessPage() {
                     onChange={(e) => setQualification(e.target.value)}
                     placeholder="e.g. BHMS, MD (Hom)"
                     required
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label
+                    htmlFor="req-gmail"
+                    className="text-xs font-semibold"
+                    style={{ color: "oklch(var(--muted-foreground))" }}
+                  >
+                    Gmail Address *
+                  </Label>
+                  <Input
+                    id="req-gmail"
+                    data-ocid="request_access.gmail.input"
+                    type="email"
+                    value={gmail}
+                    onChange={(e) => setGmail(e.target.value)}
+                    placeholder="yourname@gmail.com"
+                    required
+                  />
+                  <p
+                    className="text-[10px]"
+                    style={{ color: "oklch(var(--muted-foreground))" }}
+                  >
+                    Used by admin to contact you if needed (e.g. account reset)
+                  </p>
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label
+                    htmlFor="req-phone"
+                    className="text-xs font-semibold"
+                    style={{ color: "oklch(var(--muted-foreground))" }}
+                  >
+                    Phone Number
+                  </Label>
+                  <Input
+                    id="req-phone"
+                    data-ocid="request_access.phone.input"
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="e.g. +91 98765 43210"
                   />
                 </div>
 
