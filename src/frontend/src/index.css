@@ -292,23 +292,68 @@
   }
 }
 
-/* ─── Print / Export PDF ──────────────────────────────────────────────────── */
+/* ─── Print / Export PDF ───────────────────────────────────────────────── */
 .print-only {
   display: none;
 }
 
 @media print {
-  body > * {
-    display: none !important;
+  /*
+   * Use visibility:hidden instead of display:none on ancestors.
+   * visibility:hidden hides an element but preserves layout space,
+   * and crucially, children can override it with visibility:visible.
+   * display:none on an ancestor blocks ALL descendants -- no override possible.
+   */
+  body * {
+    visibility: hidden !important;
   }
+
+  /* Make the print-only container and all its children visible */
+  .print-only,
+  .print-only * {
+    visibility: visible !important;
+  }
+
+  /* Position the print content to fill the page */
   .print-only {
     display: block !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    background: white !important;
+    color: black !important;
+    z-index: 99999;
   }
+
+  /* Force all print content to be black on white */
+  .print-only * {
+    color: black !important;
+    background: white !important;
+    background-color: white !important;
+    border-color: #999 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Table borders */
+  .print-only table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+  }
+  .print-only th,
+  .print-only td {
+    border: 1px solid #999 !important;
+  }
+
+  /* Hide elements explicitly marked as no-print */
   .no-print {
     display: none !important;
+    visibility: hidden !important;
   }
-  /* Ensure the print view is visible in the shadow DOM / portal */
-  #root .print-only {
-    display: block !important;
+
+  @page {
+    margin: 1.5cm;
+    size: A4 portrait;
   }
 }

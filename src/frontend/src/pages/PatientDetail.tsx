@@ -845,6 +845,249 @@ export function PatientDetail() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Print-only patient summary */}
+      <div
+        className="print-only"
+        style={{
+          fontFamily: "Arial, sans-serif",
+          fontSize: "12px",
+          padding: "16px",
+        }}
+      >
+        <div
+          style={{
+            borderBottom: "2px solid #333",
+            paddingBottom: "10px",
+            marginBottom: "16px",
+          }}
+        >
+          <h1
+            style={{
+              fontSize: "18px",
+              fontWeight: "bold",
+              margin: "0 0 4px 0",
+            }}
+          >
+            HomeoClinic
+          </h1>
+          <p style={{ margin: "0", fontSize: "11px", color: "#555" }}>
+            Patient Record
+          </p>
+        </div>
+
+        <h2
+          style={{
+            fontSize: "15px",
+            fontWeight: "bold",
+            margin: "0 0 12px 0",
+            borderBottom: "1px solid #ccc",
+            paddingBottom: "6px",
+          }}
+        >
+          Patient Bio-Data
+        </h2>
+        <table
+          style={{
+            width: "100%",
+            borderCollapse: "collapse",
+            marginBottom: "16px",
+          }}
+        >
+          <tbody>
+            <tr>
+              <td
+                style={{
+                  border: "1px solid #999",
+                  padding: "5px 8px",
+                  fontWeight: "bold",
+                  width: "30%",
+                  background: "#f5f5f5",
+                }}
+              >
+                Name
+              </td>
+              <td style={{ border: "1px solid #999", padding: "5px 8px" }}>
+                {patient.name}
+              </td>
+              <td
+                style={{
+                  border: "1px solid #999",
+                  padding: "5px 8px",
+                  fontWeight: "bold",
+                  width: "20%",
+                  background: "#f5f5f5",
+                }}
+              >
+                Age / Sex
+              </td>
+              <td style={{ border: "1px solid #999", padding: "5px 8px" }}>
+                {patient.age?.toString()} yrs / {patient.sex}
+              </td>
+            </tr>
+            <tr>
+              <td
+                style={{
+                  border: "1px solid #999",
+                  padding: "5px 8px",
+                  fontWeight: "bold",
+                  background: "#f5f5f5",
+                }}
+              >
+                Occupation
+              </td>
+              <td style={{ border: "1px solid #999", padding: "5px 8px" }}>
+                {patient.occupation}
+              </td>
+              <td
+                style={{
+                  border: "1px solid #999",
+                  padding: "5px 8px",
+                  fontWeight: "bold",
+                  background: "#f5f5f5",
+                }}
+              >
+                Contact
+              </td>
+              <td style={{ border: "1px solid #999", padding: "5px 8px" }}>
+                {patient.contact}
+              </td>
+            </tr>
+            <tr>
+              <td
+                style={{
+                  border: "1px solid #999",
+                  padding: "5px 8px",
+                  fontWeight: "bold",
+                  background: "#f5f5f5",
+                }}
+              >
+                Address
+              </td>
+              <td
+                colSpan={3}
+                style={{ border: "1px solid #999", padding: "5px 8px" }}
+              >
+                {patient.address}
+              </td>
+            </tr>
+            <tr>
+              <td
+                style={{
+                  border: "1px solid #999",
+                  padding: "5px 8px",
+                  fontWeight: "bold",
+                  background: "#f5f5f5",
+                }}
+              >
+                Reg. Year
+              </td>
+              <td
+                colSpan={3}
+                style={{ border: "1px solid #999", padding: "5px 8px" }}
+              >
+                {patient.registrationYear?.toString()}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        {cases && cases.length > 0 && (
+          <>
+            <h2
+              style={{
+                fontSize: "13px",
+                fontWeight: "bold",
+                margin: "0 0 8px 0",
+                borderBottom: "1px solid #ccc",
+                paddingBottom: "4px",
+              }}
+            >
+              Case History ({cases.length} case{cases.length !== 1 ? "s" : ""})
+            </h2>
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <thead>
+                <tr style={{ background: "#333", color: "#fff" }}>
+                  <th
+                    style={{
+                      border: "1px solid #999",
+                      padding: "5px 8px",
+                      textAlign: "left",
+                    }}
+                  >
+                    Year
+                  </th>
+                  <th
+                    style={{
+                      border: "1px solid #999",
+                      padding: "5px 8px",
+                      textAlign: "left",
+                    }}
+                  >
+                    Chief Complaint
+                  </th>
+                  <th
+                    style={{
+                      border: "1px solid #999",
+                      padding: "5px 8px",
+                      textAlign: "left",
+                    }}
+                  >
+                    Date
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {cases.map((c, i) => (
+                  <tr
+                    key={c.id}
+                    style={{ background: i % 2 === 0 ? "#fff" : "#f9f9f9" }}
+                  >
+                    <td
+                      style={{ border: "1px solid #999", padding: "5px 8px" }}
+                    >
+                      {c.year?.toString()}
+                    </td>
+                    <td
+                      style={{ border: "1px solid #999", padding: "5px 8px" }}
+                    >
+                      {c.chiefComplaint
+                        ? c.chiefComplaint.slice(0, 80) +
+                          (c.chiefComplaint.length > 80 ? "..." : "")
+                        : "(untitled)"}
+                    </td>
+                    <td
+                      style={{ border: "1px solid #999", padding: "5px 8px" }}
+                    >
+                      {new Date(Number(c.createdAt)).toLocaleDateString(
+                        "en-IN",
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </>
+        )}
+
+        <div
+          style={{
+            marginTop: "24px",
+            borderTop: "1px solid #ccc",
+            paddingTop: "8px",
+            fontSize: "10px",
+            color: "#888",
+            textAlign: "center",
+          }}
+        >
+          Printed from HomeoClinic &mdash;{" "}
+          {new Date().toLocaleDateString("en-IN", {
+            day: "2-digit",
+            month: "long",
+            year: "numeric",
+          })}
+        </div>
+      </div>
     </div>
   );
 }

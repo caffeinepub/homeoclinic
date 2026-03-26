@@ -19,13 +19,13 @@ import {
   setAdminSession,
   useAccessControl,
 } from "../context/AccessControlContext";
-import { useActor } from "../hooks/useActor";
+import { useActorDirect } from "../hooks/useActorDirect";
 import { useInternetIdentity } from "../hooks/useInternetIdentity";
 
 export function RequestAccessPage() {
   const { submitRequest } = useAccessControl();
   const { identity, clear } = useInternetIdentity();
-  const { actor, isFetching: actorLoading } = useActor();
+  const { actor, isFetching: actorLoading } = useActorDirect();
   const principal = identity?.getPrincipal().toString() ?? "";
   const backendReady = !!actor;
 
@@ -357,7 +357,7 @@ export function RequestAccessPage() {
                 className="text-xs font-mono break-all"
                 style={{ color: "oklch(var(--teal))" }}
               >
-                {principal || "Loading…"}
+                {principal || "Loading\u2026"}
               </p>
             </div>
             <div className="flex items-center gap-2">
@@ -409,7 +409,7 @@ export function RequestAccessPage() {
           className="mt-6 text-center text-xs"
           style={{ color: "oklch(var(--muted-foreground))" }}
         >
-          © {new Date().getFullYear()}. Built with love using{" "}
+          &copy; {new Date().getFullYear()}. Built with love using{" "}
           <a
             href={`https://caffeine.ai?utm_source=caffeine-footer&utm_medium=referral&utm_content=${encodeURIComponent(window.location.hostname)}`}
             target="_blank"
