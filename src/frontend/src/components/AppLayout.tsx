@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   LogOut,
   Menu,
+  Microscope,
   Settings,
   Stethoscope,
   StickyNote,
@@ -22,6 +23,7 @@ const NAV_ITEMS = [
   { href: "/patients", icon: Users, label: "Patients" },
   { href: "/remedies", icon: FlaskConical, label: "Remedy Reference" },
   { href: "/remedy-compare", icon: Columns2, label: "Compare Remedies" },
+  { href: "/diagnosis-finder", icon: Microscope, label: "Diagnosis Finder" },
   { href: "/appointments", icon: CalendarDays, label: "Appointments" },
   { href: "/memos", icon: StickyNote, label: "Memos" },
 ];

@@ -20,6 +20,7 @@ import { Appointments } from "./pages/Appointments";
 import { CaseSheet } from "./pages/CaseSheet";
 import { Dashboard } from "./pages/Dashboard";
 import { DeniedPage } from "./pages/DeniedPage";
+import { DiagnosisFinder } from "./pages/DiagnosisFinder";
 import { ForceChangePasswordPage } from "./pages/ForceChangePasswordPage";
 import { ForgotPasswordPage } from "./pages/ForgotPasswordPage";
 import { Memos } from "./pages/Memos";
@@ -194,6 +195,11 @@ const remedyCompareRoute = createRoute({
   path: "/remedy-compare",
   component: RemedyCompare,
 });
+const diagnosisFinderRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/diagnosis-finder",
+  component: DiagnosisFinder,
+});
 const appointmentsRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/appointments",
@@ -217,6 +223,7 @@ const routeTree = rootRoute.addChildren([
   caseSheetRoute,
   remediesRoute,
   remedyCompareRoute,
+  diagnosisFinderRoute,
   appointmentsRoute,
   memosRoute,
   settingsRoute,
