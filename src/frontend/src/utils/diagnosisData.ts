@@ -13,6 +13,528 @@ export interface DiagnosisEntry {
 }
 
 export const DIAGNOSIS_DATABASE: DiagnosisEntry[] = [
+  // ── ACUTE ──
+  {
+    name: "Common Fever",
+    aliases: ["fever", "pyrexia", "high temperature", "febrile illness"],
+    category: "Acute",
+    harrisons: {
+      definition:
+        "A regulated rise in core body temperature above 38.3°C (101°F), driven by pyrogens acting on the hypothalamic thermoregulatory centre. Fever is a symptom, not a diagnosis.",
+      classicSymptoms: [
+        "Core temperature > 38.3°C",
+        "Chills and rigors",
+        "Profuse sweating",
+        "Headache and myalgia",
+        "Malaise and anorexia",
+      ],
+      keySigns: [
+        "Tachycardia (pulse rises ~10 bpm per °C)",
+        "Flushed warm skin or cold clammy skin during rigor",
+        "Coated tongue, concentrated urine",
+      ],
+      keyFeatures:
+        "Fever pattern (intermittent, remittent, continuous) aids diagnosis. Investigate for focus of infection. Antipyretics (paracetamol/NSAIDs) provide symptomatic relief. Investigate if > 7 days (fever of unknown origin).",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 16; Davidson's Principles, 23rd Ed., Ch. 6",
+    },
+    keywords: [
+      "fever",
+      "pyrexia",
+      "temperature",
+      "rigor",
+      "chills",
+      "febrile",
+      "high temp",
+      "hyperthermia",
+    ],
+  },
+  {
+    name: "Common Cold",
+    aliases: [
+      "cold",
+      "rhinitis",
+      "URTI",
+      "upper respiratory tract infection",
+      "coryza",
+    ],
+    category: "Acute",
+    harrisons: {
+      definition:
+        "Acute, self-limiting viral infection of the upper respiratory tract, most commonly caused by rhinoviruses, characterised by nasal symptoms and mild systemic upset.",
+      classicSymptoms: [
+        "Nasal congestion and profuse watery rhinorrhoea",
+        "Sneezing and nasal irritation",
+        "Sore throat (pharyngitis)",
+        "Mild headache",
+        "Low-grade fever (more common in children)",
+      ],
+      keySigns: [
+        "Erythematous nasal mucosa",
+        "Clear to mucopurulent nasal discharge",
+        "Mild pharyngeal injection",
+      ],
+      keyFeatures:
+        "Rhinovirus accounts for > 50% of cases. Incubation 1–3 days; illness lasts 7–10 days. No effective antiviral therapy; management is symptomatic. Secondary bacterial sinusitis or otitis media may complicate.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 202; Davidson's 23rd Ed., Ch. 19",
+    },
+    keywords: [
+      "cold",
+      "coryza",
+      "rhinitis",
+      "nasal",
+      "runny nose",
+      "sneezing",
+      "URTI",
+      "rhinorrhea",
+      "blocked nose",
+    ],
+  },
+  {
+    name: "Influenza",
+    aliases: ["flu", "viral fever", "grippe", "influenza A", "influenza B"],
+    category: "Acute",
+    harrisons: {
+      definition:
+        "Acute respiratory illness caused by influenza A or B virus, characterised by abrupt onset of systemic and respiratory symptoms, with epidemic and pandemic potential.",
+      classicSymptoms: [
+        "Abrupt onset high fever (38–41°C) with rigors",
+        "Severe myalgia and arthralgia",
+        "Frontal headache",
+        "Dry, hacking cough",
+        "Profound malaise and prostration",
+      ],
+      keySigns: [
+        "High fever with flushed face",
+        "Injected conjunctivae and pharynx",
+        "Tachycardia; tachypnoea if complicated",
+      ],
+      keyFeatures:
+        "Differentiating feature from common cold: abrupt onset and severe systemic symptoms. Complications include primary viral pneumonia, secondary bacterial pneumonia, myocarditis, encephalitis. Oseltamivir (Tamiflu) effective if started within 48 h.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 203; Davidson's 23rd Ed., Ch. 19",
+    },
+    keywords: [
+      "influenza",
+      "flu",
+      "grippe",
+      "myalgia",
+      "headache",
+      "fever",
+      "prostration",
+      "viral fever",
+      "cough",
+    ],
+  },
+  {
+    name: "Acute Gastroenteritis",
+    aliases: [
+      "stomach flu",
+      "food poisoning",
+      "gastro",
+      "diarrhea vomiting",
+      "vomiting diarrhea",
+    ],
+    category: "Acute",
+    harrisons: {
+      definition:
+        "Acute inflammation of the stomach and intestines, typically caused by viral (norovirus, rotavirus) or bacterial (Salmonella, E. coli) pathogens, presenting with nausea, vomiting, and diarrhoea.",
+      classicSymptoms: [
+        "Nausea and vomiting",
+        "Watery diarrhoea (non-bloody in viral, may be bloody in bacterial)",
+        "Cramping abdominal pain",
+        "Fever (mild to moderate)",
+        "Dehydration, thirst, oliguria",
+      ],
+      keySigns: [
+        "Diffuse abdominal tenderness (mild)",
+        "Hyperactive bowel sounds",
+        "Signs of dehydration (dry mucosa, reduced skin turgor, sunken eyes)",
+      ],
+      keyFeatures:
+        "Oral rehydration is the cornerstone of management. Antibiotics indicated for severe bacterial gastroenteritis (cholera, Shigella). ETEC is the commonest cause of traveller's diarrhoea. Rotavirus is the leading cause in children under 5.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 158; Davidson's 23rd Ed., Ch. 22",
+    },
+    keywords: [
+      "gastroenteritis",
+      "diarrhea",
+      "vomiting",
+      "food poisoning",
+      "nausea",
+      "stomach",
+      "dehydration",
+      "norovirus",
+      "rotavirus",
+    ],
+  },
+  {
+    name: "Urinary Tract Infection",
+    aliases: [
+      "UTI",
+      "cystitis",
+      "dysuria",
+      "bladder infection",
+      "urinary infection",
+    ],
+    category: "Acute",
+    harrisons: {
+      definition:
+        "Microbial infection of any part of the urinary tract; cystitis denotes bladder infection while pyelonephritis involves the upper tract. E. coli is responsible for > 80% of community-acquired cases.",
+      classicSymptoms: [
+        "Dysuria (burning/stinging on urination)",
+        "Urinary frequency and urgency",
+        "Suprapubic pain or pressure",
+        "Haematuria (visible or microscopic)",
+        "Foul-smelling or cloudy urine",
+      ],
+      keySigns: [
+        "Suprapubic tenderness",
+        "Costovertebral angle tenderness (upper UTI/pyelonephritis)",
+        "Fever and rigors (upper tract involvement)",
+      ],
+      keyFeatures:
+        "Urinalysis showing leukocyte esterase, nitrites, and pyuria supports diagnosis. Urine culture confirms. Short-course nitrofurantoin or trimethoprim for uncomplicated cystitis. Recurrent UTIs in women warrant further investigation.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 130; Davidson's 23rd Ed., Ch. 17",
+    },
+    keywords: [
+      "UTI",
+      "cystitis",
+      "dysuria",
+      "frequency",
+      "urgency",
+      "haematuria",
+      "bladder",
+      "burning urination",
+      "suprapubic pain",
+    ],
+  },
+  {
+    name: "Acute Tonsillitis",
+    aliases: [
+      "tonsillitis",
+      "sore throat",
+      "strep throat",
+      "pharyngotonsillitis",
+    ],
+    category: "Acute",
+    harrisons: {
+      definition:
+        "Acute infection and inflammation of the palatine tonsils, predominantly caused by Group A Streptococcus (GAS) or viral pathogens (adenovirus, EBV), presenting with sore throat, fever, and tonsillar exudate.",
+      classicSymptoms: [
+        "Severe sore throat, worse on swallowing",
+        "Fever (often > 38.5°C)",
+        "Odynophagia (painful swallowing)",
+        "Tender cervical lymphadenopathy",
+        "Muffled voice ('hot potato voice') in severe cases",
+      ],
+      keySigns: [
+        "Erythematous, swollen tonsils",
+        "Tonsillar exudate (yellow-white patches)",
+        "Tender anterior cervical lymph nodes",
+      ],
+      keyFeatures:
+        "Centor/McIsaac score aids decision for antibiotics. GAS tonsillitis treated with penicillin V (10 days) to prevent rheumatic fever. Infectious mononucleosis (EBV) mimics GAS tonsillitis — avoid ampicillin (causes rash). Peritonsillar abscess is a complication.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 27; Davidson's 23rd Ed., Ch. 19",
+    },
+    keywords: [
+      "tonsillitis",
+      "sore throat",
+      "strep",
+      "tonsillar exudate",
+      "odynophagia",
+      "pharyngitis",
+      "fever",
+      "cervical nodes",
+    ],
+  },
+  {
+    name: "Conjunctivitis",
+    aliases: ["pink eye", "eye infection", "red eye", "conjunctival infection"],
+    category: "Acute",
+    harrisons: {
+      definition:
+        "Inflammation of the conjunctiva caused by bacterial, viral, or allergic stimuli, characterised by conjunctival injection, discharge, and ocular discomfort.",
+      classicSymptoms: [
+        "Red, injected eye(s)",
+        "Mucopurulent or watery discharge",
+        "Gritty, foreign-body sensation",
+        "Eyelid crusting (especially on waking)",
+        "Itching (prominent in allergic type)",
+      ],
+      keySigns: [
+        "Conjunctival hyperaemia (bulbar and tarsal)",
+        "Papillae (allergic/bacterial) or follicles (viral)",
+        "Purulent discharge (bacterial) or clear watery (viral/allergic)",
+      ],
+      keyFeatures:
+        "Bacterial conjunctivitis (S. aureus, H. influenzae): purulent discharge, responds to topical antibiotics. Viral (adenovirus): watery discharge, pre-auricular lymphadenopathy, highly contagious. Allergic: bilateral, intensely itchy, associated with atopy. Gonococcal conjunctivitis requires systemic treatment.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 40; Davidson's 23rd Ed., Ch. 28",
+    },
+    keywords: [
+      "conjunctivitis",
+      "pink eye",
+      "red eye",
+      "eye discharge",
+      "itching eye",
+      "watery eye",
+      "conjunctival injection",
+    ],
+  },
+  // ── ENDOCRINE ──
+  {
+    name: "Type 2 Diabetes Mellitus",
+    aliases: [
+      "diabetes",
+      "T2DM",
+      "high blood sugar",
+      "type 2 diabetes",
+      "non-insulin dependent diabetes",
+    ],
+    category: "Endocrine",
+    harrisons: {
+      definition:
+        "A chronic metabolic disorder characterised by hyperglycaemia resulting from progressive impairment of insulin secretion and insulin resistance, associated with microvascular and macrovascular complications.",
+      classicSymptoms: [
+        "Polyuria and polydipsia",
+        "Polyphagia with weight loss",
+        "Fatigue and generalised weakness",
+        "Blurring of vision",
+        "Recurrent infections (skin, urinary, vaginal)",
+      ],
+      keySigns: [
+        "Fasting plasma glucose ≥ 7.0 mmol/L or HbA1c ≥ 48 mmol/mol (6.5%)",
+        "Acanthosis nigricans (insulin resistance marker)",
+        "Signs of complications: retinopathy, peripheral neuropathy, foot changes",
+      ],
+      keyFeatures:
+        "WHO diagnostic criteria: FPG ≥ 7.0 mmol/L, 2-h PG ≥ 11.1 mmol/L, HbA1c ≥ 48 mmol/mol. Metformin is first-line therapy. Lifestyle modification (diet, exercise) is cornerstone. Screen for nephropathy (urine ACR), retinopathy, neuropathy, and cardiovascular disease annually.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 397; Davidson's 23rd Ed., Ch. 20; Alagappan Manual of Practical Medicine, 4th Ed.",
+    },
+    keywords: [
+      "diabetes",
+      "T2DM",
+      "hyperglycemia",
+      "polyuria",
+      "polydipsia",
+      "HbA1c",
+      "insulin resistance",
+      "glucose",
+      "diabetic",
+      "metformin",
+    ],
+  },
+  {
+    name: "Hypothyroidism",
+    aliases: ["underactive thyroid", "myxoedema", "hypothyroid", "low thyroid"],
+    category: "Endocrine",
+    harrisons: {
+      definition:
+        "Deficiency of thyroid hormone due to primary thyroid failure (autoimmune — Hashimoto's thyroiditis being the commonest cause) or secondary/tertiary hypothalamic-pituitary disease, resulting in slowing of metabolic processes.",
+      classicSymptoms: [
+        "Fatigue, lethargy, somnolence",
+        "Weight gain despite poor appetite",
+        "Cold intolerance",
+        "Constipation",
+        "Dry skin, hair loss, brittle nails",
+      ],
+      keySigns: [
+        "Bradycardia and low blood pressure",
+        "Non-pitting periorbital and peripheral oedema (myxoedema)",
+        "Delayed relaxation of deep tendon reflexes",
+        "Goitre (in Hashimoto's thyroiditis)",
+      ],
+      keyFeatures:
+        "Elevated TSH with low free T4 confirms primary hypothyroidism. Hashimoto's thyroiditis: positive anti-TPO antibodies. Treatment: levothyroxine (L-T4), dose titrated to TSH. Myxoedema coma is a rare, life-threatening emergency. Screen with TSH in all women over 50.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 376; Davidson's 23rd Ed., Ch. 20; Alagappan 4th Ed.",
+    },
+    keywords: [
+      "hypothyroidism",
+      "thyroid",
+      "TSH",
+      "levothyroxine",
+      "myxoedema",
+      "cold intolerance",
+      "fatigue",
+      "weight gain",
+      "Hashimoto",
+      "dry skin",
+    ],
+  },
+  {
+    name: "Hyperthyroidism",
+    aliases: [
+      "overactive thyroid",
+      "thyrotoxicosis",
+      "Graves disease",
+      "Graves' disease",
+    ],
+    category: "Endocrine",
+    harrisons: {
+      definition:
+        "Excess production and secretion of thyroid hormones (T3 and T4) causing hypermetabolic state. Graves' disease (TSH-receptor autoantibodies) is the commonest cause, accounting for 70–80% of cases.",
+      classicSymptoms: [
+        "Palpitations and tachycardia",
+        "Weight loss despite increased appetite",
+        "Heat intolerance and excessive sweating",
+        "Tremor (fine, postural)",
+        "Anxiety, irritability, emotional lability",
+      ],
+      keySigns: [
+        "Tachycardia or atrial fibrillation",
+        "Warm, moist, velvety skin",
+        "Diffuse goitre (Graves') with bruit",
+        "Exophthalmos and lid retraction (Graves' ophthalmopathy)",
+        "Hyperreflexia",
+      ],
+      keyFeatures:
+        "Suppressed TSH with elevated free T4/T3 confirms hyperthyroidism. Graves' disease: positive TSH-receptor antibodies (TRAb). Radioactive iodine, antithyroid drugs (carbimazole/propylthiouracil), or surgery are treatment options. Thyroid storm is a life-threatening complication.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 376; Davidson's 23rd Ed., Ch. 20; Alagappan 4th Ed.",
+    },
+    keywords: [
+      "hyperthyroidism",
+      "thyrotoxicosis",
+      "Graves",
+      "palpitations",
+      "weight loss",
+      "sweating",
+      "tremor",
+      "goitre",
+      "exophthalmos",
+      "tachycardia",
+    ],
+  },
+  {
+    name: "Polycystic Ovary Syndrome",
+    aliases: ["PCOS", "polycystic ovaries", "polycystic ovary disease"],
+    category: "Endocrine",
+    harrisons: {
+      definition:
+        "A common endocrine-metabolic disorder in women of reproductive age characterised by hyperandrogenism, ovulatory dysfunction, and polycystic ovarian morphology (Rotterdam criteria: 2 of 3 features).",
+      classicSymptoms: [
+        "Oligomenorrhoea or amenorrhoea",
+        "Hirsutism (excessive hair on face, chest, abdomen)",
+        "Acne and oily skin",
+        "Weight gain and central obesity",
+        "Subfertility or infertility",
+      ],
+      keySigns: [
+        "Elevated serum androgens (testosterone, DHEAS)",
+        "Polycystic ovaries on ultrasound (≥ 12 follicles per ovary)",
+        "Acanthosis nigricans (insulin resistance)",
+        "LH:FSH ratio often > 2:1",
+      ],
+      keyFeatures:
+        "Rotterdam criteria (2003): 2 of — oligo/anovulation, clinical or biochemical hyperandrogenism, polycystic ovaries on USS. Associated with insulin resistance and metabolic syndrome. Combined OCP for menstrual regulation; metformin for metabolic/fertility. Clomiphene or letrozole for ovulation induction.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 388; Davidson's 23rd Ed., Ch. 20",
+    },
+    keywords: [
+      "PCOS",
+      "polycystic ovary",
+      "hirsutism",
+      "amenorrhea",
+      "oligomenorrhea",
+      "androgen",
+      "infertility",
+      "acne",
+      "insulin resistance",
+    ],
+  },
+  {
+    name: "Cushing's Syndrome",
+    aliases: [
+      "hypercortisolism",
+      "Cushings",
+      "adrenal excess",
+      "Cushing syndrome",
+    ],
+    category: "Endocrine",
+    harrisons: {
+      definition:
+        "A clinical syndrome resulting from prolonged exposure to excess glucocorticoids, most commonly iatrogenic (exogenous steroids); endogenous causes include pituitary ACTH-secreting adenoma (Cushing's disease), adrenal adenoma, or ectopic ACTH.",
+      classicSymptoms: [
+        "Weight gain with central obesity",
+        "Round ('moon') face and buffalo hump",
+        "Proximal muscle weakness",
+        "Skin fragility with easy bruising and striae",
+        "Mood disturbance (depression, psychosis)",
+      ],
+      keySigns: [
+        "Centripetal obesity, moon face, buffalo hump",
+        "Purple striae > 1 cm wide (pathognomonic)",
+        "Proximal myopathy",
+        "Hypertension",
+        "Hypokalaemia, hyperglycaemia",
+      ],
+      keyFeatures:
+        "Screening: 24-h urinary free cortisol, late-night salivary cortisol, or low-dose dexamethasone suppression test. Cushing's disease (pituitary ACTH): fails low-dose but suppresses on high-dose DST. Purple striae and proximal weakness are most specific signs. Treatment depends on aetiology.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 379; Davidson's 23rd Ed., Ch. 20",
+    },
+    keywords: [
+      "Cushing",
+      "hypercortisolism",
+      "moon face",
+      "buffalo hump",
+      "striae",
+      "cortisol",
+      "ACTH",
+      "adrenal",
+      "obesity",
+      "purple striae",
+    ],
+  },
+  {
+    name: "Addison's Disease",
+    aliases: [
+      "adrenal insufficiency",
+      "hypoadrenalism",
+      "primary adrenal insufficiency",
+      "adrenal failure",
+    ],
+    category: "Endocrine",
+    harrisons: {
+      definition:
+        "Primary adrenocortical insufficiency due to destruction of the adrenal cortex (autoimmune adrenalitis in > 80% of cases in developed countries), resulting in deficiency of cortisol and aldosterone.",
+      classicSymptoms: [
+        "Chronic fatigue, weakness, and lethargy",
+        "Anorexia, nausea, vomiting, and weight loss",
+        "Salt craving",
+        "Postural hypotension and dizziness",
+        "Abdominal pain",
+      ],
+      keySigns: [
+        "Hyperpigmentation (buccal mucosa, skin creases, scars) — due to elevated ACTH/MSH",
+        "Postural hypotension",
+        "Hyponatraemia and hyperkalaemia on biochemistry",
+        "Vitiligo (associated autoimmune condition)",
+      ],
+      keyFeatures:
+        "Short Synacthen test: subnormal cortisol rise confirms primary AI. Elevated ACTH with low cortisol distinguishes primary from secondary AI. Addisonian crisis (acute adrenal insufficiency): shock, hypotension, hyponatraemia — treat with IV hydrocortisone immediately. Long-term: hydrocortisone + fludrocortisone.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 379; Davidson's 23rd Ed., Ch. 20",
+    },
+    keywords: [
+      "Addison",
+      "adrenal insufficiency",
+      "hypoadrenalism",
+      "cortisol",
+      "hyperpigmentation",
+      "salt craving",
+      "hypotension",
+      "ACTH",
+      "Addisonian crisis",
+    ],
+  },
+
   // ── RESPIRATORY ──
   {
     name: "Pneumonia",

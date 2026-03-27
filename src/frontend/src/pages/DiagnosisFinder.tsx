@@ -104,6 +104,8 @@ function getExcerpt(text: string, keywords: string[], maxLen = 120): string {
 
 // ── Category badge colours ───────────────────────────────────────────────────
 const CATEGORY_COLORS: Record<string, string> = {
+  Acute: "0.55 0.18 30",
+  Endocrine: "0.52 0.16 305",
   Respiratory: "0.50 0.13 230",
   Gastrointestinal: "0.50 0.14 160",
   Cardiovascular: "0.55 0.20 25",
@@ -502,8 +504,25 @@ export function DiagnosisFinder() {
     ? findMatchingRemedies(selectedDiagnosis, SEED_REMEDIES)
     : [];
 
-  // Quick-pick categories for discovery
-  const popularDiagnoses = DIAGNOSIS_DATABASE.slice(0, 12);
+  // Category sections for discovery
+  const FEATURED_CATEGORIES = [
+    { key: "Acute", label: "Acute Conditions" },
+    { key: "Respiratory", label: "Respiratory" },
+    { key: "Gastrointestinal", label: "Gastrointestinal" },
+    { key: "Musculoskeletal", label: "Musculoskeletal" },
+    { key: "Endocrine", label: "Endocrine" },
+    { key: "Skin", label: "Skin" },
+  ];
+  const [activeCategoryFilter, setActiveCategoryFilter] = useState<
+    string | null
+  >(null);
+  const categorySections = FEATURED_CATEGORIES.map((cat) => ({
+    ...cat,
+    diagnoses: DIAGNOSIS_DATABASE.filter((d) => d.category === cat.key),
+  }));
+  const displayedSections = activeCategoryFilter
+    ? categorySections.filter((s) => s.key === activeCategoryFilter)
+    : categorySections;
 
   return (
     <div
@@ -650,38 +669,81 @@ export function DiagnosisFinder() {
           </AnimatePresence>
         </motion.div>
 
-        {/* ── No search yet — quick picks ── */}
+        {/* ── No search yet — category sections ── */}
         {!selectedDiagnosis && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2, delay: 0.1 }}
+            className="space-y-5"
           >
-            <p
-              className="text-xs font-semibold uppercase tracking-wider mb-3"
-              style={{ color: "oklch(var(--muted-foreground))" }}
-            >
-              Common Diagnoses — click to explore
-            </p>
+            {/* Category filter pills */}
             <div className="flex flex-wrap gap-2">
-              {popularDiagnoses.map((d) => (
-                <button
-                  key={d.name}
-                  type="button"
-                  onClick={() => selectDiagnosis(d)}
-                  className="rounded-full px-3 py-1 text-xs font-medium transition-all hover:opacity-80 border"
-                  data-ocid="diagnosis_finder.button"
-                  style={{
-                    background: `oklch(${getCatColor(d.category)} / 0.08)`,
-                    borderColor: `oklch(${getCatColor(d.category)} / 0.3)`,
-                    color: `oklch(${getCatColor(d.category)})`,
-                  }}
-                >
-                  {d.name}
-                </button>
-              ))}
+              {FEATURED_CATEGORIES.map((cat) => {
+                const color = getCatColor(cat.key);
+                const isActive = activeCategoryFilter === cat.key;
+                return (
+                  <button
+                    key={cat.key}
+                    type="button"
+                    onClick={() =>
+                      setActiveCategoryFilter(isActive ? null : cat.key)
+                    }
+                    data-ocid="diagnosis_finder.tab"
+                    className="rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-wide transition-all border"
+                    style={{
+                      background: isActive
+                        ? `oklch(${color} / 0.18)`
+                        : `oklch(${color} / 0.06)`,
+                      borderColor: isActive
+                        ? `oklch(${color} / 0.6)`
+                        : `oklch(${color} / 0.25)`,
+                      color: `oklch(${color})`,
+                    }}
+                  >
+                    {cat.label}
+                  </button>
+                );
+              })}
             </div>
+
+            {/* Diagnosis chips grouped by category */}
+            {displayedSections.map((section) => {
+              const color = getCatColor(section.key);
+              return (
+                <div key={section.key}>
+                  <p
+                    className="text-xs font-bold uppercase tracking-wider mb-2 flex items-center gap-2"
+                    style={{ color: `oklch(${color})` }}
+                  >
+                    <span
+                      className="inline-block w-2 h-2 rounded-full"
+                      style={{ background: `oklch(${color})` }}
+                    />
+                    {section.label}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {section.diagnoses.map((d) => (
+                      <button
+                        key={d.name}
+                        type="button"
+                        onClick={() => selectDiagnosis(d)}
+                        className="rounded-full px-3 py-1 text-xs font-medium transition-all hover:opacity-80 border"
+                        data-ocid="diagnosis_finder.button"
+                        style={{
+                          background: `oklch(${color} / 0.08)`,
+                          borderColor: `oklch(${color} / 0.3)`,
+                          color: `oklch(${color})`,
+                        }}
+                      >
+                        {d.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
           </motion.div>
         )}
 
