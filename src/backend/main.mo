@@ -499,7 +499,7 @@ actor {
   };
 
   // FIX: return empty array instead of trapping when no doctor accounts exist
-  public shared ({ caller }) func getAllDoctorAccounts() : async [DoctorAccount] {
+  public query ({ caller }) func getAllDoctorAccounts() : async [DoctorAccount] {
     passwordHashDoctorMap.values().toArray();
   };
 };

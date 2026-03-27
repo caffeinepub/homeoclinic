@@ -78,9 +78,14 @@ function RootLayout() {
   }, []);
 
   // Reset page nav when we have a valid session
+  // Bug #1 fix: also reset adminEnteredApp when accessState leaves "admin"
+  // so the next admin login always shows the dashboard first
   useEffect(() => {
     if (accessState === "approved" || accessState === "admin") {
       setCurrentPage("login");
+    }
+    if (accessState !== "admin") {
+      setAdminEnteredApp(false);
     }
   }, [accessState]);
 
