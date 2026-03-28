@@ -2409,6 +2409,457 @@ export const DIAGNOSIS_DATABASE: DiagnosisEntry[] = [
       "fatigue",
     ],
   },
+
+  // ── Pediatric ─────────────────────────────────────────────────────────────
+  {
+    name: "Measles (Rubeola)",
+    aliases: ["rubeola", "measles"],
+    category: "Pediatric",
+    harrisons: {
+      definition: "",
+      classicSymptoms: [
+        "High fever (>39°C) for 4–5 days",
+        "Coryza, cough, and conjunctivitis (3 Cs)",
+        "Koplik's spots on buccal mucosa (pathognomonic)",
+        "Maculopapular rash starting at hairline, spreading downward",
+        "Photophobia",
+        "Malaise and anorexia",
+      ],
+      keySigns: [
+        "Koplik's spots (white spots on buccal mucosa opposite lower molars)",
+        "Erythematous maculopapular rash — cephalocaudal spread",
+        "Cervical lymphadenopathy",
+        "Conjunctival injection",
+      ],
+      keyFeatures:
+        "Caused by paramyxovirus (Morbillivirus). Highly contagious (R0 = 12–18). Complications: pneumonia, encephalitis, SSPE (subacute sclerosing panencephalitis), blindness, diarrhoea. Notifiable disease. MMR vaccine preventable. Vitamin A reduces morbidity in malnourished children.",
+      reference:
+        "Nelson Textbook of Pediatrics, 21st Ed.; Alagappan's Manual of Practical Medicine, 5th Ed.",
+    },
+    keywords: [
+      "measles",
+      "rubeola",
+      "koplik",
+      "rash",
+      "fever",
+      "MMR",
+      "paramyxovirus",
+      "pediatric",
+      "coryza",
+      "conjunctivitis",
+    ],
+  },
+  {
+    name: "Chickenpox (Varicella)",
+    aliases: ["varicella", "chickenpox", "VZV"],
+    category: "Pediatric",
+    harrisons: {
+      definition: "",
+      classicSymptoms: [
+        "Low-grade fever and malaise for 1–2 days before rash",
+        "Pruritic vesicular rash — starts on trunk, spreads to face and limbs",
+        "Lesions in multiple stages simultaneously (macule → papule → vesicle → crust)",
+        "Itching (often intense)",
+        "Anorexia",
+      ],
+      keySigns: [
+        "Polymorphic rash: lesions in different stages on same area",
+        "'Dew drop on a rose petal' vesicle appearance",
+        "Rash predominantly on trunk (centripetal)",
+        "Lesions also on scalp and mucous membranes",
+      ],
+      keyFeatures:
+        "Caused by Varicella-Zoster Virus (VZV). Highly contagious via respiratory droplets and direct contact. Incubation 10–21 days. Complications: secondary bacterial skin infection, pneumonia, encephalitis, cerebellar ataxia. Reactivation causes Herpes Zoster (shingles). Acyclovir for high-risk groups. Varicella vaccine available.",
+      reference:
+        "Nelson Textbook of Pediatrics, 21st Ed.; Harrison's Principles of Internal Medicine, 21st Ed., Ch. 189",
+    },
+    keywords: [
+      "varicella",
+      "chickenpox",
+      "vesicular rash",
+      "VZV",
+      "pediatric",
+      "pruritus",
+      "blister",
+      "herpes",
+    ],
+  },
+  {
+    name: "Whooping Cough (Pertussis)",
+    aliases: ["pertussis", "whooping cough", "Bordetella pertussis"],
+    category: "Pediatric",
+    harrisons: {
+      definition: "",
+      classicSymptoms: [
+        "Catarrhal phase: mild cough, coryza, low fever (1–2 weeks)",
+        "Paroxysmal phase: severe paroxysms of coughing followed by inspiratory 'whoop'",
+        "Post-tussive vomiting",
+        "Cyanosis during paroxysms",
+        "Convalescent phase: gradual improvement over weeks",
+      ],
+      keySigns: [
+        "Whooping inspiratory sound after paroxysmal cough",
+        "Post-tussive vomiting",
+        "Subconjunctival haemorrhages from coughing",
+        "Lymphocytosis on blood count (>20,000 lymphocytes/μL)",
+      ],
+      keyFeatures:
+        "Caused by Bordetella pertussis. Highly contagious; most dangerous in infants <6 months (can cause apnoea, pneumonia, death). Diagnosis by nasopharyngeal PCR. Treatment: azithromycin or erythromycin. DPT vaccine is preventable. Notifiable disease.",
+      reference:
+        "Nelson Textbook of Pediatrics, 21st Ed.; Davidson's Principles and Practice of Medicine, 23rd Ed., Ch. 13",
+    },
+    keywords: [
+      "pertussis",
+      "whooping cough",
+      "Bordetella",
+      "paroxysmal cough",
+      "pediatric",
+      "lymphocytosis",
+      "DPT",
+    ],
+  },
+  {
+    name: "Rickets",
+    aliases: ["rickets", "nutritional rickets", "vitamin D deficiency rickets"],
+    category: "Pediatric",
+    harrisons: {
+      definition: "",
+      classicSymptoms: [
+        "Bowing of legs (genu varum) or knock-knees (genu valgum)",
+        "Delayed dentition and dental caries",
+        "Frontal bossing and craniotabes (soft skull bones)",
+        "Rachitic rosary (beading of costochondral junctions)",
+        "Harrison's sulcus (groove along lower chest)",
+        "Muscle weakness and hypotonia",
+        "Delayed motor milestones",
+      ],
+      keySigns: [
+        "Widening of wrists and ankles (metaphyseal expansion)",
+        "Craniotabes — ping-pong ball feel of skull",
+        "Rachitic rosary",
+        "X-ray: cupping, fraying, splaying of metaphyses",
+        "Low serum calcium, phosphorus; elevated ALP and PTH",
+      ],
+      keyFeatures:
+        "Caused by Vitamin D deficiency (most common), Calcium deficiency, or Phosphate deficiency. Risk factors: breastfed infants without supplementation, dark skin, limited sun exposure, malabsorption. Treatment: Vitamin D and calcium supplementation. Severe cases may need orthopedic correction.",
+      reference:
+        "Nelson Textbook of Pediatrics, 21st Ed.; Alagappan's Manual of Practical Medicine, 5th Ed.",
+    },
+    keywords: [
+      "rickets",
+      "vitamin D",
+      "bowing",
+      "calcium",
+      "craniotabes",
+      "rachitic rosary",
+      "pediatric",
+      "metaphyseal",
+      "ALP",
+    ],
+  },
+  {
+    name: "Tonsillitis",
+    aliases: ["tonsillitis", "acute tonsillitis", "strep throat"],
+    category: "Pediatric",
+    harrisons: {
+      definition: "",
+      classicSymptoms: [
+        "Sore throat (acute onset)",
+        "Dysphagia (pain on swallowing)",
+        "Fever (>38.5°C)",
+        "Tonsillar swelling with exudate (pus)",
+        "Foul breath (halitosis)",
+        "Ear pain (referred otalgia)",
+        "Headache and malaise",
+      ],
+      keySigns: [
+        "Enlarged erythematous tonsils with or without white exudate",
+        "Tender cervical lymphadenopathy (especially jugulodigastric nodes)",
+        "Soft palate erythema",
+        "Absence of cough distinguishes bacterial from viral",
+      ],
+      keyFeatures:
+        "Most commonly caused by Group A beta-haemolytic Streptococcus (GABHS) or viral (EBV, adenovirus). Centor criteria for GABHS: exudate, tender cervical nodes, fever, no cough. Treat GABHS with penicillin (amoxicillin) for 10 days to prevent rheumatic fever. Complications: peritonsillar abscess, rheumatic fever, post-streptococcal GN.",
+      reference:
+        "Alagappan's Manual of Practical Medicine, 5th Ed.; Davidson's Principles of Medicine, 23rd Ed.",
+    },
+    keywords: [
+      "tonsillitis",
+      "sore throat",
+      "strep",
+      "tonsils",
+      "pediatric",
+      "GABHS",
+      "exudate",
+      "lymphadenopathy",
+    ],
+  },
+  {
+    name: "Febrile Seizures",
+    aliases: ["febrile seizure", "febrile convulsion"],
+    category: "Pediatric",
+    harrisons: {
+      definition: "",
+      classicSymptoms: [
+        "Seizure occurring in the context of fever (>38°C)",
+        "Age 6 months to 5 years",
+        "Usually brief tonic-clonic seizure lasting <15 minutes",
+        "Child recovers fully and is alert after seizure (simple febrile seizure)",
+        "No focal neurological signs",
+        "Postictal drowsiness",
+      ],
+      keySigns: [
+        "Temperature >38°C (febrile illness at time of seizure)",
+        "Generalised tonic-clonic activity",
+        "Normal neurological examination after recovery",
+        "Complex febrile seizure: focal, prolonged >15 min, or multiple within 24 hours",
+      ],
+      keyFeatures:
+        "Most common seizure disorder in children (2–5% of children). Simple febrile seizure: generalised, <15 min, single episode in 24 hours. Complex febrile seizure: focal/prolonged/multiple. Risk of recurrence ~30%. Small increased risk of epilepsy later. Investigate for cause of fever; LP if meningitis suspected. Diazepam for prolonged seizures.",
+      reference:
+        "Nelson Textbook of Pediatrics, 21st Ed.; Alagappan's Manual of Practical Medicine, 5th Ed.",
+    },
+    keywords: [
+      "febrile seizure",
+      "convulsion",
+      "fever",
+      "pediatric",
+      "tonic-clonic",
+      "postictal",
+      "epilepsy",
+    ],
+  },
+
+  // ── Mental Health ──────────────────────────────────────────────────────────
+  {
+    name: "Major Depressive Disorder",
+    aliases: ["depression", "MDD", "major depression", "unipolar depression"],
+    category: "Mental Health",
+    harrisons: {
+      definition: "",
+      classicSymptoms: [
+        "Persistent depressed mood (most of the day, nearly every day, ≥2 weeks)",
+        "Anhedonia — loss of interest or pleasure in activities",
+        "Significant weight change (loss or gain) or appetite disturbance",
+        "Insomnia or hypersomnia",
+        "Psychomotor agitation or retardation",
+        "Fatigue or loss of energy",
+        "Feelings of worthlessness or excessive guilt",
+        "Difficulty concentrating or making decisions",
+        "Recurrent thoughts of death or suicidal ideation",
+      ],
+      keySigns: [
+        "DSM-5: ≥5 symptoms for ≥2 weeks; must include depressed mood or anhedonia",
+        "PHQ-9 score ≥10 suggests moderate-to-severe depression",
+        "Exclude medical causes (hypothyroidism, anaemia, medications)",
+        "Risk assessment: suicidal/homicidal ideation, plan, intent, means",
+      ],
+      keyFeatures:
+        "Most common psychiatric disorder worldwide. Biopsychosocial model: genetic, neurobiological (↓serotonin, norepinephrine, dopamine), psychosocial stressors. Subtypes: melancholic, atypical, psychotic, seasonal. Treatment: SSRIs (first-line), SNRIs, CBT, interpersonal therapy. Severe/refractory: ECT. Monitor for suicidality.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 467; DSM-5",
+    },
+    keywords: [
+      "depression",
+      "MDD",
+      "anhedonia",
+      "low mood",
+      "suicide",
+      "SSRIs",
+      "mental health",
+      "PHQ-9",
+      "worthlessness",
+    ],
+  },
+  {
+    name: "Generalised Anxiety Disorder",
+    aliases: ["GAD", "generalised anxiety", "anxiety disorder"],
+    category: "Mental Health",
+    harrisons: {
+      definition: "",
+      classicSymptoms: [
+        "Excessive, uncontrollable worry about multiple topics (≥6 months)",
+        "Restlessness or feeling on edge",
+        "Fatigue",
+        "Difficulty concentrating ('mind going blank')",
+        "Irritability",
+        "Muscle tension",
+        "Sleep disturbance (difficulty falling or staying asleep)",
+      ],
+      keySigns: [
+        "GAD-7 score ≥10 suggests moderate-to-severe anxiety",
+        "DSM-5: excessive anxiety/worry ≥6 months; ≥3 of 6 symptoms",
+        "Rule out: hyperthyroidism, phaeochromocytoma, caffeine, medications",
+        "Functional impairment in social or occupational domains",
+      ],
+      keyFeatures:
+        "Prevalence ~5–7% lifetime. Female:male 2:1. Pathophysiology: HPA axis dysregulation, amygdala hyperactivation, ↓GABA tone. Commonly comorbid with depression. First-line: CBT, SSRIs/SNRIs. Short-term: benzodiazepines (caution for dependence). Buspirone is a non-addictive anxiolytic alternative.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 467; DSM-5",
+    },
+    keywords: [
+      "anxiety",
+      "GAD",
+      "worry",
+      "restlessness",
+      "mental health",
+      "GAD-7",
+      "tension",
+      "insomnia",
+    ],
+  },
+  {
+    name: "Schizophrenia",
+    aliases: ["schizophrenia", "psychosis", "psychotic disorder"],
+    category: "Mental Health",
+    harrisons: {
+      definition: "",
+      classicSymptoms: [
+        "Positive symptoms: hallucinations (typically auditory — hearing voices)",
+        "Positive symptoms: delusions (persecutory, referential, grandiose)",
+        "Positive symptoms: disorganised thinking and speech (formal thought disorder)",
+        "Positive symptoms: grossly disorganised or catatonic behaviour",
+        "Negative symptoms: flat affect, alogia, avolition, anhedonia, social withdrawal",
+        "Cognitive symptoms: impaired working memory, attention, executive function",
+      ],
+      keySigns: [
+        "DSM-5: ≥2 of 5 criteria for ≥1 month; continuous disturbance ≥6 months",
+        "Auditory hallucinations (command, commentary, or third-person)",
+        "Schneiderian first-rank symptoms: thought insertion, withdrawal, broadcasting",
+        "Social/occupational dysfunction",
+        "Negative symptoms often more disabling than positive",
+      ],
+      keyFeatures:
+        "Prevalence ~1% worldwide. Onset: late teens/20s for men; late 20s/30s for women. Dopamine hypothesis: excess D2 activity in mesolimbic pathway. Treatment: antipsychotics (typical: haloperidol; atypical: olanzapine, risperidone, clozapine for resistant). Clozapine for treatment-resistant schizophrenia. Monitor for metabolic side effects of atypical antipsychotics.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 465; DSM-5",
+    },
+    keywords: [
+      "schizophrenia",
+      "psychosis",
+      "hallucinations",
+      "delusions",
+      "mental health",
+      "antipsychotic",
+      "thought disorder",
+    ],
+  },
+  {
+    name: "Obsessive-Compulsive Disorder",
+    aliases: ["OCD", "obsessive compulsive disorder"],
+    category: "Mental Health",
+    harrisons: {
+      definition: "",
+      classicSymptoms: [
+        "Obsessions: recurrent, intrusive, unwanted thoughts, urges, or images",
+        "Compulsions: repetitive behaviours or mental acts performed to neutralise obsessions",
+        "Common themes: contamination/washing, symmetry/ordering, harm/checking, forbidden thoughts",
+        "Significant time-consuming (>1 hour/day) and distress-causing",
+        "Insight: individual recognises obsessions as excessive (usually)",
+        "Avoidance of triggers",
+      ],
+      keySigns: [
+        "Y-BOCS (Yale-Brown Obsessive Compulsive Scale) for severity",
+        "Ego-dystonic nature distinguishes from normal rituals",
+        "Comorbid depression, anxiety, tics (Tourette's)",
+        "Insight specifier: good insight, poor insight, absent insight/delusional",
+      ],
+      keyFeatures:
+        "Prevalence ~2–3%. Equal sex distribution (childhood onset more common in males). Neurobiology: cortico-striato-thalamo-cortical (CSTC) circuit dysregulation, ↑serotonin involvement. First-line: SSRIs (at higher doses than depression) + ERP (Exposure and Response Prevention therapy). Clomipramine for refractory. 40–60% respond to treatment.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 467; DSM-5",
+    },
+    keywords: [
+      "OCD",
+      "obsessive",
+      "compulsive",
+      "rituals",
+      "mental health",
+      "washing",
+      "checking",
+      "intrusive thoughts",
+    ],
+  },
+  {
+    name: "Bipolar Disorder",
+    aliases: [
+      "bipolar disorder",
+      "bipolar affective disorder",
+      "manic depression",
+      "mania",
+    ],
+    category: "Mental Health",
+    harrisons: {
+      definition: "",
+      classicSymptoms: [
+        "Manic episode: elevated or irritable mood lasting ≥1 week",
+        "Manic episode: decreased need for sleep (feels rested after 3 hours)",
+        "Manic episode: grandiosity or inflated self-esteem",
+        "Manic episode: pressured speech, flight of ideas, racing thoughts",
+        "Manic episode: increased goal-directed activity or psychomotor agitation",
+        "Manic episode: reckless behaviour (spending, sex, risky activities)",
+        "Depressive episodes: as in MDD",
+        "Bipolar II: hypomania (less severe, <1 week) + MDD",
+      ],
+      keySigns: [
+        "DSM-5: Bipolar I — ≥1 manic episode; Bipolar II — hypomania + MDD",
+        "Mood cycling between mania/hypomania and depression",
+        "Psychotic features may occur in severe mania",
+        "Rapid cycling: ≥4 episodes/year",
+      ],
+      keyFeatures:
+        "Lifetime prevalence ~2–3% (Bipolar I + II). Bimodal onset: late teens/early 20s. Strong genetic component. Triggered by sleep deprivation, substances, antidepressants (may precipitate mania). Treatment: mood stabilisers (lithium — gold standard; valproate; lamotrigine). Acute mania: antipsychotics + benzodiazepines. Monitor lithium levels (narrow therapeutic index).",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 466; DSM-5",
+    },
+    keywords: [
+      "bipolar",
+      "mania",
+      "hypomania",
+      "lithium",
+      "mental health",
+      "mood disorder",
+      "manic",
+      "elated",
+    ],
+  },
+  {
+    name: "Post-Traumatic Stress Disorder",
+    aliases: ["PTSD", "post traumatic stress", "trauma disorder"],
+    category: "Mental Health",
+    harrisons: {
+      definition: "",
+      classicSymptoms: [
+        "Re-experiencing: flashbacks, nightmares, intrusive memories of traumatic event",
+        "Avoidance: avoiding trauma-related thoughts, feelings, places, or people",
+        "Negative cognitions and mood: persistent negative beliefs, blame, emotional numbing",
+        "Hyperarousal: hypervigilance, exaggerated startle response, sleep disturbance",
+        "Angry outbursts and irritability",
+        "Difficulty concentrating",
+        "Symptoms >1 month; significant functional impairment",
+      ],
+      keySigns: [
+        "History of exposure to traumatic event (death, serious injury, sexual violence — actual or threatened)",
+        "PCL-5 screening tool for PTSD",
+        "DSM-5: symptoms in all 4 clusters (re-experiencing, avoidance, negative cognitions, hyperarousal) for >1 month",
+        "High comorbidity with depression, anxiety, substance use disorders",
+      ],
+      keyFeatures:
+        "Prevalence 10–20% lifetime in trauma-exposed individuals. Risk factors: severity of trauma, lack of social support, prior mental health history, female sex. Neurobiology: amygdala hyperactivation, ↓hippocampal volume, HPA axis dysregulation. First-line: trauma-focused CBT, EMDR (Eye Movement Desensitisation and Reprocessing), SSRIs (sertraline, paroxetine FDA-approved). Prazosin for nightmares.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 467; DSM-5",
+    },
+    keywords: [
+      "PTSD",
+      "trauma",
+      "flashbacks",
+      "nightmares",
+      "mental health",
+      "hypervigilance",
+      "avoidance",
+      "re-experiencing",
+    ],
+  },
 ];
 
 export const DIAGNOSIS_CATEGORIES = [

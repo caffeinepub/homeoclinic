@@ -116,6 +116,8 @@ const CATEGORY_COLORS: Record<string, string> = {
   Gynaecology: "0.52 0.16 340",
   ENT: "0.50 0.14 195",
   Metabolic: "0.50 0.16 130",
+  Pediatric: "0.55 0.18 60",
+  "Mental Health": "0.52 0.16 310",
 };
 function getCatColor(cat: string): string {
   return CATEGORY_COLORS[cat] ?? "0.45 0.12 260";
@@ -508,10 +510,18 @@ export function DiagnosisFinder() {
   const FEATURED_CATEGORIES = [
     { key: "Acute", label: "Acute Conditions" },
     { key: "Respiratory", label: "Respiratory" },
+    { key: "Cardiovascular", label: "Cardiovascular" },
     { key: "Gastrointestinal", label: "Gastrointestinal" },
+    { key: "Neurological", label: "Neurological" },
     { key: "Musculoskeletal", label: "Musculoskeletal" },
     { key: "Endocrine", label: "Endocrine" },
+    { key: "Metabolic", label: "Metabolic" },
+    { key: "Urological", label: "Urological" },
+    { key: "Gynaecology", label: "Gynaecology" },
     { key: "Skin", label: "Skin" },
+    { key: "ENT", label: "ENT" },
+    { key: "Pediatric", label: "Pediatric" },
+    { key: "Mental Health", label: "Mental Health" },
   ];
   const [activeCategoryFilter, setActiveCategoryFilter] = useState<
     string | null
