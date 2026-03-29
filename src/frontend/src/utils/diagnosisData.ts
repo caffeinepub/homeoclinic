@@ -3503,6 +3503,582 @@ export const DIAGNOSIS_DATABASE: DiagnosisEntry[] = [
       "re-experiencing",
     ],
   },
+  // ── RESPIRATORY (additional) ──
+  {
+    name: "COPD (Chronic Obstructive Pulmonary Disease)",
+    aliases: [
+      "COPD",
+      "chronic obstructive pulmonary disease",
+      "chronic bronchitis",
+      "emphysema",
+      "smoker's lung",
+    ],
+    category: "Respiratory",
+    harrisons: {
+      definition:
+        "A preventable and treatable disease characterised by persistent, progressive airflow limitation due to chronic bronchitis and/or emphysema, usually caused by long-term exposure to noxious particles or gases, predominantly tobacco smoke.",
+      classicSymptoms: [
+        "Chronic productive cough — 'smoker's cough', worse in the mornings",
+        "Progressive exertional dyspnoea — initially on exertion, later at rest",
+        "Wheeze — particularly on exertion",
+        "Copious mucoid sputum production, purulent during exacerbations",
+        "Reduced exercise tolerance and fatigue",
+        "Recurrent chest infections (acute exacerbations of COPD)",
+        "Weight loss and muscle wasting in advanced disease",
+      ],
+      keySigns: [
+        "Barrel chest, prolonged expiratory phase, use of accessory muscles",
+        "Reduced air entry, scattered rhonchi/wheeze on auscultation",
+        "Pursed lip breathing, cyanosis in advanced disease",
+        "Spirometry: FEV1/FVC < 0.70 post-bronchodilator (diagnostic criterion — GOLD criteria)",
+        "HRCT: emphysematous bullae, air trapping, bronchial wall thickening",
+      ],
+      keyFeatures:
+        "GOLD staging (I–IV) based on FEV1 % predicted. Management: smoking cessation (most effective), SABA/LABA bronchodilators, ICS in frequent exacerbators, pulmonary rehabilitation, oxygen therapy in severe hypoxaemia (PaO2 <55 mmHg). Vaccination against influenza and pneumococcus recommended. Exacerbations treated with bronchodilators, systemic steroids, antibiotics if purulent sputum.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 290; Davidson's Principles, 23rd Ed., Ch. 17; GOLD Guidelines 2023",
+    },
+    keywords: [
+      "COPD",
+      "emphysema",
+      "chronic bronchitis",
+      "smoker",
+      "dyspnoea",
+      "wheeze",
+      "spirometry",
+      "airflow obstruction",
+    ],
+  },
+  {
+    name: "Pulmonary Embolism",
+    aliases: [
+      "PE",
+      "pulmonary embolism",
+      "lung clot",
+      "pulmonary thromboembolism",
+    ],
+    category: "Respiratory",
+    harrisons: {
+      definition:
+        "Obstruction of the pulmonary arterial circulation by thrombus (usually originating from deep veins of the legs/pelvis), air, fat, or amniotic fluid, leading to haemodynamic compromise and V/Q mismatch.",
+      classicSymptoms: [
+        "Sudden onset pleuritic chest pain — sharp, worse on inspiration",
+        "Acute dyspnoea — sudden breathlessness at rest",
+        "Haemoptysis — blood-stained sputum",
+        "Tachycardia and tachypnoea",
+        "Syncope or near-syncope in massive PE",
+        "Anxiety and sense of impending doom",
+        "Leg pain and swelling if associated DVT",
+      ],
+      keySigns: [
+        "Tachycardia, tachypnoea, hypoxia (SpO2 <94%)",
+        "Raised JVP, right heart strain on ECG (S1Q3T3 pattern, right bundle branch block)",
+        "CTPA: filling defect in pulmonary arteries (gold standard)",
+        "Elevated D-dimer (sensitive, not specific); raised troponin/BNP in large PE",
+        "Wells score for pre-test probability assessment",
+      ],
+      keyFeatures:
+        "Risk factors: Virchow's triad — stasis (immobility, pregnancy), hypercoagulability (thrombophilia, malignancy, OCP), vessel wall injury. Treatment: anticoagulation with LMWH/DOAC (rivaroxaban, apixaban) immediately. Thrombolysis for haemodynamically unstable massive PE. Long-term anticoagulation 3–6 months (provoked) or indefinitely (unprovoked/recurrent). DVT prophylaxis in hospitalised patients is essential.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 273; Davidson's Principles, 23rd Ed., Ch. 17",
+    },
+    keywords: [
+      "pulmonary embolism",
+      "PE",
+      "DVT",
+      "lung clot",
+      "pleuritic chest pain",
+      "haemoptysis",
+      "tachycardia",
+      "CTPA",
+    ],
+  },
+  {
+    name: "Pleural Effusion",
+    aliases: [
+      "pleural effusion",
+      "fluid in lungs",
+      "hydrothorax",
+      "pleural fluid",
+    ],
+    category: "Respiratory",
+    harrisons: {
+      definition:
+        "Accumulation of excess fluid in the pleural space between the parietal and visceral pleura. Classified as transudate (protein <30 g/L) or exudate (protein >30 g/L) using Light's criteria.",
+      classicSymptoms: [
+        "Progressive breathlessness and reduced exercise tolerance",
+        "Pleuritic chest pain — dull ache on the affected side",
+        "Dry non-productive cough",
+        "Reduced breath sounds on the affected side",
+        "Dullness to percussion at the lung base",
+        "Ipsilateral mediastinal shift towards effusion if large",
+      ],
+      keySigns: [
+        "Stony dullness on percussion over the effusion",
+        "Reduced or absent breath sounds; bronchial breathing at the upper border",
+        "CXR: blunting of costophrenic angle (>200 mL), opacification with concave meniscus sign",
+        "USS guided thoracocentesis: fluid analysis distinguishes cause (LDH, protein, pH, cytology, culture)",
+        "Light's criteria: exudate if pleural LDH/serum LDH >0.6, pleural protein/serum protein >0.5, or pleural LDH >2/3 upper normal serum LDH",
+      ],
+      keyFeatures:
+        "Common causes of transudate: heart failure, cirrhosis, nephrotic syndrome, hypoalbuminaemia. Exudate causes: pneumonia (parapneumonic), malignancy, TB, pulmonary embolism, rheumatoid arthritis. Large symptomatic effusions require therapeutic thoracocentesis. Malignant effusions may need pleurodesis or indwelling pleural catheter. TB effusion requires anti-TB therapy.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 292; Davidson's Principles, 23rd Ed., Ch. 17",
+    },
+    keywords: [
+      "pleural effusion",
+      "fluid in chest",
+      "hydrothorax",
+      "dullness to percussion",
+      "breathlessness",
+      "thoracocentesis",
+      "transudate",
+      "exudate",
+    ],
+  },
+  {
+    name: "Lung Cancer",
+    aliases: [
+      "lung cancer",
+      "bronchogenic carcinoma",
+      "non-small cell lung cancer",
+      "NSCLC",
+      "small cell lung cancer",
+      "SCLC",
+      "lung carcinoma",
+    ],
+    category: "Respiratory",
+    harrisons: {
+      definition:
+        "Malignant tumour arising from the bronchial epithelium. Major types: non-small cell lung cancer (NSCLC — adenocarcinoma, squamous cell, large cell; ~85%) and small cell lung cancer (SCLC; ~15%). Leading cause of cancer death worldwide.",
+      classicSymptoms: [
+        "Persistent cough — often a change in a pre-existing cough",
+        "Haemoptysis — blood-streaked or frank blood in sputum",
+        "Progressive dyspnoea and wheeze",
+        "Chest pain — dull, persistent, pleuritic",
+        "Unexplained weight loss, anorexia, fatigue",
+        "Recurrent pneumonia or persistent radiological shadowing",
+        "Hoarseness (recurrent laryngeal nerve palsy), dysphagia, SVC syndrome",
+      ],
+      keySigns: [
+        "CXR/CT chest: peripheral mass, hilar/mediastinal lymphadenopathy, pleural effusion, collapse",
+        "Bronchoscopy and biopsy / CT-guided biopsy for histological diagnosis",
+        "PET-CT for staging; brain MRI to detect metastases",
+        "Paraneoplastic syndromes: SIADH (hyponatraemia), hypercalcaemia, Lambert-Eaton syndrome, HPOA",
+        "Pancoast tumour: apical tumour causing Horner's syndrome, shoulder/arm pain",
+      ],
+      keyFeatures:
+        "Risk factors: tobacco smoking (80–85%), occupational exposure (asbestos, radon, silica), air pollution, family history. Staging (TNM) determines treatment. NSCLC early stage: surgical resection ± adjuvant chemotherapy. Advanced NSCLC: targeted therapy (EGFR, ALK, ROS1 inhibitors), immunotherapy (pembrolizumab), platinum-based chemotherapy. SCLC: highly chemo-sensitive initially — cisplatin + etoposide; prophylactic cranial irradiation in limited disease. Prognosis: 5-year survival ~15–20% overall.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 514; Davidson's Principles, 23rd Ed., Ch. 17",
+    },
+    keywords: [
+      "lung cancer",
+      "bronchogenic carcinoma",
+      "NSCLC",
+      "SCLC",
+      "haemoptysis",
+      "smoking",
+      "lung mass",
+      "carcinoma",
+    ],
+  },
+  {
+    name: "Bronchiectasis",
+    aliases: [
+      "bronchiectasis",
+      "dilated bronchi",
+      "chronic bronchial dilation",
+    ],
+    category: "Respiratory",
+    harrisons: {
+      definition:
+        "Abnormal, permanent dilation of bronchi due to destruction of bronchial wall components (muscle, elastic tissue, cartilage), resulting in impaired mucociliary clearance and chronic airway infection.",
+      classicSymptoms: [
+        "Chronic productive cough — large volume purulent sputum ('cupful' per day), worse on posture change",
+        "Recurrent chest infections — exacerbations with fever, increased sputum volume and purulence",
+        "Haemoptysis — can be massive",
+        "Dyspnoea and wheeze in advanced disease",
+        "Halitosis due to chronic infection",
+        "Fatigue, malaise, weight loss in severe disease",
+      ],
+      keySigns: [
+        "Coarse crepitations and wheeze over affected areas (often bilateral basal)",
+        "Finger clubbing in longstanding disease",
+        "HRCT chest: 'signet ring sign' (bronchial diameter > adjacent pulmonary artery), bronchial wall thickening, mucus plugging — gold standard for diagnosis",
+        "Sputum culture: Pseudomonas aeruginosa, H. influenzae, S. aureus common",
+        "Spirometry: obstructive or mixed pattern",
+      ],
+      keyFeatures:
+        "Causes: post-infectious (measles, pertussis, TB), cystic fibrosis, primary ciliary dyskinesia, immunodeficiency (hypogammaglobulinaemia), allergic bronchopulmonary aspergillosis (ABPA), obstruction. Management: airway clearance physiotherapy (postural drainage, oscillating PEP devices), antibiotics during exacerbations (guided by culture), long-term prophylactic antibiotics (azithromycin 3x/week) in frequent exacerbators, bronchodilators. Surgery in localised disease.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 287; Davidson's Principles, 23rd Ed., Ch. 17",
+    },
+    keywords: [
+      "bronchiectasis",
+      "productive cough",
+      "purulent sputum",
+      "recurrent chest infection",
+      "haemoptysis",
+      "HRCT",
+      "signet ring",
+    ],
+  },
+  {
+    name: "Pulmonary Fibrosis",
+    aliases: [
+      "pulmonary fibrosis",
+      "IPF",
+      "idiopathic pulmonary fibrosis",
+      "interstitial lung disease",
+      "ILD",
+      "fibrosing alveolitis",
+    ],
+    category: "Respiratory",
+    harrisons: {
+      definition:
+        "Progressive scarring (fibrosis) of lung parenchyma leading to impaired gas exchange. Idiopathic pulmonary fibrosis (IPF) is the most common form of idiopathic interstitial pneumonia, with a poor prognosis.",
+      classicSymptoms: [
+        "Progressive exertional dyspnoea — insidious onset over months/years",
+        "Dry, non-productive cough — persistent, distressing",
+        "Reduced exercise tolerance and fatigue",
+        "No significant sputum production",
+        "Cyanosis in advanced disease",
+        "Symptoms of pulmonary hypertension in late stage (RHF, oedema)",
+      ],
+      keySigns: [
+        "Bilateral fine 'Velcro' inspiratory crepitations at lung bases",
+        "Finger clubbing (~50% of IPF patients)",
+        "HRCT: honeycombing, traction bronchiectasis, subpleural/basal predominant reticular opacities — usual interstitial pneumonia (UIP) pattern",
+        "Restrictive spirometry: reduced FVC, reduced DLCO",
+        "Desaturation on 6-minute walk test",
+      ],
+      keyFeatures:
+        "Causes of ILD: IPF (idiopathic), connective tissue disease (RA, SLE, scleroderma), hypersensitivity pneumonitis (bird/mold exposure), sarcoidosis, drug-induced (amiodarone, methotrexate), occupational (asbestosis, silicosis). IPF treatment: antifibrotics — pirfenidone or nintedanib slow FVC decline. Lung transplantation for eligible patients. Prognosis of IPF: median survival 3–5 years from diagnosis.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 291; Davidson's Principles, 23rd Ed., Ch. 17",
+    },
+    keywords: [
+      "pulmonary fibrosis",
+      "IPF",
+      "ILD",
+      "interstitial lung disease",
+      "Velcro crepitations",
+      "dry cough",
+      "dyspnoea",
+      "honeycombing",
+    ],
+  },
+  {
+    name: "Sarcoidosis",
+    aliases: [
+      "sarcoidosis",
+      "sarcoid",
+      "pulmonary sarcoid",
+      "systemic sarcoidosis",
+    ],
+    category: "Respiratory",
+    harrisons: {
+      definition:
+        "A multisystem granulomatous disorder of unknown aetiology characterised by non-caseating granulomas predominantly affecting the lungs and intrathoracic lymph nodes, but also the skin, eyes, liver, and nervous system.",
+      classicSymptoms: [
+        "Dry cough and dyspnoea — most common respiratory symptoms",
+        "Bilateral hilar lymphadenopathy — often asymptomatic, found incidentally on CXR",
+        "Erythema nodosum — painful red nodules on shins (Löfgren's syndrome)",
+        "Uveitis — ocular sarcoidosis causing red, painful eyes",
+        "Fatigue, malaise, low-grade fever",
+        "Skin lesions — lupus pernio (violaceous plaques on nose/cheeks)",
+        "Hypercalcaemia — thirst, polyuria, renal stones",
+      ],
+      keySigns: [
+        "CXR staging: Stage 0 (normal), I (bilateral hilar lymphadenopathy), II (BHL + pulmonary infiltrates), III (infiltrates only), IV (pulmonary fibrosis)",
+        "Elevated serum ACE level (elevated in ~60%, not specific)",
+        "Hypercalcaemia and hypercalciuria due to macrophage 1-hydroxylase activity",
+        "Tissue biopsy showing non-caseating granulomas (bronchoscopy/EBUS-guided biopsy)",
+        "BAL: lymphocytosis with CD4:CD8 ratio >3.5",
+      ],
+      keyFeatures:
+        "Young adults (20–40 years); Black individuals have higher prevalence and more severe disease. Löfgren's syndrome (BHL + erythema nodosum + arthralgia + fever) has an excellent prognosis and often resolves spontaneously. Treatment: corticosteroids (prednisolone) for symptomatic/progressive disease, ocular, neurological, cardiac, or hypercalcaemia involvement. Most pulmonary sarcoidosis (stage I–II) resolves spontaneously within 2 years.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 390; Davidson's Principles, 23rd Ed., Ch. 17",
+    },
+    keywords: [
+      "sarcoidosis",
+      "BHL",
+      "bilateral hilar lymphadenopathy",
+      "non-caseating granuloma",
+      "erythema nodosum",
+      "uveitis",
+      "ACE",
+      "sarcoid",
+    ],
+  },
+  {
+    name: "Pneumothorax",
+    aliases: [
+      "pneumothorax",
+      "collapsed lung",
+      "spontaneous pneumothorax",
+      "tension pneumothorax",
+    ],
+    category: "Respiratory",
+    harrisons: {
+      definition:
+        "Accumulation of air in the pleural space causing partial or complete lung collapse. Primary spontaneous pneumothorax (PSP) occurs without underlying lung disease; secondary (SSP) complicates pre-existing lung disease.",
+      classicSymptoms: [
+        "Sudden onset unilateral pleuritic chest pain — sharp, stabbing",
+        "Acute dyspnoea — severity depends on size of pneumothorax",
+        "Reduced breath sounds on the affected side",
+        "Tachycardia",
+        "In tension pneumothorax: rapidly worsening dyspnoea, hypotension, cyanosis, tracheal deviation — medical emergency",
+        "In small PSP: may be asymptomatic or mild symptoms only",
+      ],
+      keySigns: [
+        "Reduced/absent breath sounds and hyper-resonance on percussion on affected side",
+        "CXR: visible pleural line with absent lung markings beyond it; deep sulcus sign on supine film",
+        "Tracheal deviation away from side of tension pneumothorax",
+        "SpO2 reduction, tachycardia, hypotension in tension/large pneumothorax",
+        "Risk factors: tall thin young males (PSP), Marfan syndrome, COPD, asthma, TB (SSP)",
+      ],
+      keyFeatures:
+        "Management of small PSP (<2 cm rim): observation, supplemental O2. Moderate/large PSP: needle aspiration or intercostal drain. SSP always requires drainage. Tension pneumothorax: immediate needle decompression (2nd intercostal space, midclavicular line) then chest drain. Recurrence rate ~30% after first PSP — video-assisted thoracoscopic surgery (VATS) with pleurodesis recommended after second episode or high-risk occupation.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 292; Davidson's Principles, 23rd Ed., Ch. 17; BTS Guidelines",
+    },
+    keywords: [
+      "pneumothorax",
+      "collapsed lung",
+      "pleuritic chest pain",
+      "dyspnoea",
+      "tension pneumothorax",
+      "pleural line",
+      "chest drain",
+    ],
+  },
+  {
+    name: "Pulmonary Hypertension",
+    aliases: [
+      "pulmonary hypertension",
+      "PAH",
+      "pulmonary arterial hypertension",
+      "right heart failure secondary",
+      "cor pulmonale",
+    ],
+    category: "Respiratory",
+    harrisons: {
+      definition:
+        "Mean pulmonary arterial pressure (mPAP) ≥25 mmHg at rest, measured by right heart catheterisation. WHO Group 1 (PAH) is idiopathic or associated with connective tissue disease, HIV, congenital heart disease. Groups 2–5 are secondary causes.",
+      classicSymptoms: [
+        "Progressive exertional dyspnoea — cardinal symptom",
+        "Fatigue and reduced exercise tolerance",
+        "Syncope on exertion — poor prognostic sign",
+        "Chest pain — atypical, possibly anginal",
+        "Palpitations",
+        "Peripheral oedema and ascites in right heart failure",
+        "Haemoptysis in severe cases",
+      ],
+      keySigns: [
+        "Loud P2 (pulmonary component of S2), right ventricular heave",
+        "Raised JVP, peripheral oedema, hepatomegaly in cor pulmonale",
+        "ECG: right axis deviation, RBBB, right ventricular hypertrophy",
+        "ECHO: elevated RVSP (>35 mmHg), RV dilatation/hypertrophy, tricuspid regurgitation",
+        "Right heart catheterisation: diagnostic gold standard (mPAP ≥25 mmHg, PAWP ≤15 mmHg for PAH)",
+      ],
+      keyFeatures:
+        "Causes: idiopathic, heritable (BMPR2 mutation), connective tissue disease (scleroderma — most common secondary CTD cause), left heart disease (Group 2), lung disease/hypoxia (Group 3), chronic thromboembolic (CTEPH — potentially curable by pulmonary endarterectomy). PAH treatment: ERA (bosentan, ambrisentan), PDE5 inhibitors (sildenafil, tadalafil), prostacyclin analogues (epoprostenol IV). Anticoagulation in idiopathic PAH. CTEPH: riociguat, balloon pulmonary angioplasty, or endarterectomy.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 277; Davidson's Principles, 23rd Ed., Ch. 17",
+    },
+    keywords: [
+      "pulmonary hypertension",
+      "PAH",
+      "cor pulmonale",
+      "dyspnoea",
+      "right heart failure",
+      "loud P2",
+      "ECHO",
+      "sildenafil",
+    ],
+  },
+  {
+    name: "Obstructive Sleep Apnoea",
+    aliases: [
+      "OSA",
+      "obstructive sleep apnoea",
+      "sleep apnoea",
+      "sleep apnea",
+      "OSAS",
+      "snoring disorder",
+    ],
+    category: "Respiratory",
+    harrisons: {
+      definition:
+        "Repetitive episodes of partial or complete upper airway obstruction during sleep, leading to oxygen desaturation and arousal from sleep. Defined as Apnoea-Hypopnoea Index (AHI) ≥5 events/hour with symptoms, or AHI ≥15 regardless of symptoms.",
+      classicSymptoms: [
+        "Loud habitual snoring — witnessed by bed partner",
+        "Witnessed apnoeas — partner observes breathing cessation",
+        "Excessive daytime sleepiness (EDS) — Epworth Sleepiness Scale",
+        "Morning headaches due to nocturnal hypercapnia",
+        "Non-refreshing sleep, frequent nocturnal waking",
+        "Nocturia, mood changes, poor concentration",
+        "Choking or gasping on awakening",
+      ],
+      keySigns: [
+        "Obesity: BMI >30 kg/m² (major risk factor); neck circumference >43 cm (men), >38 cm (women)",
+        "Oropharyngeal crowding: Mallampati score, tonsillar hypertrophy",
+        "Overnight polysomnography (PSG): gold standard — measures AHI, oxygen desaturation",
+        "Home sleep apnoea testing (HSAT): acceptable alternative in moderate-high pre-test probability",
+        "Cardiovascular complications: systemic hypertension (50%), arrhythmias, increased MI/stroke risk",
+      ],
+      keyFeatures:
+        "Prevalence: ~10–17% men, 3–9% women; higher in obesity, hypothyroidism, acromegaly. AHI classification: mild (5–14), moderate (15–29), severe (≥30). Treatment: CPAP (continuous positive airway pressure) — gold standard for moderate-severe OSA; improves EDS, cardiovascular outcomes. Mandibular advancement devices for mild-moderate. Weight loss, positional therapy, alcohol avoidance as adjuncts. Surgical options (UPPP, bariatric surgery) in selected patients.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 294; Davidson's Principles, 23rd Ed., Ch. 17",
+    },
+    keywords: [
+      "OSA",
+      "sleep apnoea",
+      "snoring",
+      "daytime sleepiness",
+      "CPAP",
+      "apnoea",
+      "AHI",
+      "polysomnography",
+    ],
+  },
+  {
+    name: "Allergic Bronchopulmonary Aspergillosis (ABPA)",
+    aliases: [
+      "ABPA",
+      "allergic bronchopulmonary aspergillosis",
+      "aspergillosis",
+      "fungal asthma",
+    ],
+    category: "Respiratory",
+    harrisons: {
+      definition:
+        "A hypersensitivity reaction to Aspergillus fumigatus antigens occurring in the airways of patients with asthma or cystic fibrosis, leading to bronchiectasis, pulmonary infiltrates, and mucus impaction.",
+      classicSymptoms: [
+        "Worsening asthma not responding to usual treatment",
+        "Expectoration of brown/black mucus plugs",
+        "Low-grade fever and malaise",
+        "Eosinophilia in blood",
+        "Fleeting or recurrent pulmonary infiltrates on CXR",
+        "Proximal bronchiectasis on HRCT",
+      ],
+      keySigns: [
+        "Elevated serum IgE (total >1000 IU/mL) and specific IgE/IgG to Aspergillus",
+        "Immediate skin test reactivity to Aspergillus antigens",
+        "Blood eosinophilia (>500/μL)",
+        "HRCT: central (proximal) bronchiectasis, mucoid impaction, finger-in-glove opacities",
+        "Sputum culture: Aspergillus species (not always positive)",
+      ],
+      keyFeatures:
+        "Diagnostic criteria (modified Rosenberg-Patterson): history of asthma, positive Aspergillus skin test, elevated total IgE, elevated specific IgE/IgG, radiological infiltrates, blood eosinophilia. Treatment: oral corticosteroids (prednisolone) to suppress immune response; itraconazole or voriconazole as steroid-sparing agents. Long-term follow-up needed as ABPA can progress to end-stage fibrosis.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 287; Davidson's Principles, 23rd Ed., Ch. 17",
+    },
+    keywords: [
+      "ABPA",
+      "aspergillosis",
+      "fungal asthma",
+      "mucus plugs",
+      "eosinophilia",
+      "IgE",
+      "bronchiectasis",
+      "aspergillus",
+    ],
+  },
+  {
+    name: "Hypersensitivity Pneumonitis",
+    aliases: [
+      "hypersensitivity pneumonitis",
+      "extrinsic allergic alveolitis",
+      "farmer's lung",
+      "bird fancier's lung",
+      "EAA",
+    ],
+    category: "Respiratory",
+    harrisons: {
+      definition:
+        "An immune-mediated inflammatory lung disease caused by repeated inhalation of organic antigens (fungal spores, avian proteins, chemical sensitizers) in susceptible individuals, involving both Type III and Type IV hypersensitivity reactions.",
+      classicSymptoms: [
+        "Acute: flu-like illness 4–6 hours after antigen exposure — fever, chills, myalgia",
+        "Dyspnoea and dry cough after exposure",
+        "Subacute: progressive breathlessness, weight loss, fatigue",
+        "Chronic: insidious progressive breathlessness mimicking IPF",
+        "Symptoms improve when away from the exposure source (e.g., on holiday)",
+        "Bilateral fine crepitations at the lung bases",
+      ],
+      keySigns: [
+        "Bilateral fine crepitations, occasionally crackles",
+        "HRCT: ground-glass opacities, centrilobular nodules, mosaic attenuation (air trapping)",
+        "BAL: lymphocytosis (>30%), CD4:CD8 ratio <1 (opposite to sarcoidosis)",
+        "Serum precipitins (IgG) to causative antigen (e.g., Farmer's lung antibodies to thermophilic actinomycetes)",
+        "Restrictive spirometry, reduced DLCO",
+      ],
+      keyFeatures:
+        "Common causes: Farmer's lung (Saccharopolyspora rectivirgula in mouldy hay), Bird Fancier's lung (avian proteins in feathers/droppings), Humidifier lung, Chemical worker's lung (isocyanates). Key treatment: antigen avoidance (most important step). Corticosteroids for acute/subacute disease. Chronic HP may progress to fibrosis despite antigen avoidance. Prognosis varies: acute/subacute good if antigen removed; chronic HP poor prognosis.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 291; Davidson's Principles, 23rd Ed., Ch. 17",
+    },
+    keywords: [
+      "hypersensitivity pneumonitis",
+      "EAA",
+      "farmer's lung",
+      "bird fancier's lung",
+      "antigen exposure",
+      "dyspnoea",
+      "organic dust",
+      "alveolitis",
+    ],
+  },
+  {
+    name: "Respiratory Failure",
+    aliases: [
+      "respiratory failure",
+      "type 1 respiratory failure",
+      "type 2 respiratory failure",
+      "hypoxic respiratory failure",
+      "hypercapnic respiratory failure",
+      "ARF",
+    ],
+    category: "Respiratory",
+    harrisons: {
+      definition:
+        "Inadequacy of respiratory system to maintain normal blood gas levels. Type 1 (hypoxaemic): PaO2 <60 mmHg with normal/low PaCO2 — V/Q mismatch. Type 2 (hypercapnic/ventilatory): PaCO2 >45 mmHg ± hypoxaemia — alveolar hypoventilation.",
+      classicSymptoms: [
+        "Type 1: severe breathlessness, cyanosis, confusion, agitation — in pneumonia, pulmonary oedema, ARDS, pulmonary embolism",
+        "Type 2: drowsiness, headache (CO2 retention), bounding pulse — in COPD exacerbation, neuromuscular disease, obesity hypoventilation",
+        "Use of accessory muscles, intercostal recession",
+        "Inability to complete sentences",
+        "Paradoxical breathing in neuromuscular failure",
+        "Reduced consciousness in severe cases",
+      ],
+      keySigns: [
+        "ABG (arterial blood gas): definitive diagnosis — PaO2 <60 mmHg (Type 1); PaCO2 >45 mmHg (Type 2)",
+        "SpO2 <90% on pulse oximetry",
+        "Tachypnoea (RR >25/min), tachycardia",
+        "Cyanosis (central — tongue), confusion",
+        "Underlying cause: auscultation for wheeze (COPD/asthma), crackles (pulmonary oedema/pneumonia), absent sounds (pneumothorax)",
+      ],
+      keyFeatures:
+        "Type 1 treatment: controlled oxygen therapy (target SpO2 94–98%), treat underlying cause. Type 2 treatment: controlled O2 (target SpO2 88–92% in COPD to avoid worsening hypercapnia), NIV (non-invasive ventilation/BiPAP) — first-line for COPD exacerbation with acidosis. ARDS management: lung-protective ventilation (low tidal volume 6 mL/kg, PEEP), prone positioning. ICU/intubation for life-threatening failure.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 296; Davidson's Principles, 23rd Ed., Ch. 9",
+    },
+    keywords: [
+      "respiratory failure",
+      "type 1",
+      "type 2",
+      "hypoxaemia",
+      "hypercapnia",
+      "ABG",
+      "BiPAP",
+      "ARDS",
+      "ventilation",
+    ],
+  },
 ];
 
 export const DIAGNOSIS_CATEGORIES = [
