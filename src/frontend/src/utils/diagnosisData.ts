@@ -285,6 +285,649 @@ export const DIAGNOSIS_DATABASE: DiagnosisEntry[] = [
       "conjunctival injection",
     ],
   },
+  {
+    name: "Acute Urinary Tract Infection (UTI)",
+    aliases: [
+      "cystitis",
+      "bladder infection",
+      "UTI",
+      "urinary infection",
+      "uncomplicated UTI",
+    ],
+    category: "Acute",
+    harrisons: {
+      definition:
+        "Uncomplicated lower urinary tract infection (cystitis) caused predominantly by Escherichia coli and other Enterobacteriaceae, presenting with dysuria, frequency, and urgency without systemic features.",
+      classicSymptoms: [
+        "Dysuria (burning or pain on urination)",
+        "Increased urinary frequency and urgency",
+        "Suprapubic pain or discomfort",
+        "Cloudy, offensive-smelling urine",
+        "Haematuria (in haemorrhagic cystitis)",
+        "Low-grade fever (uncommon in uncomplicated cystitis)",
+      ],
+      keySigns: [
+        "Suprapubic tenderness on palpation",
+        "Urine dipstick: nitrites and leucocyte esterase positive",
+        "Pyuria on urine microscopy (>10 WBC/hpf)",
+        "Urine culture: ≥10⁵ CFU/mL (E. coli most common)",
+      ],
+      keyFeatures:
+        "Uncomplicated UTI affects predominantly women; E. coli accounts for 80–85% of cases. Distinguish from pyelonephritis (fever, loin pain, rigors) which requires longer antibiotic courses. In pregnancy, even asymptomatic bacteriuria must be treated. Recurrent UTIs require investigation for structural anomaly. Homeopathic remedies: Cantharis (intolerable burning, urging), Apis mellifica (stinging pain, scanty urine), Sarsaparilla (pain at end of urination). References: Harrison's 21st Ed. Ch. 130; Davidson's 23rd Ed. Ch. 17; Alagappan's Manual of Practical Medicine 5th Ed.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 130; Davidson's 23rd Ed., Ch. 17; Alagappan's Manual of Practical Medicine",
+    },
+    keywords: [
+      "UTI",
+      "cystitis",
+      "urinary infection",
+      "dysuria",
+      "burning urination",
+      "bladder infection",
+      "urinary tract",
+      "frequent urination",
+    ],
+  },
+  {
+    name: "Acute Otitis Media",
+    aliases: ["ear infection", "middle ear infection", "AOM", "otitis media"],
+    category: "Acute",
+    harrisons: {
+      definition:
+        "Acute bacterial or viral infection of the middle ear cavity, characterised by otalgia, fever, and otoscopic evidence of middle ear inflammation, most common in children under 5 years.",
+      classicSymptoms: [
+        "Severe otalgia (ear pain), especially in children",
+        "Fever (often >38.5°C)",
+        "Irritability and crying in infants (pulling at ear)",
+        "Hearing loss or muffled hearing",
+        "Otorrhoea if tympanic membrane perforates",
+        "Preceding upper respiratory tract infection",
+      ],
+      keySigns: [
+        "Bulging, erythematous tympanic membrane on otoscopy",
+        "Loss of tympanic membrane light reflex",
+        "Reduced tympanic membrane mobility on pneumatic otoscopy",
+        "Conductive hearing loss on audiometry",
+      ],
+      keyFeatures:
+        "Streptococcus pneumoniae, Haemophilus influenzae, and Moraxella catarrhalis are the commonest pathogens. Many cases are viral and self-limiting; watchful waiting is appropriate for mild cases in children ≥2 years. Antibiotics (amoxicillin) are indicated for severe or bilateral disease and children <2 years. Complications include mastoiditis, labyrinthitis, and meningitis. Homeopathic remedies: Pulsatilla (bland discharge, clingy child, worse warm room), Belladonna (sudden high fever, throbbing pain), Chamomilla (pain intolerable, screaming child). References: Harrison's 21st Ed. Ch. 46; Davidson's 23rd Ed. Ch. 28; Alagappan's.",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 46; Davidson's 23rd Ed., Ch. 28; Alagappan's Manual of Practical Medicine",
+    },
+    keywords: [
+      "otitis media",
+      "ear infection",
+      "ear pain",
+      "otalgia",
+      "middle ear",
+      "AOM",
+      "child ear pain",
+      "hearing loss",
+    ],
+  },
+  {
+    name: "Acute Sinusitis",
+    aliases: [
+      "sinus infection",
+      "sinusitis",
+      "rhinosinusitis",
+      "acute bacterial rhinosinusitis",
+      "ABRS",
+    ],
+    category: "Acute",
+    harrisons: {
+      definition:
+        "Acute inflammation of the paranasal sinuses (maxillary, frontal, ethmoid, or sphenoid) of less than 4 weeks' duration, most commonly following viral upper respiratory infection, with bacterial superinfection in 0.5–2% of cases.",
+      classicSymptoms: [
+        "Facial pain or pressure (worse on bending forward)",
+        "Nasal congestion and purulent nasal discharge",
+        "Hyposmia or anosmia",
+        "Toothache or cheek pain (maxillary sinusitis)",
+        "Headache (frontal, periorbital, or vertex)",
+        "Post-nasal drip with cough and sore throat",
+      ],
+      keySigns: [
+        "Tenderness over affected sinus on palpation/percussion",
+        "Purulent nasal discharge on anterior rhinoscopy",
+        "Mucosal oedema and nasal polyps if chronic",
+        "CT sinuses: air-fluid levels, mucosal thickening",
+      ],
+      keyFeatures:
+        "Viral rhinosinusitis is self-limiting (7–10 days); bacterial sinusitis is suggested by symptoms >10 days without improvement, severe symptoms from onset, or double-worsening (initial improvement then relapse). S. pneumoniae, H. influenzae, and M. catarrhalis are commonest bacteria. Complications: orbital cellulitis, meningitis, cavernous sinus thrombosis. Decongestants, saline irrigation, and analgesics suffice for most cases; amoxicillin-clavulanate for confirmed bacterial cases. Homeopathic: Kali bichromicum (thick ropy discharge, post-nasal drip, sinus pain), Hydrastis (thick yellow discharge), Pulsatilla (bland discharge, no thirst).",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 46; Davidson's 23rd Ed., Ch. 28; Alagappan's Manual of Practical Medicine",
+    },
+    keywords: [
+      "sinusitis",
+      "sinus infection",
+      "facial pain",
+      "nasal congestion",
+      "rhinosinusitis",
+      "sinus headache",
+      "purulent discharge",
+      "paranasal sinus",
+    ],
+  },
+  {
+    name: "Acute Bronchitis",
+    aliases: [
+      "chest cold",
+      "bronchitis",
+      "lower respiratory infection",
+      "tracheobronchitis",
+    ],
+    category: "Acute",
+    harrisons: {
+      definition:
+        "Acute self-limiting inflammation of the tracheobronchial tree, predominantly of viral aetiology, characterised by cough (with or without sputum) lasting up to 3 weeks in an otherwise healthy individual.",
+      classicSymptoms: [
+        "Productive cough (initially dry, then purulent-appearing sputum)",
+        "Low-grade fever and malaise",
+        "Retrosternal chest discomfort on coughing",
+        "Dyspnoea on exertion (mild)",
+        "Preceding upper respiratory tract symptoms (coryza, sore throat)",
+        "Wheeze or mild breathlessness",
+      ],
+      keySigns: [
+        "Scattered rhonchi or wheeze on auscultation",
+        "Normal or slightly elevated respiratory rate",
+        "Clear chest X-ray (distinguishes from pneumonia)",
+        "Normal oxygen saturation",
+      ],
+      keyFeatures:
+        "Viral aetiology (rhinovirus, influenza, parainfluenza, coronavirus) accounts for >90% of cases; antibiotics are not indicated in immunocompetent adults. The yellow-green colour of sputum reflects neutrophil peroxidase, not bacterial infection. Cough may persist 2–3 weeks ('post-infectious cough'). Distinguish from pneumonia (fever, consolidation, hypoxia) and early COPD. Inhaled bronchodilators reduce wheeze; cough suppressants provide symptomatic relief. Homeopathic remedies: Antimonium tartaricum (loose rattling cough, weakness), Drosera (spasmodic cough worse at night), Ipecacuanha (persistent cough with nausea).",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 295; Davidson's 23rd Ed., Ch. 19; Alagappan's Manual of Practical Medicine",
+    },
+    keywords: [
+      "bronchitis",
+      "chest cold",
+      "productive cough",
+      "lower respiratory infection",
+      "tracheobronchitis",
+      "cough sputum",
+      "wheeze",
+      "viral bronchitis",
+    ],
+  },
+  {
+    name: "Food Poisoning",
+    aliases: [
+      "food-borne illness",
+      "food intoxication",
+      "gastroenteritis food",
+      "staphylococcal food poisoning",
+      "salmonella poisoning",
+    ],
+    category: "Acute",
+    harrisons: {
+      definition:
+        "Acute illness caused by ingestion of contaminated food or water containing pathogenic organisms (Salmonella, Staphylococcus aureus, Campylobacter, E. coli, Clostridium) or their preformed toxins, characterised by nausea, vomiting, and diarrhoea.",
+      classicSymptoms: [
+        "Sudden-onset nausea and profuse vomiting",
+        "Watery or bloody diarrhoea",
+        "Abdominal cramps and pain",
+        "Fever (variable; prominent in Salmonella/Campylobacter)",
+        "Myalgia and malaise",
+        "Dehydration with thirst and reduced urine output",
+      ],
+      keySigns: [
+        "Signs of dehydration (dry mucosae, tachycardia, reduced skin turgor)",
+        "Diffuse abdominal tenderness on palpation",
+        "High fever (>38.5°C) in invasive bacterial infections",
+        "Bloody stool on rectal examination (dysentery-like picture)",
+      ],
+      keyFeatures:
+        "Incubation period guides aetiology: 1–6 h (S. aureus toxin, preformed), 8–16 h (C. perfringens), 12–48 h (Salmonella, Campylobacter). Most cases are self-limiting; oral rehydration is the mainstay. Antibiotics indicated for systemic illness, elderly, or immunocompromised. Stool culture and sensitivity guide targeted therapy. Outbreak investigation includes food history, shared meals. Haemolytic uraemic syndrome (HUS) is a feared complication of EHEC (E. coli O157:H7). Homeopathic: Arsenicum album (burning diarrhoea and vomiting, anxiety, restlessness, midnight aggravation), Veratrum album (profuse watery stools, cold sweat, prostration).",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 163–165; Davidson's 23rd Ed., Ch. 13; Alagappan's Manual of Practical Medicine",
+    },
+    keywords: [
+      "food poisoning",
+      "food-borne illness",
+      "vomiting diarrhoea",
+      "gastroenteritis",
+      "salmonella",
+      "staphylococcal",
+      "contaminated food",
+      "nausea vomiting",
+    ],
+  },
+  {
+    name: "Dengue Fever",
+    aliases: [
+      "dengue",
+      "break-bone fever",
+      "dengue haemorrhagic fever",
+      "dengue viral fever",
+      "DHF",
+    ],
+    category: "Acute",
+    harrisons: {
+      definition:
+        "Mosquito-borne viral illness caused by dengue virus (DENV 1–4, Flaviviridae) transmitted by Aedes aegypti, characterised by sudden high fever, severe myalgia/arthralgia, rash, and potential haemorrhagic complications.",
+      classicSymptoms: [
+        "Sudden high fever (39–40°C), biphasic (saddle-back) pattern",
+        "Severe headache (frontal/retro-orbital pain)",
+        "Myalgia and arthralgia ('break-bone fever')",
+        "Maculopapular rash appearing on day 3–5",
+        "Nausea, vomiting, abdominal pain",
+        "Bleeding manifestations (petechiae, epistaxis, gum bleeding in severe disease)",
+      ],
+      keySigns: [
+        "Positive tourniquet test (≥10 petechiae/sq inch)",
+        "Thrombocytopaenia (<100,000 platelets/μL) and leukopenia",
+        "Haemoconcentration (>20% rise in haematocrit)",
+        "Hepatomegaly with elevated transaminases",
+      ],
+      keyFeatures:
+        "WHO dengue classification: dengue without warning signs, dengue with warning signs (abdominal pain, persistent vomiting, fluid accumulation, mucosal bleeding, rapid drop in platelets), and severe dengue (plasma leakage, severe bleeding, organ impairment). No specific antiviral; management is supportive with oral/IV hydration. Aspirin and NSAIDs are contraindicated (bleeding risk). Watch for dengue shock syndrome (DSS) on defervescence (day 4–6) when vascular leak peaks. NS1 antigen (day 1–5) and IgM/IgG ELISA confirm diagnosis. Homeopathic: Eupatorium perfoliatum (bone-breaking pain, high fever, chills), Rhus toxicodendron (restlessness, body ache, rash).",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 233; Davidson's 23rd Ed., Ch. 14; Alagappan's Manual of Practical Medicine",
+    },
+    keywords: [
+      "dengue",
+      "dengue fever",
+      "break-bone fever",
+      "dengue haemorrhagic",
+      "thrombocytopenia fever",
+      "aedes mosquito",
+      "dengue rash",
+      "DHF",
+    ],
+  },
+  {
+    name: "Malaria",
+    aliases: [
+      "malaria fever",
+      "plasmodium",
+      "paludism",
+      "falciparum malaria",
+      "vivax malaria",
+      "malarial fever",
+    ],
+    category: "Acute",
+    harrisons: {
+      definition:
+        "Parasitic infection caused by Plasmodium species (P. falciparum, P. vivax, P. ovale, P. malariae) transmitted by female Anopheles mosquito, characterised by periodic paroxysms of fever, rigors, and anaemia.",
+      classicSymptoms: [
+        "Periodic fever with chills and rigors (classic malarial paroxysm)",
+        "Severe headache, myalgia, and arthralgia",
+        "Profuse sweating at end of fever episode",
+        "Nausea, vomiting, and abdominal discomfort",
+        "Anaemia causing pallor and fatigue",
+        "Altered consciousness or seizures (severe falciparum malaria)",
+      ],
+      keySigns: [
+        "Splenomegaly (tender in acute, firm in chronic malaria)",
+        "Anaemia with pallor and mild jaundice",
+        "Peripheral blood smear: ring forms, gametocytes (Giemsa stain)",
+        "Thrombocytopaenia; elevated bilirubin and LDH",
+      ],
+      keyFeatures:
+        "P. falciparum causes severe malaria: cerebral malaria (coma, seizures), severe anaemia, hypoglycaemia, pulmonary oedema, acute kidney injury, and blackwater fever (massive haemolysis). P. vivax and P. ovale form hypnozoites causing relapses; primaquine required for radical cure. Rapid Diagnostic Tests (RDTs) and thick/thin blood smears confirm diagnosis. Artemisinin-based combination therapy (ACT) is first-line for uncomplicated falciparum malaria; IV artesunate for severe disease. Fever pattern: every 48 h (tertian – vivax/falciparum/ovale); every 72 h (quartan – malariae). Homeopathic: China officinalis (periodical fever, anaemia, debility after malarial illness), Natrum muriaticum (intermittent fever, anaemia, herpes), Arsenic album (anxiety, burning, exhaustion, midnight aggravation).",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 219; Davidson's 23rd Ed., Ch. 13; Alagappan's Manual of Practical Medicine",
+    },
+    keywords: [
+      "malaria",
+      "malarial fever",
+      "plasmodium",
+      "periodic fever",
+      "rigors chills",
+      "falciparum",
+      "vivax malaria",
+      "anopheles mosquito",
+    ],
+  },
+  {
+    name: "Typhoid Fever",
+    aliases: [
+      "enteric fever",
+      "typhoid",
+      "Salmonella typhi",
+      "paratyphoid",
+      "typhoid salmonella",
+    ],
+    category: "Acute",
+    harrisons: {
+      definition:
+        "Systemic illness caused by Salmonella typhi (or S. paratyphi) characterised by sustained fever, relative bradycardia, rose spots, and splenomegaly, transmitted via faecal-oral route through contaminated food and water.",
+      classicSymptoms: [
+        "Stepladder rise of fever over 3–4 days (up to 39–40°C)",
+        "Relative bradycardia (Faget's sign: pulse-temperature dissociation)",
+        "Headache, malaise, and myalgia",
+        "Constipation in early phase; diarrhoea ('pea-soup') in later phase",
+        "Rose spots: faint salmon-pink maculopapular rash on trunk (2nd week)",
+        "Abdominal pain, hepatosplenomegaly, and coated tongue",
+      ],
+      keySigns: [
+        "Sustained high fever with relative bradycardia",
+        "Splenomegaly and hepatomegaly",
+        "Rose spots on abdomen (transient, 2–4 mm salmon macules)",
+        "Blood culture positive in week 1 (Widal rising titres from week 2)",
+      ],
+      keyFeatures:
+        "Widal test (O and H antigens) has low sensitivity/specificity; blood culture is the gold standard in week 1, stool/urine culture in weeks 2–3. Ciprofloxacin or ceftriaxone is first-line (increasing fluoroquinolone resistance in South Asia); azithromycin an alternative. Complications: intestinal perforation (week 3), haemorrhage, myocarditis, encephalopathy. The carrier state (gallbladder colonisation) is an important public health concern. Vaccination (Vi polysaccharide) advised for endemic areas. Homeopathic: Baptisia tinctoria (stupor, foul odour, can only swallow liquids), Muriatic acid (profound prostration, sliding down bed), Arnica (soreness, refuses to be examined, putrid fever).",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 164; Davidson's 23rd Ed., Ch. 13; Alagappan's Manual of Practical Medicine",
+    },
+    keywords: [
+      "typhoid",
+      "enteric fever",
+      "salmonella typhi",
+      "stepladder fever",
+      "rose spots",
+      "widal test",
+      "typhoid salmonella",
+      "paratyphoid",
+    ],
+  },
+  {
+    name: "Chickenpox (Varicella)",
+    aliases: [
+      "varicella",
+      "chicken pox",
+      "VZV infection",
+      "chickenpox",
+      "varicella zoster",
+    ],
+    category: "Acute",
+    harrisons: {
+      definition:
+        "Highly contagious primary infection with Varicella-Zoster Virus (VZV), characterised by successive crops of pruritic vesicular rash on erythematous base ('dewdrop on a rose petal'), fever, and malaise.",
+      classicSymptoms: [
+        "Pruritic vesicular rash in successive crops (face → trunk → limbs)",
+        "Low-grade fever and malaise preceding rash by 1–2 days",
+        "Lesions in different stages simultaneously (macule, papule, vesicle, pustule, crust)",
+        "Rash involves scalp and mucous membranes (oral, conjunctival)",
+        "Intense pruritus causing scratching and secondary infection",
+        "Headache and anorexia in prodrome",
+      ],
+      keySigns: [
+        "'Dewdrop on rose petal' vesicle appearance on erythematous base",
+        "Lesions in all stages present simultaneously (pathognomonic)",
+        "Tzanck smear: multinucleated giant cells",
+        "VZV PCR or DFA from vesicle fluid confirms diagnosis",
+      ],
+      keyFeatures:
+        "Incubation period 10–21 days; infectious 1–2 days before rash until all lesions crust (5–7 days). Complications: bacterial superinfection (S. aureus, S. pyogenes), pneumonia (especially in adults and immunocompromised), encephalitis, cerebellar ataxia, and haemorrhagic varicella. Aciclovir indicated in adults, immunocompromised, neonates, and pregnant women. Aspirin contraindicated (Reye's syndrome risk in children). Varicella vaccine (VZV live attenuated) prevents disease. Latent virus reactivates as Herpes Zoster. Homeopathic: Antimonium tartaricum (large pustular eruptions, restlessness), Rhus toxicodendron (intense itching, restlessness), Mezereum (thick crusts, intolerable itching).",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 192; Davidson's 23rd Ed., Ch. 14; Alagappan's Manual of Practical Medicine",
+    },
+    keywords: [
+      "chickenpox",
+      "varicella",
+      "VZV",
+      "vesicular rash",
+      "pruritic rash",
+      "varicella zoster",
+      "chicken pox",
+      "dewdrop vesicle",
+    ],
+  },
+  {
+    name: "Acute Pharyngitis",
+    aliases: [
+      "sore throat",
+      "throat infection",
+      "strep throat",
+      "tonsillitis",
+      "pharyngotonsillitis",
+      "streptococcal pharyngitis",
+    ],
+    category: "Acute",
+    harrisons: {
+      definition:
+        "Acute inflammation of the posterior pharynx and tonsillar region caused by Group A β-haemolytic Streptococcus (GABHS) or viral pathogens, presenting with sore throat, odynophagia, and tonsillar exudates.",
+      classicSymptoms: [
+        "Sore throat and odynophagia (pain on swallowing)",
+        "High fever (>38.5°C) and chills (bacterial)",
+        "Tonsillar enlargement with white/grey exudates",
+        "Tender anterior cervical lymphadenopathy",
+        "Absence of cough (distinguishes bacterial from viral)",
+        "Headache, malaise, and loss of appetite",
+      ],
+      keySigns: [
+        "Erythematous, oedematous tonsils with exudates (bacterial)",
+        "Tender jugulodigastric (tonsillar) lymph nodes",
+        "Palatal petechiae (streptococcal pharyngitis)",
+        "Positive rapid streptococcal antigen test or throat culture",
+      ],
+      keyFeatures:
+        "Centor/McIsaac criteria guide antibiotic decision: exudate, tender anterior nodes, fever, absence of cough (score 4 = treat). GABHS pharyngitis must be treated with penicillin/amoxicillin to prevent acute rheumatic fever (ARF) and post-streptococcal glomerulonephritis. Viral pharyngitis (adenovirus, EBV, CMV) is self-limiting. EBV (infectious mononucleosis) presents with exudative pharyngitis, splenomegaly, and atypical lymphocytosis; avoid ampicillin (rash). Peritonsillar abscess (quinsy) is a complication requiring drainage. Homeopathic: Belladonna (sudden high fever, bright red throat, tonsils), Mercurius solubilis (offensive breath, salivation, sweating), Baryta carbonica (recurrent tonsillitis, enlarged tonsils in children, timid).",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 46; Davidson's 23rd Ed., Ch. 28; Alagappan's Manual of Practical Medicine",
+    },
+    keywords: [
+      "pharyngitis",
+      "sore throat",
+      "strep throat",
+      "tonsillitis",
+      "throat infection",
+      "odynophagia",
+      "streptococcal",
+      "tonsillar exudate",
+    ],
+  },
+  {
+    name: "Cellulitis",
+    aliases: [
+      "skin infection",
+      "bacterial cellulitis",
+      "erysipelas",
+      "soft tissue infection",
+      "acute cellulitis",
+    ],
+    category: "Acute",
+    harrisons: {
+      definition:
+        "Acute bacterial infection of the dermis and subcutaneous tissues, most commonly caused by Group A Streptococcus (S. pyogenes) and Staphylococcus aureus, characterised by spreading erythema, warmth, oedema, and tenderness.",
+      classicSymptoms: [
+        "Localised spreading erythema, warmth, and oedema",
+        "Skin tenderness and pain at the site",
+        "Fever, chills, and systemic malaise",
+        "Red streaking (lymphangitis) tracking proximally",
+        "Regional lymphadenopathy",
+        "Preceding skin breach (trauma, insect bite, tinea, ulcer)",
+      ],
+      keySigns: [
+        "Non-pitting erythema with indistinct borders",
+        "Tenderness on palpation; fluctuance suggests abscess",
+        "Elevated inflammatory markers (CRP, WBC)",
+        "Lymphangitis: red streaks along lymphatic channels",
+      ],
+      keyFeatures:
+        "Cellulitis commonly affects the lower limbs; predisposing factors include tinea pedis, lymphoedema, obesity, and diabetes. Erysipelas (S. pyogenes) is a superficial form with sharply demarcated, raised, bright-red lesion with systemic toxicity. Distinguish from DVT (mimicker), necrotising fasciitis (surgical emergency: pain out of proportion, wooden-hard feel, gas on imaging), and contact dermatitis. MRSA community-acquired cellulitis requires trimethoprim-sulfamethoxazole or doxycycline; non-purulent cellulitis responds to beta-lactams. Elevation of limb reduces oedema. Homeopathic: Belladonna (bright red, hot, inflamed skin, rapid spread), Apis mellifica (oedematous, stinging, rosy-pink), Hepar sulphuris (suppurating, very sensitive to touch, worse cold).",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 124; Davidson's 23rd Ed., Ch. 27; Alagappan's Manual of Practical Medicine",
+    },
+    keywords: [
+      "cellulitis",
+      "skin infection",
+      "erysipelas",
+      "bacterial skin",
+      "soft tissue infection",
+      "spreading redness",
+      "lymphangitis",
+      "streptococcal skin",
+    ],
+  },
+  {
+    name: "Acute Anaphylaxis",
+    aliases: [
+      "anaphylaxis",
+      "anaphylactic shock",
+      "severe allergic reaction",
+      "anaphylactic reaction",
+      "IgE hypersensitivity",
+    ],
+    category: "Acute",
+    harrisons: {
+      definition:
+        "Life-threatening acute systemic hypersensitivity reaction mediated by IgE, mast cells, and basophils, triggered by allergens (foods, drugs, insect stings, latex), causing multisystem involvement including airway compromise, cardiovascular collapse, and urticaria.",
+      classicSymptoms: [
+        "Sudden urticaria, angioedema (lips, tongue, throat)",
+        "Stridor or bronchospasm causing respiratory distress",
+        "Hypotension and tachycardia (anaphylactic shock)",
+        "Nausea, vomiting, abdominal cramps",
+        "Pruritus and generalised flushing",
+        "Loss of consciousness and collapse in severe cases",
+      ],
+      keySigns: [
+        "Urticaria and angioedema (skin/mucosal)",
+        "Stridor (upper airway) or wheeze (lower airway)",
+        "Hypotension (systolic <90 mmHg) with tachycardia",
+        "Elevated serum tryptase (diagnostic biomarker within 1–3 h)",
+      ],
+      keyFeatures:
+        "Adrenaline (epinephrine) 0.5 mg IM (anterolateral thigh) is the first-line treatment; delay is the commonest cause of death. Biphasic reactions (recurrence 8–72 h later) occur in 5–20% — observation for minimum 6–8 h. H1/H2 antihistamines and corticosteroids are adjuncts only, not first-line. Common triggers: peanuts, tree nuts, shellfish, bee/wasp venom, penicillin, NSAIDs. Epinephrine auto-injector (EpiPen) prescribed for all at-risk patients. Allergy referral and component-resolved diagnostics identify specific triggers. Homeopathic: Apis mellifica (angioedema, urticaria, stinging, < heat), Carbo vegetabilis (collapse, cyanosis, air hunger), Urtica urens (urticaria, intense burning and itching).",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 349; Davidson's 23rd Ed., Ch. 4; Alagappan's Manual of Practical Medicine",
+    },
+    keywords: [
+      "anaphylaxis",
+      "anaphylactic shock",
+      "severe allergy",
+      "allergic reaction",
+      "epinephrine emergency",
+      "angioedema",
+      "urticaria shock",
+      "IgE reaction",
+    ],
+  },
+  {
+    name: "Tension-Type Headache",
+    aliases: [
+      "tension headache",
+      "acute headache",
+      "stress headache",
+      "TTH",
+      "bilateral headache",
+      "tension-type headache",
+    ],
+    category: "Acute",
+    harrisons: {
+      definition:
+        "The most common primary headache disorder, characterised by bilateral, pressing/tightening, non-pulsating head pain of mild to moderate intensity, not aggravated by routine physical activity, without significant nausea or vomiting.",
+      classicSymptoms: [
+        "Bilateral headache ('band-like' or 'vice-like' pressure around head)",
+        "Non-pulsating, pressing or tightening quality",
+        "Mild to moderate intensity; does not prevent activity",
+        "No significant nausea or vomiting (unlike migraine)",
+        "May have photo- or phonophobia (not both simultaneously)",
+        "Associated neck and shoulder muscle stiffness/tenderness",
+      ],
+      keySigns: [
+        "Pericranial muscle tenderness on palpation (diagnostic criterion)",
+        "No neurological deficit on examination",
+        "Normal fundoscopy and vital signs",
+        "No meningeal signs (important red flag exclusion)",
+      ],
+      keyFeatures:
+        "Episodic TTH (<15 days/month) vs. chronic TTH (≥15 days/month for >3 months). Red flags (SNOOP criteria): Systemic illness, Neurological deficit, Onset sudden/thunderclap, Onset after 50, Positional variation, Papilloedema — warrant urgent neuroimaging. Simple analgesics (paracetamol, NSAIDs) are effective for episodic TTH; triptans are not effective. Amitriptyline is the drug of choice for prophylaxis of chronic TTH. Migraine differentiators: unilateral, pulsating, moderate-severe, associated nausea/vomiting, photophobia AND phonophobia. Homeopathic: Natrum muriaticum (sunrise to sunset headache, hammering, worse sun exposure), Belladonna (throbbing, sudden onset, better pressure), Gelsemium (dull heavy headache, beginning in occiput, band-like, better urination).",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 422; Davidson's 23rd Ed., Ch. 26; Alagappan's Manual of Practical Medicine",
+    },
+    keywords: [
+      "tension headache",
+      "TTH",
+      "stress headache",
+      "band-like headache",
+      "bilateral headache",
+      "muscle contraction headache",
+      "pressure headache",
+      "acute headache",
+    ],
+  },
+  {
+    name: "Acute Diarrhoea",
+    aliases: [
+      "diarrhoea",
+      "acute diarrhea",
+      "loose motions",
+      "acute gastroenteritis",
+      "watery diarrhoea",
+      "infectious diarrhoea",
+    ],
+    category: "Acute",
+    harrisons: {
+      definition:
+        "Sudden-onset passage of three or more loose/liquid stools per day, of less than 14 days' duration, caused by infectious (bacterial, viral, parasitic) or non-infectious (drugs, toxins) aetiologies, with risk of dehydration and electrolyte imbalance.",
+      classicSymptoms: [
+        "Frequent watery or loose stools (≥3/day)",
+        "Abdominal cramps and borborygmi",
+        "Nausea and vomiting (especially in viral gastroenteritis)",
+        "Fever (in invasive bacterial infections)",
+        "Blood or mucus in stool (dysentery: Shigella, EHEC, amoeba)",
+        "Signs of dehydration: thirst, dry mouth, oliguria, dizziness",
+      ],
+      keySigns: [
+        "Dehydration assessment: skin turgor, mucous membranes, sunken eyes, capillary refill",
+        "Tenderness on abdominal palpation (periumbilical or diffuse)",
+        "Hyperactive bowel sounds",
+        "Stool microscopy: leukocytes (invasive), cysts/trophozoites (amoeba), ova (helminthic)",
+      ],
+      keyFeatures:
+        "Secretory diarrhoea (large-volume, watery, no blood): ETEC, Vibrio cholerae, rotavirus, Giardia; oral rehydration therapy (ORS) is the cornerstone. Inflammatory/invasive diarrhoea (small-volume, bloody, mucus, fever): Shigella, Campylobacter, Entamoeba histolytica; stool culture guides antibiotic therapy. Traveller's diarrhoea is most commonly caused by ETEC; empirical azithromycin/ciprofloxacin for severe cases. Red flags warranting investigation: bloody stool, high fever, severe abdominal pain, immunocompromise, elderly. Cholera (rice-water stools, profuse, painless) is a medical emergency. Homeopathic: Arsenicum album (watery burning stools, anxiety, restlessness, midnight aggravation), Croton tiglium (sudden explosive watery stool, gushing), Podophyllum (profuse, gushing, offensive, painless, morning aggravation).",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 163; Davidson's 23rd Ed., Ch. 13; Alagappan's Manual of Practical Medicine",
+    },
+    keywords: [
+      "diarrhoea",
+      "loose motions",
+      "acute diarrhoea",
+      "gastroenteritis",
+      "watery stool",
+      "infectious diarrhoea",
+      "dehydration diarrhoea",
+      "bloody diarrhoea",
+    ],
+  },
+  {
+    name: "Heat Stroke / Sunstroke",
+    aliases: [
+      "heat stroke",
+      "sunstroke",
+      "heat exhaustion",
+      "hyperthermia",
+      "classic heat stroke",
+      "exertional heat stroke",
+    ],
+    category: "Acute",
+    harrisons: {
+      definition:
+        "Life-threatening heat-related illness characterised by core body temperature >40°C with neurological dysfunction (confusion, seizures, coma), caused by failure of thermoregulatory mechanisms due to environmental heat exposure (classic) or exertion (exertional).",
+      classicSymptoms: [
+        "Core temperature >40°C (104°F) – hallmark finding",
+        "Central nervous system dysfunction: confusion, delirium, seizures, coma",
+        "Anhidrosis (dry hot skin) in classic heat stroke; diaphoresis in exertional",
+        "Nausea, vomiting, and headache as prodromal symptoms",
+        "Muscle cramps and weakness (heat cramps preceding full syndrome)",
+        "Collapse and loss of consciousness",
+      ],
+      keySigns: [
+        "Rectal temperature >40°C (oral temperature may be underestimated)",
+        "Neurological signs: altered sensorium, ataxia, focal deficits",
+        "Dry, hot, flushed skin (classic) or wet in exertional",
+        "Rhabdomyolysis: elevated CK, myoglobinuria (tea-coloured urine)",
+      ],
+      keyFeatures:
+        "Classic heat stroke: elderly or chronically ill patients during heat waves; exertional heat stroke: athletes and military in hot humid conditions. Immediate cooling is the priority — ice-water immersion is most effective; evaporative cooling (tepid water + fanning) is an alternative. Target temperature <39°C within 30 min. Complications: rhabdomyolysis, AKI, DIC, hepatic injury, ARDS, and multiorgan failure. Differentiate from heat exhaustion (temperature <40°C, no CNS dysfunction — less severe). Malignant hyperthermia (anaesthetic trigger) and neuroleptic malignant syndrome (antipsychotic drug) are important differentials. IV fluids, electrolyte correction, and ICU monitoring essential. Homeopathic: Glonoine (sudden, bursting headache, flushing, worse sun, cerebral congestion), Belladonna (hot dry skin, throbbing headache, delirium), Natrum carbonicum (ill effects of sun/heat, headache, prostration).",
+      reference:
+        "Harrison's Principles of Internal Medicine, 21st Ed., Ch. 449; Davidson's 23rd Ed., Ch. 12; Alagappan's Manual of Practical Medicine",
+    },
+    keywords: [
+      "heat stroke",
+      "sunstroke",
+      "hyperthermia",
+      "heat exhaustion",
+      "high temperature",
+      "heat-related illness",
+      "sun exposure fever",
+      "exertional heat stroke",
+    ],
+  },
   // ── ENDOCRINE ──
   {
     name: "Type 2 Diabetes Mellitus",
