@@ -15,6 +15,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Psoric miasm base remedy. Skin diseases (eczema, psoriasis, urticaria). Chronic diarrhea. Hemorrhoids. Chronic rhinitis. Eye complaints. Liver affections. Chronic chest complaints with morning aggravation. Suppressed skin diseases causing internal complaints.",
     rubrics:
       "SKIN — ERUPTIONS — burning; STOMACH — APPETITE — canine, noon except at; RECTUM — DIARRHEA — morning, driving out of bed; EXTREMITIES — HEAT — hands; GENERALS — BATHING — worse; MIND — UNTIDY",
+    farrington:
+      "Farrington compares Sulphur with Calcarea and Lycopodium as the three great anti-psorics. Sulphur is the most acute of the three — acts more on the surface, burning, redness of orifices. Distinguishes from Aconite: Aconite acts on the surface in acute fevers with fear; Sulphur acts deeper, chronically. Compared to Mercurius: both have offensiveness but Sulphur's discharges burn while Mercury's are bland. Key Farrington notes: Sulphur the 'prince of anti-psorics' — use when well-selected remedies fail to act. The 11 AM hunger and hot, burning, offensive feet are pathognomonic. In skin diseases: prefer Sulphur when eruptions itch and burn worse at night and from warmth.",
     relationships: {
       complementary: "Calcarea carbonica, Lycopodium",
       antidotes: "Camphor",
@@ -37,6 +39,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Catarrhal affections. Measles (in children). Female complaints — dysmenorrhea, amenorrhea, menopause. Ophthalmia. Cystitis. Varicose veins. Indigestion from fatty food. Children who weep easily. One-sided headache.",
     rubrics:
       "MIND — WEEPING — tendency; GENERALS — THIRST — thirstlessness; FEMALE — MENSES — delayed; GENERALS — AIR — open, desire for; NOSE — DISCHARGE — yellow-green, bland",
+    farrington:
+      "Farrington distinguishes Pulsatilla from Kali bich, Hydrastis, and Sepia for catarrhal conditions. Pulsatilla: discharges thick, bland, yellow-green — non-irritating. Compare Kali bich: tenacious, stringy, ropy. Compare Hydrastis: thick but yellow, irritating. Compare Sepia: indifference and coldness, less weeping. Farrington's key: 'The Pulsatilla patient wants to go out into the cold air — the Sepia patient is equally chilly but from weakness.' Distinguishes from Cyclamen for menstrual disorders: Cyclamen has more nausea and visual disturbance. For ear: Pulsatilla vs Chamomilla — Chamomilla is more irritable and sensitive to pain.",
     relationships: {
       complementary: "Silicea",
       antidotes: "Chamomilla",
@@ -59,6 +63,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Constipation. Indigestion. Hemorrhoids. Colds. Hangover/drug antidote. Insomnia. Irritable bowel. Menstrual cramps. Headache from overindulgence. Anxiety with impatience.",
     rubrics:
       "RECTUM — CONSTIPATION — ineffectual urging; MIND — IRRITABILITY; GENERALS — FOOD — coffee, agg; SLEEP — WAKING — 3 AM; GENERALS — COLD — general, sensitive to",
+    farrington:
+      "Farrington compares Nux vomica extensively with Bryonia and Ignatia. Nux: irritable from overwork, hypersensitive, constipation with ineffectual urging. Bryonia: irritable from being disturbed, wants to be left alone, constipation from dryness. Ignatia: irritability from grief, spasmodic, paradoxical symptoms. For digestive complaints: Nux vs Lycopodium — both have flatulence but Nux wakes at 3 AM while Lycopodium is worse 4-8 PM. Distinguishes from Strychninum: both have convulsive symptoms but Strychninum lacks the mental picture. Farrington's rule: Nux is the natural antidote for the modern sedentary, overworked, stimulant-abusing constitution.",
     relationships: {
       complementary: "Sulphur",
       antidotes: "Coffee",
@@ -81,6 +87,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Digestive complaints. Liver diseases. Urinary calculi. Impotence. Respiratory complaints. Alopecia. Eczema. Psoriasis. Anxiety states. Right-sided headache.",
     rubrics:
       "ABDOMEN — FLATULENCE; GENERALS — TIME — 4–8 PM agg; KIDNEYS — PAIN — right; MIND — CONFIDENCE — want of self; URINE — SEDIMENT — red",
+    farrington:
+      "Farrington's comparative notes: Lycopodium is the 'intellectual remedy' — brain dominates brawn. Compare Silica: both are chilly, lack confidence, but Silica is more obstinate, Lycopodium more cowardly. Compare Argentum nitricum: both have anticipatory anxiety and flatulence but Arg-n is warm, craves sweets, worse from sugar; Lycopodium is chilly, craves sweets and warmth. Right-sidedness: Compare Chelidonium (right side, liver) — both are right-sided but Chel has the characteristic right shoulder blade pain. For kidney: Lyc has red sand; Pareira brava has constant urging with inability to urinate. Farrington notes: 'Lycopodium is the remedy of the 40-year-old man who has overtaxed his brain.'",
     relationships: {
       complementary: "Iodum",
       antidotes: "Camphor",
@@ -103,6 +111,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Gastroenteritis. Food poisoning. Asthma. Anxiety disorders. Cancer cachexia. Chronic skin diseases. Malaria (periodical). Typhoid. Debilitating illnesses.",
     rubrics:
       "MIND — ANXIETY — health about; MIND — RESTLESSNESS; GENERALS — MIDNIGHT — after; GENERALS — BURNING — heat, relieved by; STOMACH — THIRST — sips, in",
+    farrington:
+      "Farrington places Arsenicum as the leading remedy for the 'irritable, restless, exhausted' type. Compare Veratrum album: both have cold sweat, vomiting, diarrhea but Veratrum has more collapse and prostration; Arsenicum is more restless and anxious. Compare Phosphorus: both burn and have organotrophic action on lungs, liver but Phos has hemorrhagic tendency and is warm-blooded; Ars is chilly and restless. Distinguishes from China in debility: China's debility comes from loss of vital fluids, Arsenicum's from toxemia and sepsis. Farrington's key: 'The midnight aggravation, fear of death, restlessness in spite of weakness — the trinity of Arsenicum.' For malignancy and cachexia, Arsenicum leads over all other remedies.",
     relationships: {
       complementary: "Allium Sativa, Carbo Veg, Phosphorus, Sulphur, Thuja",
       antidotes: "China, Graphites, Hepar, Iodium, Nux Vomica",
@@ -125,6 +135,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Childhood developmental delays. Hypothyroid state. Obesity. Chronic fatigue. Eczema. Uterine fibroids. Dental complaints. Recurrent respiratory infections.",
     rubrics:
       "HEAD — PERSPIRATION — sleep during; GENERALS — COLD — becoming, agg; STOMACH — DESIRES — eggs; MIND — FEAR — insane, of becoming; GENERALS — EXERTION — aggravates",
+    farrington:
+      "Farrington distinguishes Cal-c as the MIDDLE anti-psoric between Sulphur (surface/acute) and Lycopodium (deeply chronic). Cal-c: fair, fat, flabby, phlegmatic. Compare Baryta carbonica: both are slow and stout but Bar-c is more for senility and dwarfishness; Cal-c for the chilly, sweating, slow-learning child. Distinguishes from Silica: both are chilly and slow but Silica lacks the flabbiness and sweating head of Cal-c. 'The Calcarea child has a large head, sweats on the head at night, souring of everything.' Bone diseases: Cal-c vs Phosphorus — Cal-c for defective ossification with flabbiness; Phos for tall, slender, rapidly-growing bone conditions.",
     relationships: {
       complementary: "Belladonna, Lycopodium, Natrum Mur, Rhus Tox, Silica",
       antidotes: "Camphor, China, Nux Vomica, Sulphur",
@@ -147,6 +159,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Pneumonia. Hemorrhagic conditions. Liver disease. Gastric ulcer. Anemia. Diabetes. Neuropathy. Anxiety disorders. Bone tuberculosis.",
     rubrics:
       "CHEST — LYING — left side, agg; GENERALS — HEMORRHAGE — bright red; STOMACH — THIRST — cold water; BACK — BURNING — scapulae between; MIND — FEAR — dark, of",
+    farrington:
+      "Farrington's notes: Phosphorus acts strongly on the nervous system, blood, and parenchymatous organs. Compare Ferrum phos: both have first-stage inflammations but Ferrum lacks the mental symptoms and hemorrhagic tendency of Phosphorus. Distinguishes from Tuberculinum: both are tall, slender, sensitive, chilly, with chest tendency; Tub has more rapid emaciation and family history of TB. Compare Arsenicum for pneumonia: Ars has more restlessness, anxiety, burning; Phos has more hepatization and blood-streaked expectoration. Farrington's rule: 'Phosphorus acts in any disease where there is great susceptibility to external impressions, when the vital powers are giving way.' The craving for cold drinks that become warm and are vomited is characteristic.",
     relationships: {
       complementary: "Arsenicum, Carbo Veg, Lycopodium",
       antidotes: "China, Coffea, Nux Vomica, Terebinthina",
@@ -169,6 +183,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "High fever. Encephalitis/meningitis (complementary). Acute tonsillitis. Acute otitis media. Sunstroke. Convulsions. Mastitis. Acute dysmenorrhea.",
     rubrics:
       "HEAD — PAIN — throbbing; FACE — REDNESS; GENERALS — HEAT — burning; MIND — DELIRIUM; GENERALS — ONSET — sudden",
+    farrington:
+      "Farrington compares Belladonna with Stramonium and Hyoscyamus in the trio of solanaceous remedies. Belladonna: acute violence — sudden onset, red face, dilated pupils, throbbing carotids — but subsides as rapidly. Stramonium: more persistently violent, terror, sees ghosts, wants light and company. Hyoscyamus: more low-grade, suspicious, jealousy, obscene, lascivious. For fever: Bell vs Aconite — Aconite has fear of death and dryness; Bell has delirium and throbbing. Farrington's key: 'Belladonna is indicated in all active conditions which come on suddenly, run a violent course, and have a tendency to end in delirium.' For children with high fever and convulsions, Bell vs Stramonium — Bell bites, Stramonium grinds teeth.",
     relationships: {
       complementary: "Calcarea carbonica",
       antidotes: "Camphor, Opium",
@@ -191,6 +207,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Pleuritis. Pneumonia. Arthritis. Constipation. Headache. Gastritis. Mastitis. Typhoid (early stage). Flu with muscle soreness.",
     rubrics:
       "GENERALS — MOTION — agg; GENERALS — PRESSURE — ameliorates; GENERALS — DRYNESS — mucous membranes; CHEST — PAIN — stitching, inspiration; STOMACH — THIRST — large quantities",
+    farrington:
+      "Farrington's comparative analysis: Bryonia is the 'great anti-inflammatory' for serous membranes. Compare Rhus tox: the fundamental difference — Bryonia patients want rest (pain worse any motion), Rhus tox patients cannot rest (pain better motion). For respiratory: Bryonia vs Phosphorus — Bryonia has rust-colored, brick-dust expectoration with sharp pleuritic stitches; Phos has hepatization, blood-streaked sputum. Distinguishes from Nux vomica in irritability: Bryonia resents being disturbed; Nux vomica is actively angry and hypersensitive. Farrington notes: 'Bryonia is the remedy when the synovial membranes are inflamed — the joints are hot, swollen, red, and exquisitely painful on any movement.'",
     relationships: {
       complementary: "Rhus tox",
       antidotes: "Aconite",
@@ -214,6 +232,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Migraine. Grief disorders. Herpes simplex. Anemia. Eczema. Malaria. Hypothyroid states. Infertility. Chronic catarrh. Depression.",
     rubrics:
       "MIND — GRIEF — ailments from; MIND — CONSOLATION — aggravates; GENERALS — FOOD — salt, desire for; GENERALS — TIME — 10 AM agg; TONGUE — MAP-LIKE",
+    farrington:
+      "Farrington places Natrum mur as the chronic of Ignatia. Where Ignatia is acute grief/emotional shock, Natrum mur is the chronic state from sustained grief. Compare Sepia: both are reserved, indifferent, worse from consolation; but Sepia has the bearing-down sensation and hormonal changes while Natrum mur has mapped tongue and salt craving. Compare Lachesis: both have aggravation on waking, but Lachesis is loquacious and Natrum mur is taciturn. Farrington's key: 'Natrum muriaticum is one of the profoundest anti-psorics — its sphere of action covers the whole organism.' Distinguishes from Pulsatilla: Puls weeps easily and is comforted by it; Natrum mur weeps easily but is made worse by consolation.",
     relationships: {
       complementary: "Apis, Ignatia, Sepia",
       antidotes: "Arsenic, Phosphorus, Sulphur",
@@ -236,6 +256,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "First stage of fevers. Croup. Acute conjunctivitis. Shock from fright. Palpitations from fear. Neuralgia from cold. Urine retention from fright. Restless insomnia from anxiety.",
     rubrics:
       "MIND — FEAR — death, of; GENERALS — ONSET — sudden; GENERALS — FEVER — dry heat; MIND — RESTLESSNESS — anxious; GENERALS — CAUSATION — fright",
+    farrington:
+      "Farrington's notes: Aconite is purely an acute remedy — no chronic indications. 'If you find yourself prescribing Aconite for weeks, change your remedy.' Compare Belladonna: Aconite in the first stage of inflammation — extreme fear, dry heat, thirst; Bell in the second stage with throbbing and delirium. Compare Coffea: both come from sudden shock/fright but Coffea is more from pleasant excitement; Aconite from fright and cold dry wind. Distinguishes from Ferrum phosphoricum in first stages: Ferrum phos lacks the anxiety and fear of Aconite. Farrington's rule: 'Aconite is suitable to robust, plethoric patients; not to those worn down by disease.' The numbness and tingling with the fear are the triad of Aconite.",
     relationships: {
       complementary: "Sulphur, Coffea",
       antidotes: "Camphor, Coffee, Nux vomica",
@@ -258,6 +280,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Uterine prolapse. Dysmenorrhea. Menopause. Leucorrhea. Hepatic complaints. Constipation. Skin affections — eczema, ringworm. Depression with indifference. Morning sickness in pregnancy.",
     rubrics:
       "FEMALE — BEARING DOWN; MIND — INDIFFERENCE — loved ones; FACE — DISCOLORATION — yellow, saddle; GENERALS — EXERCISE — vigorous, ameliorates; MIND — WEEPING — telling symptoms",
+    farrington:
+      "Farrington compares Sepia extensively with Pulsatilla, Natrum mur, and Lachesis. Sepia: the 'washerwoman's remedy' — worn-out, indifferent, bearing-down sensation. Compare Pulsatilla: both are female remedies; Pulsatilla is emotional and yielding, Sepia is cold and indifferent. Compare Natrum mur: both worse from consolation but Natrum mur is more intellectual; Sepia is more physical and hormonal. Farrington's key: 'Sepia acts on the portal circulation, the uterus, and the skin — the patient looks as if she needed a good wash of yellow-brown complexion.' For menstrual disorders, Sepia vs Sabina: Sepia has the bearing-down; Sabina has bright red hemorrhage with clots. Distinguishes from Helonias: both have uterine exhaustion but Helonias has the peculiar symptom — pain relieved when attention is called to it.",
     relationships: {
       complementary: "Natrum mur",
       antidotes: "Nux vomica",
@@ -280,6 +304,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Recurrent boils and abscesses. Fistulae. Sinusitis. Chronic ear discharge. Bone caries. Keloids. Ingrowing nails. Lack of stamina. Nutritional deficiencies. Expulsion of foreign bodies.",
     rubrics:
       "GENERALS — PERSPIRATION — offensive; RECTUM — CONSTIPATION — recedes, stool; GENERALS — COLD — sensitive to; MIND — CONFIDENCE — lack of self; SKIN — SUPPURATION",
+    farrington:
+      "Farrington places Silica as a deep-acting, slow, chronic remedy. Compare Calcarea carb: both are chilly but Cal-c is fat and flabby; Silica is lean and obstinate. Compare Pulsatilla: Silica is stubborn where Pulsatilla is yielding and weeps easily. Farrington's note: 'Silica is the chronic of Pulsatilla in many cases.' For suppuration: Silica vs Hepar sulph — Hepar is more sensitive to touch and cold air and more acute; Silica works more chronically to absorb or expel foreign bodies. Distinguishes from Phosphorus for nervous system: Phos is warm-blooded with burning; Silica is chilly with excessive sweating of head and feet. 'Give Silica when a patient is losing ground slowly — it acts deeply on nutrition.'",
     relationships: {
       complementary: "Pulsatilla",
       antidotes: "Fluoric acid",
@@ -302,6 +328,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Rheumatism. Sprains and strains. Lumbago. Sciatica. Typhoid. Herpes zoster. Urticaria. Cellulitis. Bell's palsy. Chickenpox.",
     rubrics:
       "GENERALS — MOTION — beginning, agg; GENERALS — MOTION — continued, ameliorates; GENERALS — WEATHER — wet, agg; TONGUE — RED, tip; GENERALS — REST — agg",
+    farrington:
+      "Farrington's central comparison: Rhus tox vs Bryonia — the defining pair. Bryonia: worse any motion; Rhus tox: better from motion (first motion painful, continued motion relieves). Compare Anacardium: both have skin eruptions and restlessness but Anacardium has a unique irresistible impulse and lack of moral sentiment. For rheumatic complaints: Rhus vs Ruta — Rhus is for tendons and muscles; Ruta is specifically for periosteum and cartilage. Farrington notes: 'Rhus tox has a special affinity for the fibrous tissue — tendons, aponeuroses, fasciae.' For typhoid states: Rhus vs Baptisia — both have stupor and offensive discharges; Baptisia has the peculiar delusion of the body being scattered.",
     relationships: {
       complementary: "Bryonia, Calcarea Carb, Phytolacca",
       antidotes: "Apis, Belladonna, Bryonia, Coffea, Croton Tig",
@@ -324,6 +352,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Grief reactions. Hysteria. Conversion disorders. Headache from grief. Insomnia after emotional shock. Hiccough. Globus hystericus. Convulsions in children from fright.",
     rubrics:
       "MIND — GRIEF; MIND — SIGHING; THROAT — LUMP, sensation of; GENERALS — AILMENTS FROM — grief; MIND — MOODS — changeable",
+    farrington:
+      "Farrington notes: Ignatia is the acute grief remedy par excellence. Compare Natrum mur: Ignatia is acute, Natrum mur is chronic. The mother who cannot cry after losing her child needs Natrum mur; the one who weeps convulsively needs Ignatia. Compare Nux vomica: both are hypersensitive; Nux is from overwork/stimulants, Ignatia from grief/disappointment. Farrington's key: 'The contradictory, paradoxical symptoms of Ignatia are its most distinctive feature — sore throat better swallowing solids; hunger satisfied by a small amount; fever better from uncovering.' For spasms: Ignatia vs Hyoscyamus — Ignatia's convulsions are from emotional excitement; Hyoscyamus from toxic stupefaction. The globus hystericus of Ignatia is without parallel.",
     relationships: {
       complementary: "Nat Mur",
       antidotes: "Pulsatilla, Cocculus",
@@ -347,6 +377,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Climacteric complaints. Left-sided sore throat. Hemorrhagic conditions. Jealousy and suspicious states. Varicose veins. Heart complaints. Typhoid with hemorrhage.",
     rubrics:
       "MIND — LOQUACITY; MIND — JEALOUSY; GENERALS — SLEEP — after, agg; GENERALS — CLOTHING — tight, intolerance; GENERALS — SIDE — left",
+    farrington:
+      "Farrington places Lachesis among the snake venoms with Crotalus, Elaps, and Naja. Lachesis: left-sidedness (or right to left), aggravation on waking from sleep, worse tight clothing around throat. Compare Crotalus horridus: more decomposition of blood, more hemorrhagic, jaundice; Lachesis has more frenzy and loquacity. Compare Lycopodium: both have right-to-left or left sidedness; Lycopodium right-to-left; Lachesis more purely left. Farrington's note: 'Lachesis is especially suited to women at the climacteric, to drunkards, and to low fevers with septic tendency.' Distinguishes from Naja: Naja is quieter, has more cardiac symptoms; Lachesis is more violent, jealous, loquacious. For throat: Lachesis vs Mercurius — Merc has more suppuration; Lachesis is worse after sleep.",
     relationships: {
       complementary: "Lycopodium, Hepar Sulph",
       antidotes: "Nux Vomica, Arsenicum, Alcohol",
@@ -369,6 +401,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Syphilitic conditions. Tonsillitis with ulcers. Suppurating glands. Gingivitis. Dysentery. Otitis media. Rheumatism worse at night. Liver complaints.",
     rubrics:
       "MOUTH — SALIVATION; GENERALS — PERSPIRATION — profuse, without relief; GENERALS — NIGHT — agg; MOUTH — ODOR — offensive; GENERALS — DISCHARGES — offensive",
+    farrington:
+      "Farrington's comparative analysis: Mercurius vs Hepar sulph vs Silicea in suppurative conditions. Merc: acts on all mucous membranes; profuse sweating that does not relieve; salivation; trembling. Hepar sulph: more sensitive to cold air — CATCHES cold from slightest draught; more splinter-like pains. Silica: chronic suppurations; slow; absorbs or expels. Compare Nitric acid: both affect mucous membrane-skin junctions (anus, lips, nostrils) but Nitric acid has more splinter-like, sticking pains. Farrington's key: 'Mercury affects the periosteum and the glands — caries of bone and glandular enlargement are its two great keynotes.' The aggravation at night and in the warmth of bed distinguishes Merc from Hepar (which is aggravated in cold).",
     relationships: {
       complementary: "Hepar Sulph, Silicea, Belladonna",
       antidotes: "Hepar Sulph, Lachesis, Sulphur, Aurum",
@@ -391,6 +425,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Suppurative conditions — boils, abscesses, carbuncles. Croup. Tonsillitis with abscess. Otitis media with discharge. Sinusitis. Skin ulcers. Corneal ulcers.",
     rubrics:
       "GENERALS — COLD — sensitive to; SKIN — SUPPURATION; THROAT — PAIN — splinter, as from; MIND — IRRITABILITY — extreme; GENERALS — DISCHARGES — sour",
+    farrington:
+      "Farrington compares Hepar sulph with Mercurius and Silica in suppurative states. Hepar: the most sensitive — slightest cold air, touch, or draught aggravates; wants to be wrapped warmly. Compare Mercurius: both affect glands and mucous membranes; but Merc has more night aggravation and salivation; Hepar has more sensitivity to cold and more splinter-like pains. Compare Silica: Hepar is more acute; Silica is more chronic and milder. Farrington's note: 'Low potencies of Hepar promote suppuration; high potencies abort it — a practical consideration for the prescriber.' For croup: Hepar vs Spongia — Spongia has hard, dry, croupy cough without rattling; Hepar has rattling loose cough with easy expectoration.",
     relationships: {
       complementary: "Silicea, Calendula",
       antidotes: "Belladonna, Chamomilla, Silica",
@@ -413,6 +449,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Teething complaints. Infantile colic. Earache in children. Dysmenorrhea with unbearable pain. Neuralgic pains. Toothache. Insomnia from pain or irritability.",
     rubrics:
       "MIND — IRRITABILITY; MIND — CARRIED, desires to be; FACE — DISCOLORATION — one-sided; PAIN — UNBEARABLE; GENERALS — ANGER — ailments from",
+    farrington:
+      "Farrington places Chamomilla in its trio with Coffea and Nux vomica for hypersensitivity. Chamomilla: irritable, peevish, cannot bear pain — pain drives to despair. Compare Coffea: oversensitive to pain; Coffea from happy excitement; Chamomilla from anguish. Compare Pulsatilla in children: Pulsatilla child is gentle, tearful, desires company; Chamomilla child demands to be carried and is cross — throws things away that were asked for. Farrington's key: 'Chamomilla is the remedy where mental irritability reaches its zenith — the one great keynote is that the child is better when carried.' For toothache: Chamomilla vs Mercurius — Merc toothache worse at night; Chamomilla toothache driven to frenzy, better by warmth.",
     relationships: {
       complementary: "Belladonna, Magnesia Phos",
       antidotes: "Nux Vomica, Pulsatilla, Aconite",
@@ -435,6 +473,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Influenza. Anticipatory anxiety. Stage fright. Examination anxiety. Cervical spondylosis. Neurological weakness. Ptosis. Headache at occiput.",
     rubrics:
       "MIND — ANTICIPATION; EYES — HEAVINESS — lids; GENERALS — WEAKNESS — paralytic; MIND — FEAR — appearing in public; GENERALS — INFLUENZA",
+    farrington:
+      "Farrington's notes: Gelsemium is the leading remedy for nervous debility and functional paralysis. Compare Baptisia: both produce stupor and dullness but Baptisia has more septic tendency and offensive odor; Gelsemium has more paresis and trembling. Compare Ignatia: both have nervous symptoms from emotional excitement; Ignatia is hysterical, paradoxical; Gelsemium is paralytic and drooping. Farrington's key: 'The three D's of Gelsemium — Dullness, Dizziness, Drowsiness — are its most characteristic indications.' For anticipatory anxiety: Gelsemium vs Argentum nitricum — Arg-n has more palpitation, hurry, and desire for sweets; Gelsemium has more trembling and diarrhea from nervousness. In influenza, Gelsemium is the most important remedy.",
     relationships: {
       complementary: "Baptisia, Ipecac",
       antidotes: "Coffea, Digitalis, Nux Vomica",
@@ -457,6 +497,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Asthma. Pleurisy. Lumbago. Cardiac affections. Post-partum weakness. Constipation. Anemia. Cough worse 3 AM.",
     rubrics:
       "GENERALS — NIGHT — 3 AM agg; CHEST — PAIN — stitching; BACK — WEAKNESS; EYE — SWELLING — upper lid; STOMACH — ANXIETY, sensation",
+    farrington:
+      "Farrington places Kali carb as one of the deepest-acting constitutional remedies. Compare Arsenicum: both are chilly, anxious, precise, and sensitive; but Kali carb has the unique 3 AM aggravation and bag-like swelling between upper eyelid and brow. Compare Natrum mur: both are reserved and precise; Natrum mur is more refined; Kali carb is more dogmatic and rule-bound. Farrington's key: 'Kali carb patients are very particular, obstinate — they want everything done by rule.' The stitching pains in the chest worse from motion and pressure are characteristic (compare Bryonia — but Kali carb's pains are not relieved by firm pressure). For lung affections with emphysema, Kali carb is unsurpassed.",
     relationships: {
       complementary: "Arsenicum, Carbo Veg, Phosphorus",
       antidotes: "Camphor, Coffea",
@@ -479,6 +521,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Facial paralysis. Vocal cord paralysis (hoarseness). Enuresis. Warts. Rheumatism with contractures. Ptosis. Chronic cystitis.",
     rubrics:
       "GENERALS — PARALYSIS; GENERALS — WEATHER — wet, ameliorates; BLADDER — URINATION — involuntary — coughing; GENERALS — SYMPATHETIC; SKIN — WARTS",
+    farrington:
+      "Farrington notes: Causticum is one of Hahnemann's own preparations — not found in nature. Compare Rhus tox: both improve in warm wet weather (unique among most remedies that aggravate in damp); both have paretic symptoms. Distinguishes from Gelsemium: Causticum's paralysis comes from sustained grief, long-lasting disease; Gelsemium from sudden nerve shock. Compare Arsenicum: both are chilly and restless; Causticum has more paralysis and political/moral intensity; Arsenicum has midnight restlessness. Farrington's key: 'Causticum is pre-eminently a remedy for the effects of burns — fresh burns that blister, with pain and rawness.' The sympathetic nature of Causticum ('cannot bear injustice, weeps over others' sorrow') is a guiding mental.",
     relationships: {
       complementary: "Carbo Veg, Petroseline",
       antidotes: "Nux Vomica, Coffea, Paralysis",
@@ -501,6 +545,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Collapse states. Post-operative weakness. Chronic bronchitis with rattling. Passive hemorrhage. Varicose veins. Flatulent dyspepsia. Venous stasis.",
     rubrics:
       "GENERALS — COLLAPSE; CHEST — RESPIRATION — desire for fanning; ABDOMEN — FLATULENCE; GENERALS — COLD — body, with desire for cool air; HEMORRHAGE — dark, passive",
+    farrington:
+      "Farrington's comparative notes: Carbo veg is the 'corpse reviver.' Compare Arsenicum: both have weakness and cold but Arsenicum is restless; Carbo veg is sluggish and prostrated. Compare China: both have debility after loss of vital fluids; China is more nervous, sensitive to touch; Carbo veg is more venous, dusky, needs air but is cold. Farrington's key: 'Carbo veg is suited to patients who have never recovered from the effects of exhausting disease — they become sluggish, cold, and cyanotic.' The characteristic craving for fanning — wants air yet is cold to touch — is diagnostic. Distinguishes from Antimonium tartaricum: Ant-t has more rattling and drowsiness; Carbo veg has more coldness and need for air.",
     relationships: {
       complementary: "Arsenicum, Kali Carb, Phosphorus",
       antidotes: "Camphor, Coffea, Lachesis, Nux Vomica",
@@ -523,6 +569,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Intestinal worms. Convulsions from worms. Bruxism. Itching at anus. Irritable children. Bed-wetting with worms.",
     rubrics:
       "GENERALS — WORMS; MIND — IRRITABILITY — touch, from; NOSE — BORING; SLEEP — GRINDING — teeth; FACE — DISCOLORATION — pale with dark circles",
+    farrington:
+      "Farrington notes: Cina is the primary remedy for worm affections in children. Compare Spigelia for worm symptoms: Spigelia has more neuralgic pains; Cina has more reflex irritation of the nervous system. Compare Chamomilla: both produce irritable, cross children; Chamomilla is pacified by carrying; Cina is more grinding of teeth, boring at nose, and touchy (cannot be touched or approached). Farrington's key: 'The Cina child wants things and then throws them away — similar to Chamomilla, but Cina has the grinding of teeth and the characteristic abdominal symptoms.' Distinguishes from Calcarea in the worm patient: Calcarea's child is slow; Cina's is irritable and active.",
     relationships: {
       complementary: "Calcarea Carb, Spigelia",
       antidotes: "Camphor, Nux Vomica",
@@ -545,6 +593,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Bronchitis with rattling. Pneumonia (last stage). Asthma. Chickenpox. Whooping cough. Nausea and vomiting.",
     rubrics:
       "CHEST — RATTLING — mucus; GENERALS — DROWSINESS; FACE — SWEAT — cold; GENERALS — LYING — agg; NAUSEA",
+    farrington:
+      "Farrington compares Ant-t with Ipecac, Lobelia, and Carbo veg for respiratory symptoms. Ant-t: rattling of mucus in bronchi which cannot be expelled — the mucus drowns the patient. Compare Ipecac: Ipecac has constant nausea and nausea unrelieved by vomiting; Ant-t has drowsiness with the rattling. Compare Lobelia: Lobelia has nausea with feeling of lump in throat; Ant-t is more stuporous. Farrington's key: 'Antimonium tartaricum is the remedy for the last stage of pneumonia when the patient is too weak to expectorate — the chest fills with mucus.' For babies with capillary bronchitis: Ant-t when the child rattles and drowses, with little or no fever. The white-coated tongue is characteristic.",
     relationships: {
       complementary: "Ipecac, Sulphur",
       antidotes: "Nux Vomica",
@@ -567,6 +617,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Recurrent respiratory infections. Chronic cough. Glandular affections. Emaciation. ADHD-like restlessness. Allergic disorders. Headache in school children.",
     rubrics:
       "MIND — TRAVEL — desire for; MIND — DISCONTENTED; GENERALS — EMACIATION — eating well despite; GENERALS — AIR — open, desire for; GENERALS — TUBERCULOSIS — history of",
+    farrington:
+      "Farrington notes: Tuberculinum (and related nosodes) represent the tubercular diathesis. Compare Phosphorus: both are tall, slender, sensitive; Phos has burning; Tub has more rapid emaciation and hereditary tendency. Compare Drosera: both have spasmodic cough; Drosera is more specific for whooping cough; Tub is constitutional. Farrington's principle: 'When a well-selected remedy fails to act in a case of phthisis, think of Tuberculinum as an intercurrent.' Compare Calcarea carb: Tub patient was often a Calcarea child who failed to develop; has the same sweating head but adds emaciation and cough. For recurrent cold-taking: Tub when the patient takes cold easily and never seems to recover fully — the chronic cold-catcher.",
     relationships: {
       complementary: "Psorinum, Sulphur, Calcarea Carb",
       antidotes: "Belladonna",
@@ -589,6 +641,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Sycotic conditions. Asthma better at seashore. Warts. Rheumatism. ADHD in children. Pelvic inflammatory disease. Memory weakness.",
     rubrics:
       "GENERALS — SEASHORE — ameliorates; MIND — HURRY; MIND — FORGETFUL — words, for; GENERALS — NIGHT — ameliorates; GENERALS — SYCOSIS",
+    farrington:
+      "Farrington places Medorrhinum as the chief sycotic nosode. Compare Thuja: both cover the sycotic miasm; Thuja is more warty, fixed, secretive; Medorrhinum is more intense, restless, anxious. Farrington's note: 'The Medorrhinum patient lives in the past — a great characteristic; Thuja lives in fear.' Compare Natrum sulph: both cover sycotic manifestations; Natrum sulph is more liver-predominant; Medorrhinum more genetic depth. For asthma with sycotic history: Medorrhinum when history of gonorrhea or family history of such complaints. The wild, extreme nature — extremes of sensation, worse just before dawn, better at sea — are Medorrhinum's hallmarks.",
     relationships: {
       complementary: "Thuja, Nat Sulph",
       antidotes: "Nux Vomica, Thuja",
@@ -611,6 +665,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Syphilitic conditions. Bone pain at night. Destructive ulcers. Chronic alcoholism. Alopecia. Nocturnal epilepsy. Hopeless depression.",
     rubrics:
       "GENERALS — NIGHT — agg dramatically; BONES — PAIN — night; MIND — HOPELESSNESS; GENERALS — ULCERS — destructive; GENERALS — SYPHILIS — history",
+    farrington:
+      "Farrington notes: Syphilinum (Luesinum) covers the syphilitic miasm in depth. Compare Mercurius: both cover syphilis; Merc covers the secondary stage; Syphilinum reaches the hereditary, tertiary, and deep constitutional effects. Compare Nitric acid: both have ulcers with offensive discharges; but Nitric acid is for acquired cases; Syphilinum for hereditary syphilitic constitutions. Farrington's principle: 'Syphilinum should be thought of when the syphilitic miasm is deep in the constitution — not for active syphilis but for its hereditary taint.' The aggravation at night (2-4 AM specifically) and the amelioration by the warmth of the sea are distinctive. For destructive bone disease not responding to Mercurius, Syphilinum acts deeper.",
     relationships: {
       complementary: "Merc Sol, Aurum Met",
       antidotes: "Nux Vomica, Hepar Sulph",
@@ -633,6 +689,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Warts. Condylomata. Post-vaccination ailments. Gonorrheal sequelae. Polyps. Nail deformity. Fixed ideas. Sycotic chronic complaints.",
     rubrics:
       "SKIN — WARTS; MIND — DELUSION — body fragile; GENERALS — VACCINATION — ailments from; GENERALS — PERSPIRATION — oily; GENERALS — NIGHT — 3 AM agg",
+    farrington:
+      "Farrington places Thuja as the chief anti-sycotic remedy. Compare Medorrhinum: Thuja is chronic and slow in its action; Medorrhinum is more acute and intense. Compare Natrum sulph: both cover sycosis; Natrum sulph has more liver involvement and worse in damp weather; Thuja has more wart and condylomata tendency. Compare Silica: both are obstinate; Thuja has a peculiar fixed idea (cannot concentrate, believes his body is fragile like glass); Silica lacks this fantasy. Farrington's key: 'Thuja is the remedy for the effects of vaccination, of gonorrhea suppressed by injection, and for all forms of warts and condylomata.' The oily skin, the sensation of a living thing in abdomen, and the left-sided headaches are Thuja hallmarks.",
     relationships: {
       complementary: "Medorrhinum, Sabina, Nat Sulph",
       antidotes: "Camphor, Pulsatilla, Mercurius",
@@ -655,6 +713,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Anal fissures and fistulae. Warts. Ulcers of throat. Hemorrhoids. Condylomata. Chronic catarrhal conditions. Cracks at corners of mouth.",
     rubrics:
       "GENERALS — PAIN — splinter, as from; GENERALS — DISCHARGES — offensive, excoriating; RECTUM — FISSURE; MIND — VINDICTIVE; SKIN — WARTS — bleeding",
+    farrington:
+      "Farrington compares Nitric acid with Mercurius and Hepar sulph in affections of mucous membranes. Nitric acid: splinter-like pains at junction of mucous membrane and skin — corners of mouth, anus, nasal margins. Compare Merc: both affect these junctions but Merc has more salivation, sweating; Nitric acid has more offensive urine (horse-urine odor), splinter sensations, irritability. Compare Syphilinum: both cover syphilitic diathesis; Nitric acid for acquired manifestations; Syphilinum for hereditary. Farrington's key: 'The urine of Nitric acid is offensive like horse urine — this one symptom often leads to the prescription.' Thin persons who take cold easily and have cracks at the mucocutaneous junctions are the Nitric acid type.",
     relationships: {
       complementary: "Calcarea Carb, Arsenicum",
       antidotes: "Hepar Sulph, Milk",
@@ -677,6 +737,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Violent delirium. Convulsions. Hydrophobia. Night terrors in children. Meningitis with delirium. Mania. Stammering.",
     rubrics:
       "MIND — FEAR — dark; MIND — VIOLENCE; MIND — DELIRIUM — religious; MIND — FEAR — water; GENERALS — CONVULSIONS",
+    farrington:
+      "Farrington notes: Stramonium is the most violent of the solanaceous trio. Compare Belladonna: Bell is acute, sudden, subsides quickly; Stramonium is more persistent violence with religious and terror-filled delirium. Compare Hyoscyamus: Stramonium is more violent; Hyoscyamus is more obscene, jealous, low-grade. Farrington's key: 'Stramonium sees ghosts, frightful visions, and speaks with imaginary persons — the religious mania of Stramonium (prayers, songs, curses alternating) is characteristic.' For convulsions: Stramonium vs Belladonna — Stramonium convulsions are clonic, with turning of head; Bell convulsions are more tonic. Distinguishes from Cuprum in spasms: Cuprum has more violent, cramping type beginning in fingers and toes.",
     relationships: {
       complementary: "Belladonna, Hyoscyamus",
       antidotes: "Nux Vomica, Tabacum, Camphor",
@@ -699,6 +761,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Jealous mania. Delirium. Convulsions from jealousy or fright. Insomnia. Hiccough. Low typhoid states with muttering. Obscene behavior in mental disease.",
     rubrics:
       "MIND — JEALOUSY; MIND — LOQUACITY; MIND — OBSCENE; EXTREMITIES — TWITCHING; SLEEP — SLEEPLESSNESS — jealousy",
+    farrington:
+      "Farrington places Hyoscyamus in the solanaceous trio as the most 'low-grade' delirium. Compare Belladonna: Bell is more acute and violent; Hyoscyamus is slower, muttering, obscene, jealous. Compare Stramonium: Stram is more terror and religious; Hyoscyamus is more suspicious, jealous, lascivious, and exposes genitals. Farrington's key: 'Hyoscyamus is the remedy for low-grade typhoid states where the patient mutters, picks at the bedclothes, and has subsultus tendinum.' For jealousy: Hyoscyamus vs Lachesis — Lachesis jealousy is from sexual passion; Hyoscyamus jealousy is more of a childlike, neurotic nature. The patient who fears being poisoned by his family is characteristic Hyoscyamus.",
     relationships: {
       complementary: "Belladonna, Stramonium",
       antidotes: "Camphor, Nux Vomica, Coffea",
@@ -721,6 +785,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Cholera. Collapse states. Gastroenteritis with prostration. Religious mania. Hysteria. Whooping cough with vomiting. Menstrual colic.",
     rubrics:
       "GENERALS — COLLAPSE; HEAD — PERSPIRATION — cold; MIND — DELUSION — greatness; GENERALS — COLD — body; VOMITING — purging, with",
+    farrington:
+      "Farrington notes: Veratrum album competes with Arsenicum and Cuprum in collapse and convulsive states. Veratrum: COLD perspiration on forehead with collapse, vomiting, diarrhea — the hallmark triad. Compare Arsenicum: both have cold sweat and anxiety; Arsenicum is more restless; Veratrum is more collapsed. Compare Cuprum: both have cramps; Cuprum has more violent cramps; Veratrum has more profuse cold sweat and rice-water stools. Farrington's key: 'Veratrum album is indicated in Asiatic cholera when the patient is cold, collapsed, with cold sweat on the forehead.' Distinguishes from Camphor: Camphor is the very earliest stage before stools appear; Veratrum when rice-water stools with prostration are established.",
     relationships: {
       complementary: "Arsenicum, Carbo Veg",
       antidotes: "Camphor, China, Digitalis",
@@ -743,6 +809,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Urticaria. Angioedema. Nephritis with edema. Right ovarian cysts. Acute tonsillitis with edema. Meningitis with edema. Bee sting reactions.",
     rubrics:
       "GENERALS — EDEMA; GENERALS — PAIN — stinging; GENERALS — THIRST — thirstlessness; GENERALS — HEAT — agg; GENERALS — COLD — ameliorates",
+    farrington:
+      "Farrington's notes: Apis is one of the most important remedies for inflammatory edema. Compare Belladonna: both have red, shiny, hot inflammations — but Apis has the characteristic waxy, glistening edema; Bell has more dryness. Compare Rhus tox: both have skin vesicles; Rhus tox is better by warmth; Apis is worse by warmth and better by cold applications. Farrington's key: 'The stinging, burning pains of Apis — like bee stings — better from cold applications, combined with edema, is its defining picture.' Distinguishes from Arsenicum: Apis has no thirst (with all its inflammation); Arsenicum has great thirst. For urinary suppression: Apis when there is scanty urine with dropsy and the absence of thirst is striking.",
     relationships: {
       complementary: "Nat Mur, Baryta Carb",
       antidotes: "Arsenicum, Carbo Veg, Lachesis, Ledum, Rhus Tox",
@@ -765,6 +833,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Anticipatory anxiety. Stage fright. Pre-examination diarrhea. Ophthalmia neonatorum. Gastric ulcer. Phobia of heights. Impulsive disorders.",
     rubrics:
       "MIND — ANTICIPATION; MIND — IMPULSIVE; MIND — FEAR — high places; STOMACH — DESIRES — sweets; RECTUM — DIARRHEA — anticipation",
+    farrington:
+      "Farrington compares Argentum nitricum with Lycopodium and Gelsemium for anticipatory anxiety. Arg-n: hurried, anxious, craves sweets and sugar (which AGGRAVATE), warm-blooded. Compare Lycopodium: both have anticipatory dread and flatulence; Lycopodium is chilly; Arg-n is warm and desires cold air. Compare Gelsemium: Gelsemium trembles and becomes paralytic; Arg-n hurries and has palpitation. Farrington's key: 'Argentum nitricum is suited to the impulsive, hurried person who does everything in a hurry — walks fast, talks fast, eats fast.' For gastric ulcers: Arg-n has violent burning with splinter-sensation (compare Nitric acid). The specific aggravation from sugar despite craving is characteristic of Arg-n.",
     relationships: {
       complementary: "Gelsemium, Lycopodium",
       antidotes: "Arsenicum, Nat Mur, Pulsatilla",
@@ -787,6 +857,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Delayed development. Enlarged tonsils. Recurrent tonsillitis. Premature senility. Hypertension. Cerebral arteriosclerosis. Bashfulness.",
     rubrics:
       "MIND — BASHFUL; MIND — DEVELOPMENT — arrested; THROAT — TONSILS — enlarged; GENERALS — COLD — sensitive to; GENERALS — SENILITY — premature",
+    farrington:
+      "Farrington places Baryta carb as the remedy for the 'dwarfed in mind and body' patient. Compare Calcarea carb: both are slow, fat children but Cal-c has more sweating head and learning difficulties; Bar-c is more dwarfed, senile, and shy. Compare Lycopodium: both are cowardly; but Lycopodium develops intellectually (brain over brawn); Bar-c does not develop at all. Farrington's key: 'Baryta carbonica is the remedy for premature senility, for old age coming prematurely — and for children who are dwarfed and childish even at later age.' Distinguishes from Anacardium: both are slow in thinking; Anacardium has more irresistible impulses. For enlarged tonsils with frequent quinsy: Baryta carb vs Mercurius — Merc has more suppuration; Bar-c has recurring tonsil problems without full suppuration.",
     relationships: {
       complementary: "Dulcamara, Silicea",
       antidotes: "Camphor",
@@ -809,6 +881,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Anemia from hemorrhage. Malaria. Post-diarrheal weakness. Convalescence. Flatulent dyspepsia. Neuralgia. Tinnitus.",
     rubrics:
       "GENERALS — DEBILITY — fluids, loss of; GENERALS — PERIODICITY; ABDOMEN — FLATULENCE — not relieved; GENERALS — TOUCH — light, agg; GENERALS — PRESSURE — hard, ameliorates",
+    farrington:
+      "Farrington's notes: China (Cinchona) was Hahnemann's proving that launched homeopathy. Compare Arsenicum: both have debility and periodic fevers; China's debility is specifically from loss of vital fluids (blood, semen, milk, sweat); Arsenicum's is from sepsis and toxemia. Compare Carbo veg: both follow great loss of fluids; Carbo veg is more venous/cyanotic; China is more intermittent and periodical. Farrington's key: 'China is suited to all conditions following loss of vital fluids — the patient is sensitive, nervous, and complains of exaggerated debility after even trifling exertion.' The periodicity of China (every other day, or exact same hour) and the aversion to tight clothing around the abdomen are characteristic.",
     relationships: {
       complementary: "Arsenicum, Carbo Veg, Ferrum",
       antidotes: "Arsenicum, Nat Mur, Nux Vomica",
@@ -831,6 +905,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Eczema with sticky discharge. Fissures at anus, lips, nipples. Keloids. Nail deformity. Obesity. Irregular menses. Otitis media with sticky discharge.",
     rubrics:
       "SKIN — ERUPTIONS — moist, sticky; GENERALS — FISSURES; GENERALS — OBESITY; MIND — WEEPING — music, at; GENERALS — COLD — sensitive to",
+    farrington:
+      "Farrington compares Graphites with Calcarea, Sulphur, and Petroleum for skin conditions. Graphites: eruptions that ooze a thick, honey-like, glutinous fluid — especially in folds of skin. Compare Petroleum: both have skin conditions in folds; Petroleum has more cracking and rawness; Graphites has more oozing of golden fluid. Compare Calcarea: both are fat, chilly, and slow; Graphites has more skin manifestations; Calcarea has more bone and glandular. Farrington's key: 'Graphites is pre-eminently a remedy for the flabby, chilly, constipated patient who oozes a sticky fluid from skin eruptions in the bends of joints.' Distinguishes from Sulphur: Sulphur's eruptions are dry, burning; Graphites eruptions weep a thick, golden discharge.",
     relationships: {
       complementary: "Causticum, Hepar Sulph, Lycopodium",
       antidotes: "Arsenicum, Nux Vomica",
@@ -853,6 +929,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Thyroid disorders. Goiter. Membranous croup. Rapidly progressive pneumonia. Emaciation with appetite. Glandular affections. Diabetes.",
     rubrics:
       "GENERALS — EMACIATION — appetite, with good; MIND — ANXIETY — motion, compelling; GENERALS — HEAT — warm room, agg; GENERALS — GLANDS — hypertrophy; GENERALS — COLD — ameliorates",
+    farrington:
+      "Farrington notes: Iodine is the 'emaciation remedy' — eats well yet emaciates. Compare Arsenicum: both are restless and thin; Arsenicum is worse at midnight; Iodium is worse when quiet and must keep moving. Compare Natrum mur: both are thin and have heat aggravation; but Natrum mur has the salt craving and grief; Iodium has the peculiar ravenous hunger with emaciation. Farrington's key: 'Iodium is suited to the scrofulous type — lean, dark complexion, enlarged glands — the patient who must keep in constant motion.' For goitre and thyroid: Iodium vs Spongia — both affect the thyroid; Spongia has more heart involvement and anxiety; Iodium has more emaciation. The relief from eating (temporarily) despite emaciation is characteristic.",
     relationships: {
       complementary: "Lycopodium, Spongia",
       antidotes: "Arsenicum, Phosphorus, Sulphur",
@@ -875,6 +953,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Sinusitis. Gastric ulcer. Croup. Laryngitis. Corneal ulcers. Hepatitis. Geographic tongue. Nasal polyps.",
     rubrics:
       "NOSE — DISCHARGE — ropy, stringy; GENERALS — PAIN — small spot, in; GENERALS — ULCERS — punched out; GENERALS — COLD — agg; GENERALS — MUCUS — stringy",
+    farrington:
+      "Farrington places Kali bich as the leading remedy for catarrhal discharges. Compare Pulsatilla: Pulsatilla has bland, thick, yellow-green discharges; Kali bich has tenacious, stringy, ropy mucus that can be drawn into long strings. Compare Hydrastis: Hydrastis has thick, yellowish discharges; Kali bich is more specifically ropy and stringy. Farrington's key: 'The stringy, tenacious discharges of Kali bich — drawn into strings — combined with deep, punched-out ulcers are its two great characteristics.' For migraine: Kali bich when headache begins at the side of the head with 'halos' or 'lights' and is preceded by visual disturbance — the headache begins as the visual symptoms vanish. Sinusitis with loss of smell responds well to Kali bich.",
     relationships: {
       complementary: "Arsenicum, Cinnabaris",
       antidotes: "Arsenicum, Lachesis",
@@ -897,6 +977,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Neuralgic pains. Infantile colic. Dysmenorrhea. Writer's cramp. Facial neuralgia. Hiccough. Teething pains.",
     rubrics:
       "GENERALS — PAIN — cramping, spasmodic; GENERALS — WARMTH — ameliorates; GENERALS — PRESSURE — ameliorates; GENERALS — COLD — agg; ABDOMEN — COLIC — bending double",
+    farrington:
+      "Farrington notes: Magnesia phos is the 'anti-spasmodic' par excellence. Compare Colocynthis: both have violent cramps better from pressure and heat; Colocynthis has more embittered mental state (from indignation); Magnesia phos is more purely functional and spasmodic. Compare Dioscorea: Dioscorea's cramps are better from standing erect; Magnesia phos is specifically better from warmth and pressure. Farrington's key: 'Magnesia phosphorica is suited to nervous, exhausted patients who have lightning-like, cramping pains that are better from warmth, pressure, and bending double.' Distinguishes from Belladonna in spasm: Bell's cramps are hot and throbbing; Mag phos are purely cramping without heat. An important remedy for writer's cramp and painful cramps in professional musicians.",
     relationships: {
       complementary: "Colocynth, Kali Phos",
       antidotes: "Nux Vomica, Belladonna",
@@ -919,6 +1001,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Left-sided neuralgia. Cardiac pain. Ciliary neuralgia. Trigeminal neuralgia left side. Palpitations. Worm complaints in children. Keratitis.",
     rubrics:
       "HEAD — PAIN — left side; HEART — PAIN — stitching; GENERALS — SIDE — left; MIND — FEAR — pointed things; GENERALS — MOTION — agg",
+    farrington:
+      "Farrington notes: Spigelia is one of the most important heart and worm remedies. Compare Cactus grandiflorus: both have cardiac pain; Cactus has more constriction — 'iron band around the chest'; Spigelia has sharp, radiating pain to left arm and down. Compare Arsenicum: both have heart pains; Arsenicum is more restless with anxiety; Spigelia has more sharp stitching pain with trembling of heart. Farrington's key: 'Spigelia is the principal remedy for left-sided neuralgia and for pericarditis — the pain is lancinating, going from the heart to the left arm.' For ophthalmia: Spigelia is for sharp, neuralgic eye pain radiating into the head; worse from motion. Distinguishes from Ranunculus bulbosus: both have intercostal neuralgia; Ranunculus is more specifically left-sided intercostal (shingles area).",
     relationships: {
       complementary: "Cactus, Digitalis",
       antidotes: "Camphor, Nux Vomica",
@@ -941,6 +1025,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Honeymoon cystitis. Recurrent styes. Prostatitis. Post-surgical pain and urinary complaints. Indignation ailments. Teeth complaints. Sexual neurasthenia.",
     rubrics:
       "MIND — AILMENTS FROM — indignation; MIND — ANGER — suppressed; BLADDER — URINATION — difficult — coition, after; EYE — STYES; MIND — SENSITIVE — emotions",
+    farrington:
+      "Farrington places Staphysagria as the 'wounded dignity' remedy. Compare Colocynthis: both have indignation as causation; Colocynthis results in sudden, violent colic; Staphysagria in suppressed anger that produces chronic ailments — the ailments from indignation that cannot be expressed. Compare Ignatia: both have ailments from grief; Ignatia is more acute; Staphysagria is more chronic, with sexual symptoms. Farrington's key: 'Staphysagria is suited to mild, gentle natures who are easily hurt in their dignity — they swallow their anger and keep up appearances.' For urinary complaints: Staphysagria for cystitis after surgery, catheterization (mechanical injury to urethra), or honeymoon cystitis. Tooth affections with soft, spongy, crumbling teeth are characteristic.",
     relationships: {
       complementary: "Colocynth, Causticum",
       antidotes: "Camphor, Nux Vomica",
@@ -963,6 +1049,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Trauma, sprains, bruises, contusions. Post-surgical recovery. Concussion. Hemorrhage (dark blood). Rheumatism from overuse. Epistaxis. Apoplexy. Sports injuries.",
     rubrics:
       "GENERALS — INJURIES — bruises; MIND — WELL — says he is; GENERALS — BED — hard, feels too; GENERALS — TOUCH — agg; GENERALS — OVEREXERTION — agg",
+    farrington:
+      "Farrington notes: Arnica is the first remedy to think of after mechanical injury. Compare Rhus tox: both help with soreness and bruised feeling; Arnica is for fresh trauma and ecchymosis; Rhus tox is for sprained tendons and ligaments that improve with gentle continued motion. Compare Ruta: Ruta is for periosteum and cartilage injuries; Arnica is for the bruised, sore muscle. Farrington's key: 'Arnica is the remedy when everything the patient lies on feels too hard — the peculiar soreness as if bruised, with the characteristic mental symptom of saying I am all right, I need no doctor.' Distinguishes from Hypericum: Hypericum is for nerve-rich injuries (fingers, toes, spine); Arnica for general traumatic soreness.",
     relationships: {
       complementary: "Aconite",
       antidotes: "Camphor",
@@ -985,6 +1073,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Typhoid fever. Septicemia. Influenza with prostration. Putrid sore throat. Gastric fever. Offensive ulcers. Bed sores.",
     rubrics:
       "MIND — CONFUSION — identity; GENERALS — OFFENSIVENESS; THROAT — SWALLOWING — solids difficult; GENERALS — PROSTRATION; FEVER — TYPHOID",
+    farrington:
+      "Farrington places Baptisia in typhoid and septic states. Compare Gelsemium: both produce stupor and dullness; Gelsemium has paresis and trembling; Baptisia has more putrid, septic, offensive character — everything is offensive. Compare Rhus tox: both have restlessness and body soreness in typhoid; Rhus tox is more musculoskeletal; Baptisia has the unique delusion — patient thinks his body is scattered about the bed and tries to collect the pieces. Farrington's key: 'Baptisia is suited to low typhoid states where the patient has a stupid, besotted expression, and where all discharges are terribly offensive.' The rapid onset of prostration and the peculiar mental state (feels he is two persons) are characteristic.",
     relationships: {
       complementary: "Gelsemium, Arsenicum",
       antidotes: "Nux vomica",
@@ -1007,6 +1097,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Intestinal colic. Irritable bowel syndrome. Left-sided sciatica. Ovarian cyst (left). Diarrhea from anger. Neuralgic headaches. Renal colic.",
     rubrics:
       "ABDOMEN — PAIN — pressure, better; ABDOMEN — PAIN — bending double, better; MIND — AILMENTS FROM — anger; EXTREMITIES — SCIATIC NERVE — left",
+    farrington:
+      "Farrington's analysis: Colocynthis is the great remedy for colic from suppressed anger. Compare Magnesia phos: both have violent cramps better from heat and doubling up; Colocynthis has a definite emotional causation (indignation, humiliation); Mag phos is more mechanical. Compare Chamomilla: both are worse from anger; Chamomilla child is irritable and demands; Colocynthis adult has suppressed anger. Farrington's key: 'Colocynthis should be thought of whenever the patient says the colic comes on after anger or chagrin — the emotional causation is the key.' Distinguishes from Dioscorea: Dioscorea's colic is better from straightening up; Colocynthis is better by bending double. For sciatica: Colocynthis when the pain is better from firm pressure and warmth.",
     relationships: {
       complementary: "Mag Phos, Causticum",
       antidotes: "Coffea, Chamomilla",
@@ -1029,6 +1121,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Whooping cough. Spasmodic cough. Laryngeal phthisis. Tuberculosis. Growing pains in children. Night cough. Bronchitis.",
     rubrics:
       "COUGH — WHOOPING; COUGH — NIGHT — midnight, after; COUGH — PAROXYSMAL; LARYNX — PHTHISIS; GENERALS — TUBERCULAR DIATHESIS",
+    farrington:
+      "Farrington notes: Drosera is one of the most important remedies for spasmodic cough. Compare Pertussinum (nosode): Drosera is the acute remedy of choice for whooping cough with the violent spasmodic nature. Compare Coccus cacti: both have violent paroxysmal cough with vomiting of mucus; Coccus cacti is worse in warm room and from drinking; Drosera is worse after midnight and on lying down. Farrington's key: 'Drosera is pre-eminently the remedy for whooping cough — deep, hollow, barking cough, following one another rapidly, so that the patient cannot get breath, worse after midnight.' For laryngeal tuberculosis: Drosera has a special affinity. Distinguishes from Spongia: Spongia has more dry, barking cough; Drosera has more spasmodic, whooping character.",
     relationships: {
       complementary: "Tuberculinum, Nux Vomica",
       antidotes: "Camphor",
@@ -1051,6 +1145,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Influenza. Malaria with bone pains. Dengue fever. Bilious fever. Hepatitis. Coughs with bone pain. Rheumatic conditions.",
     rubrics:
       "GENERALS — BONES — pain, as if broken; CHILL — THIRST — chill, during; STOMACH — NAUSEA — violent; FEVER — CHILL — 7–9 AM",
+    farrington:
+      "Farrington places Eupatorium in the acute febrile diseases, particularly influenza and dengue-like fever. Compare Gelsemium: both for influenza; Gelsemium has prostration, trembling, drooping; Eupatorium has more intense bone pain — 'breakbone fever.' Compare Arsenicum: both have periodicity; Eupatorium has specifically the intense pain in bones as if they would break. Farrington's key: 'Eupatorium perfoliatum is indicated in intense bone pains and headaches during febrile states — the patient says it feels as if the bones are broken.' For malaria-like symptoms: Eupatorium when chill begins in the back, preceded by thirst and followed by intense bone ache. Distinguishes from Nux vomica in fever: both can precede bone pains but Nux has more gastric component.",
     relationships: {
       complementary: "Bryonia, Natrum Mur",
       antidotes: "Arsenicum",
@@ -1073,6 +1169,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Fevers (early stage). First stage pneumonia/bronchitis. Anemia. Epistaxis. Earache (otitis media early). Croup (early stage). Vomiting of undigested food.",
     rubrics:
       "FEVER — BEGINNING of illness; COUGH — MORNING — 4–6 AM; NOSE — EPISTAXIS — bright red; GENERALS — ANEMIA; GENERALS — INFLAMMATORY CONDITIONS — early",
+    farrington:
+      "Farrington places Ferrum phos in the first stage of all inflammations — before the exudate is formed. Compare Aconite: both are first-stage remedies; Aconite has more fear and restlessness with sudden onset; Ferrum phos is milder, more gradual, less anxiety. Compare Belladonna: Bell has high fever with violent delirium; Ferrum phos has moderate fever, flushed face but without the violent intensity. Farrington's key: 'Ferrum phosphoricum is the remedy for the first stage of colds, fevers, and inflammations when there are no characteristic symptoms to guide to a more specific remedy.' The slow, insidious onset distinguishes it from Aconite. Hemorrhages of bright red blood with moderate fever, tiredness, and mild fever point to Ferrum phos.",
     relationships: {
       complementary: "Calc Phos, Kali Mur",
       antidotes: "Nux Vomica",
@@ -1095,6 +1193,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Hemorrhoids (bleeding). Varicose veins. Passive hemorrhages. Epistaxis. Sub-conjunctival hemorrhage. Phlebitis. Orchitis. Venous ulcers.",
     rubrics:
       "RECTUM — HEMORRHOIDS — bleeding; GENERALS — HEMORRHAGE — dark; EXTREMITIES — VARICOSE VEINS; GENERALS — VENOUS CIRCULATION — weak; GENERALS — BRUISED — feeling",
+    farrington:
+      "Farrington notes: Hamamelis is the great venous hemorrhagic remedy. Compare Phosphorus: both have passive hemorrhages; Phosphorus has bright, profuse bleeding from any orifice with burning; Hamamelis has more passive, dark, venous blood with the peculiar soreness. Compare Lachesis: both have dark blood that does not coagulate; Lachesis is more purpuric and septic; Hamamelis is more specifically venous and varicose. Farrington's key: 'Hamamelis acts principally on the venous side of the circulation — venous congestion, varicose veins, hemorrhoids, and passive hemorrhages are its sphere.' The characteristic mental symptom — desire to be let alone; does not wish to be spoken to — accompanies its use. Distinguishes from Arnica: Arnica is for arterial ecchymosis; Hamamelis for venous oozing.",
     relationships: {
       complementary: "Arnica, Pulsatilla",
       antidotes: "Arnica",
@@ -1117,6 +1217,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Nausea and vomiting. Asthma. Hemorrhages (bright red). Whooping cough. Dysentery. Morning sickness. Malaria. Post-partum hemorrhage.",
     rubrics:
       "STOMACH — NAUSEA — persistent; TONGUE — CLEAN; GENERALS — HEMORRHAGE — bright red; COUGH — NAUSEA — during; GENERALS — THIRST — thirstlessness",
+    farrington:
+      "Farrington places Ipecac as the great 'nausea remedy.' Compare Antimonium tartaricum: both have nausea and respiratory mucus; Ant-t has drowsiness, coarse rattling, and is too weak to expectorate; Ipecac has persistent, unrelieved nausea with clean tongue. Compare Veratrum album: both have violent nausea and vomiting; Veratrum has cold perspiration on forehead with collapse; Ipecac has persistent nausea not relieved even after vomiting. Farrington's key: 'Ipecacuanha has one pre-eminent characteristic — constant, persistent nausea unrelieved by vomiting, with a clean moist tongue (not coated).' For hemorrhage: Ipecac when bright red blood is accompanied by nausea. Distinguishes from Phosphorus in hemorrhage: both have bright red blood but Ipecac always has the accompanying nausea.",
     relationships: {
       complementary: "Ant Tart, Arsenicum",
       antidotes: "Arsenicum, Nux Vomica",
@@ -1139,6 +1241,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Puncture wounds. Insect stings. Animal bites. Black eye. Ascending rheumatism. Gout (small joints). Tetanus prevention. Tick bites.",
     rubrics:
       "GENERALS — INJURIES — puncture wounds; EXTREMITIES — RHEUMATISM — ascending; EYE — ECCHYMOSIS; GENERALS — COLD — applications, better; GENERALS — BITES — insect",
+    farrington:
+      "Farrington notes: Ledum is the leading remedy for punctured wounds and insect stings. Compare Arnica: Arnica is for blunt trauma and bruising; Ledum is for sharp, punctured injuries — especially when the injured part becomes cold and mottled, yet is better from cold applications. Compare Apis: both are better from cold; Apis has more burning and stinging; Ledum has more coldness of the part. Farrington's key: 'Ledum is the remedy for penetrating wounds, for bites from animals, for stings — when the wound is cold to the touch and cold applications relieve.' For rheumatism: Ledum's rheumatic pains begin in the feet and travel upward, and the affected parts feel cold. Distinguishes from Silica: both are for penetrating wounds; Silica is for old, infected wounds with tendency to suppurate; Ledum for fresh punctures.",
     relationships: {
       complementary: "Arnica, Hypericum",
       antidotes: "Camphor",
@@ -1161,6 +1265,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Mastitis. Sore throat (diphtheria, tonsillitis). Glandular swellings. Gonorrheal rheumatism. Sciatica. Mumps. Breast tumors. Cracked nipples.",
     rubrics:
       "THROAT — PAIN — ear extending to, swallowing on; FEMALE — BREAST — mastitis; GLANDS — ENLARGED; EXTREMITIES — PAIN — electric, like shocks; THROAT — DIPHTHERIA",
+    farrington:
+      "Farrington places Phytolacca in glandular and throat affections. Compare Mercurius: both affect tonsils and salivary glands; Merc has more salivation, sweat; Phytolacca has the unique shooting pains radiating to the ear on swallowing, and the characteristic dark red or bluish discoloration of the throat. Compare Belladonna: both have right-sided throat affections; Bell has bright red, dry; Phytolacca is more dark red, with radiating pains. Farrington's key: 'Phytolacca is suited to the dark, rough throat — the pains shoot to the ear on swallowing — this is pathognomonic.' Distinguishes from Apis in throat: Apis has shiny edema; Phytolacca has more fibrous, glandular swelling. For mastitis: Phytolacca when breasts are stony hard, purple, exquisitely painful.",
     relationships: {
       complementary: "Belladonna, Silica",
       antidotes: "Chamomilla",
@@ -1183,6 +1289,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Summer diarrhea. Hepatitis. Cholera infantum. Teething diarrhea. Prolapse ani. Cholecystitis. Morning diarrhea. Jaundice.",
     rubrics:
       "RECTUM — DIARRHEA — morning; STOOL — GUSHING; ABDOMEN — LIVER — pressing on, desire; RECTUM — PROLAPSE — stool, during; STOOL — OFFENSIVE",
+    farrington:
+      "Farrington notes: Podophyllum is the great hepatic and diarrhea remedy. Compare China: both follow excessive discharges; Podophyllum's stools are profuse, gushing, painless, offensive, worse in morning; China's debility comes after such stools. Compare Aloe: both have sudden, gushing stools in morning driving out of bed; Aloe has more fullness in rectum; Podophyllum has more liver involvement and right-sided symptoms. Farrington's key: 'Podophyllum is indicated in chronic liver affections with morning diarrhea — profuse, gushing, offensive, painless, early morning, driving out of bed.' The teeth-grinding in children with liver symptoms is a characteristic. Distinguishes from Chamomilla: Cham has green stools from anger in children; Podophyllum has more hepatic symptoms.",
     relationships: {
       complementary: "Nat Sulph, Sulphur",
       antidotes: "Camphor, Nux Vomica",
@@ -1205,6 +1313,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Tendon injuries. Eye strain. Ganglion wrist. Ankle sprains. Lumbago. Periostitis. Rectal prolapse. Constipation. Carpal tunnel syndrome.",
     rubrics:
       "EXTREMITIES — TENDONS — injuries; EYE — STRAIN — from; GENERALS — INJURIES — periosteum; BACK — LUMBAGO — overexertion; WRIST — GANGLION",
+    farrington:
+      "Farrington's notes: Ruta acts specifically on the periosteum and cartilage. Compare Arnica: Arnica is for muscle and soft tissue bruising; Ruta is for the periosteum and fibrous coverings — bruised bone pain. Compare Rhus tox: Rhus acts on tendons and ligaments (better from motion); Ruta acts on periosteum and cartilage (not specifically better from motion). Farrington's key: 'Ruta is suited to sprains and bruises of the bones — it is especially useful when there is a bruised, lame feeling in the bones, as if the tendons had been overstrained.' For eyes: Ruta is indicated when the eyes are strained from fine work (reading, needlework) — the eye aches as if from strain. Wrist complaints (ganglion, repetitive strain) respond well to Ruta.",
     relationships: {
       complementary: "Arnica, Calc Phos",
       antidotes: "Camphor",
@@ -1227,6 +1337,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Hay fever. Allergic rhinitis. Threadworms. Hypochondriasis. Colds from cold air. Sneezing paroxysms. Lachrymation with sneezing.",
     rubrics:
       "NOSE — SNEEZING — violent; MIND — IMAGINATIONS — disease, of having; GENERALS — CHILLINESS; GENERALS — WARM — things, desire for; NOSE — HAY FEVER",
+    farrington:
+      "Farrington notes: Sabadilla is one of the most important remedies for hay fever and coryza. Compare Allium cepa: both have profuse watery coryza; Allium cepa has acrid nasal discharge (corroding upper lip) with bland eye discharge; Sabadilla has spasmodic sneezing with watery discharge and the peculiar chronic imaginative anxiety. Compare Arsenicum: both have watery, acrid nasal discharge; Arsenicum has more burning; Sabadilla's coryza is more sneezing-dominant. Farrington's key: 'Sabadilla is suited to hay fever with violent sneezing, lacrimation, and the peculiar mental characteristic of hypochondriasis — imagines disease where none exists.' The patient who complains of worms when there are none, or imagines organs are displaced, is Sabadilla.",
     relationships: {
       complementary: "Allium Cepa, Arsenicum",
       antidotes: "Camphor",
@@ -1249,6 +1361,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Right-sided migraine. Menopause (hot flushes). Shoulder rheumatism (right deltoid). Nasal polypi. Right pneumonia. Burning dysmenorrhea. Pharyngitis.",
     rubrics:
       "HEAD — PAIN — right side; HEAD — PAIN — occiput, extending to; GENERALS — HEAT — flushes of; EXTREMITIES — SHOULDER — right; NOSE — POLYPI",
+    farrington:
+      "Farrington places Sanguinaria in right-sided headaches and respiratory affections. Compare Belladonna: both have right-sided head pains; Bell's pain is more throbbing and acute; Sanguinaria's headache begins in the back of the neck, rises over the head, and settles over the right eye. Compare Iris versicolor: both have sick headaches with vomiting; Iris has burning in the throat and stomach; Sanguinaria has the right-sided, over-eye localization. Farrington's key: 'Sanguinaria is pre-eminently right-sided — right shoulder, right side of head, right side of chest.' For climacteric symptoms: Sanguinaria when hot flushes begin at menopause, especially with the characteristic right-sided headaches. For bronchitis: Sanguinaria in old age with rust-colored expectoration.",
     relationships: {
       complementary: "Lachesis, Sulphur",
       antidotes: "Nux Vomica",
@@ -1271,6 +1385,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Hysteria. Chorea. Extreme restlessness. Angina. Carbuncles. Erysipelas. Attention deficit hyperactivity. Manipulative personality disorders. Palpitations.",
     rubrics:
       "MIND — RESTLESSNESS — extreme; GENERALS — MUSIC — ameliorates; MIND — DANCING; MIND — CUNNING; EXTREMITIES — MOTION — constant",
+    farrington:
+      "Farrington places Tarentula in the choreic and hysterical conditions with restlessness. Compare Stramonium: both have violent, uncontrolled movements; Stramonium has more terror and delirium; Tarentula has more rhythmic, music-driven behavior. Compare Zincum: both have restless legs; Zincum has more fidgety feet from weakness; Tarentula has the peculiar — music ameliorates, especially rhythmic music. Farrington's key: 'Tarentula hispanica is indicated when there is extreme nervous restlessness — the patient must keep in constant motion, and is ameliorated by music (especially rhythmic music).' Distinguishes from Hyoscyamus in mania: Hyoscyamus is more lewdness; Tarentula is more frenzied, destructive, and cunning. The sudden alternation between being cunning and innocent is characteristic.",
     relationships: {
       complementary: "Zincum, Lycopodium",
       antidotes: "Camphor",
@@ -1294,6 +1410,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Chorea. Epilepsy. Spinal irritation. Chilblains. Tremors. Senile dementia. Locomotor ataxia. Delirium tremens. Twitching of eyelids. Tic douloureux.",
     rubrics:
       "EXTREMITIES — TWITCHING; BACK — SENSITIVE — dorsal; SKIN — ITCHING — burning; MIND — LOQUACITY; GENERALS — COLD — air, agg",
+    farrington:
+      "Farrington notes: Agaricus acts powerfully on the spinal cord and cerebellum. Compare Nux vomica: both affect the nervous system and are worse in cold air; Nux has more gastric and liver involvement; Agaricus has more specific spinal cord symptoms (burning, itching along spine). Compare Zincum: both have spinal irritation; Zincum has more mental exhaustion from overwork; Agaricus has more chorea-like symptoms and diagonally crossing symptoms. Farrington's key: 'Agaricus is characterized by symptoms appearing diagonally — right arm and left leg affected together — and by itching, burning, and twitching of the skin.' For chilblains with intense itching and burning: Agaricus is unsurpassed. Trembling and twitching with the spinal irritation are hallmarks.",
     relationships: {
       complementary: "Tarentula hispanica",
       antidotes: "Camphor, Coffee",
@@ -1316,6 +1434,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Constipation. Locomotor ataxia. Senile conditions. Dryness of skin and mucous membranes. Laryngitis with dryness. Progressive muscular atrophy. Dementia. Difficulty swallowing.",
     rubrics:
       "RECTUM — CONSTIPATION — soft stool, even; GENERALS — DRYNESS; MIND — IDENTITY — confusion of; EXTREMITIES — STAGGERING; GENERALS — ALTERNATING — days",
+    farrington:
+      "Farrington places Alumina as the chief remedy for dryness and constipation. Compare Nux vomica: both have constipation; Nux has constant ineffectual urging; Alumina has inactivity of the rectum — no desire at all, dry stool requiring great straining. Compare Bryonia: Bryonia's dryness is all over; Alumina's dryness is more specifically of mucous membranes and with the characteristic perversion of appetite (eats chalk, pencils, charcoal). Farrington's key: 'Alumina is indicated when there is a total absence of desire for stool — the rectum is inactive, the stool is dry, and it requires great effort even for soft stool.' The peculiar symptom — when he sees a knife, the impulse to kill — is an Alumina hallmark. Perversion of senses (chalk tastes sweet, etc.) is characteristic.",
     relationships: {
       complementary: "Bryonia, Ferrum",
       antidotes: "Bryonia, Ipecac",
@@ -1338,6 +1458,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Gastric disorders. Skin warts. Nail disorders. Corns and calluses. Obesity. Eczema. Indigestion. Sentimental depression. Children with feeding difficulties.",
     rubrics:
       "MOUTH — TONGUE — white coated; MIND — SENTIMENTAL — moonlight; SKIN — WARTS — palms; NAILS — DEFORMED; GENERALS — BATHING — cold, agg",
+    farrington:
+      "Farrington notes: Antimonium crudum is the remedy for the sulky, sullen, sentimentally romantic patient with gastric predominance. Compare Pulsatilla: both have gastric symptoms with emotional features; Pulsatilla is gentle, tearful, weeping; Antimonium crudum is surly, cross, does not want to be touched or looked at. Compare Nux vomica: both have gastric complaints from eating too much; Nux is irritably working class; Ant-c is more romantically sentimental (weeps at moonlight). Farrington's key: 'The three grand keynotes of Antimonium crudum: white-coated tongue, thick and milky; excessive ailments from overeating; and peevish, sulky disposition.' Distinguishes from Antimonium tartaricum: Ant-c is gastric and cutaneous; Ant-t is respiratory and pulmonary.",
     relationships: {
       complementary: "Sulphur, Squilla",
       antidotes: "Hepar sulph",
@@ -1360,6 +1482,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Renal calculi. Biliary calculi. Gout. Jaundice. Lumbago. Cystitis. Prostatitis. Hepatic disorders. Gall bladder disease. Radiating back pain.",
     rubrics:
       "KIDNEYS — PAIN — radiating; BACK — PAIN — lumbar — radiating; GENERALS — PAIN — radiating; URINE — TURBID; ABDOMEN — PAIN — gall bladder",
+    farrington:
+      "Farrington places Berberis vulgaris in renal and hepatic conditions with radiating pains. Compare Lycopodium: both have right-sided kidney symptoms; Lycopodium has red sand in urine; Berberis has unique bubbling, radiating pains in the kidney region radiating to the groin. Compare Ocimum canum: both have right-sided renal colic; Ocimum has more spasmodic pains; Berberis has more aching, radiating from kidney in all directions. Farrington's key: 'Berberis has a characteristic — the pains radiate FROM the kidney in all directions, as if from a radiating center — this is pathognomonic.' For biliary colic and jaundice: Berberis acts well in liver affections with the same radiating tendency. The pale, earthy complexion with sunken cheeks points to Berberis.",
     relationships: {
       complementary: "Lycopodium, Kali bich",
       antidotes: "Camphor, Belladonna",
@@ -1382,6 +1506,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Rickets. Delayed dentition. Non-union of fractures. Anemia. Growing pains. Spinal weakness. School headache. Diarrhea in children. Convalescence after illness.",
     rubrics:
       "TEETH — DELAYED; BONES — WEAKNESS; MIND — RESTLESSNESS — travel, desire; GENERALS — GROWTH — impaired; HEAD — PAIN — exertion, mental",
+    farrington:
+      "Farrington notes: Calcarea phosphorica is the tissue salt for bone diseases and deficient nutrition. Compare Calcarea carbonica: both have bone diseases; Cal-c is more for the fat, flabby child; Cal-phos is more for the thin, tall, anemic child with delayed ossification. Compare Phosphorus: both have bone diseases; Phos is more for rapidly growing bones that are fragile; Cal-phos is more for delayed ossification and late teething. Farrington's key: 'Calcarea phosphorica is suited to the peevish, fretful child that cannot tolerate being touched — with pale, waxy face and defective ossification.' For spinal curvature and growing pains in adolescence, Cal-phos rivals Silica. Headaches of schoolchildren from mental effort respond to Cal-phos.",
     relationships: {
       complementary: "Ruta, Hepar sulph",
       antidotes: "None noted",
@@ -1404,6 +1530,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Cystitis. Urethritis. Nephritis. Burns and scalds. Erysipelas with blisters. Pyelonephritis. Priapism. Nymphomanis. Gastritis with burning.",
     rubrics:
       "BLADDER — URGING — constant; BLADDER — PAIN — burning; URINE — SCANTY — droplets; SKIN — BURNS; MALE — SEXUAL DESIRE — increased",
+    farrington:
+      "Farrington places Cantharis as the leading remedy for violent inflammatory states, especially urinary. Compare Aconite: both have sudden violent onset; Aconite has more fear and skin dryness; Cantharis has more sexual and vesical excitement. Compare Apis: both affect the kidneys; Apis has more edema and stinging; Cantharis has more violent burning — burning before, during, and after urination. Farrington's key: 'Cantharis is indicated when there is burning and cutting pain in the urethra before, during, and after urination — the most intense, urgent urinary remedy.' For burns: Cantharis after the primary Urtica urens stage — when the burn forms blisters. Distinguishes from Copaiva in urinary: Copaiva is more coating of mucus in urine; Cantharis is more violent burning.",
     relationships: {
       complementary: "Camphora",
       antidotes: "Camphora",
@@ -1426,6 +1554,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Insomnia from mental excitement. Toothache. Neuralgia. Palpitations from excitement. Hypersensitivity. Menstrual pain with over-sensitiveness. Headache from excessive mental activity.",
     rubrics:
       "SLEEP — SLEEPLESSNESS — thoughts, from; MIND — SENSITIVE — pain, to; TEETH — PAIN — cold water ameliorates; MIND — CHEERFULNESS — excessive; HEART — PALPITATIONS — emotions, from",
+    farrington:
+      "Farrington places Coffea among the 'oversensitivity remedies' — with Nux vomica and Chamomilla. Coffea: oversensitivity from pleasurable excitement — the opposite of Chamomilla (which is oversensitive from pain and anger). Compare Nux vomica: both have hypersensitivity; Nux from overwork and stimulants; Coffea from sudden pleasant news, excessive joy. Compare Chamomilla: Chamomilla cannot bear pain; Coffea cannot bear the oversensitivity of nerves from any excitement. Farrington's key: 'Coffea is suited when symptoms come on from sudden pleasant surprise — joy, good news — which overstimulates the nervous system.' For toothache: Coffea toothache is temporarily relieved by cold water in the mouth. The insomnia of Coffea is from a rush of pleasant ideas.",
     relationships: {
       complementary: "None noted",
       antidotes: "Nux vomica, Chamomilla, Ignatia",
@@ -1448,6 +1578,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Paralysis. Breast tumors (scirrhous). Prostate enlargement. Testicular induration. Vertigo. Parkinson's disease. Tumors of glands. Ovarian cysts. Senile conditions. Cataract.",
     rubrics:
       "GENERALS — PARALYSIS — ascending; VERTIGO — MOTION — head, on moving; GLANDS — INDURATED; BLADDER — URINATION — intermittent stream; BREAST — TUMORS",
+    farrington:
+      "Farrington notes: Conium is the 'old age and tumor remedy.' Compare Baryta carb: both are for premature aging; Bar-c has more mental weakness; Conium has more ascending paralysis and hard glandular tumors. Compare Phosphorus: both affect the liver and nervous system; Phos has more burning; Conium has more ascending paralysis and induration. Farrington's key: 'Conium is indicated in the effects of old age and in hard, slow-growing tumors — the paralysis ascending from feet upward is characteristic.' The peculiar symptom — dizziness on turning the head or eyes (as if bed is turning) — is Conium's hallmark. The sclerotic, hardened constitution of the aged with indurated glands points to Conium. Suppression of sexual desire in old age causing mental disturbances is a Conium indication.",
     relationships: {
       complementary: "Baryta carb, Phosphorus",
       antidotes: "Coffea, Tobacco",
@@ -1470,6 +1602,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Conjunctivitis. Keratitis. Corneal ulcers. Blepharitis. Hay fever. Photophobia. Catarrhal conditions. Cataract (early). Optic neuritis.",
     rubrics:
       "EYE — DISCHARGE — acrid; EYE — PHOTOPHOBIA; NOSE — CORYZA — bland; EYE — INFLAMMATION — conjunctiva; GENERALS — AIR — open, ameliorates",
+    farrington:
+      "Farrington notes: Euphrasia is the main remedy for eye conditions. Compare Allium cepa: in coryza — Allium cepa has acrid nasal discharge with bland eye discharge; Euphrasia is the OPPOSITE — acrid, burning eye discharge with bland (non-irritating) nasal discharge. Farrington's key: 'Euphrasia — the one drug in which tears are acrid and burning while the nasal discharge is bland and non-irritating — this is the diagnostic pearl.' For conjunctivitis: Euphrasia when there is profuse, scalding lacrimation with photophobia. Compare Pulsatilla in eye: Pulsatilla has bland, thick yellow discharge; Euphrasia has acrid watery discharge. For catarrhal eye conditions in hay fever, Euphrasia alternated with Allium cepa covers the full picture.",
     relationships: {
       complementary: "Allium cepa (opposite picture)",
       antidotes: "Camphor, Pulsatilla",
@@ -1492,6 +1626,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Osteitis. Bone caries. Varicose veins. Varicose ulcers. Dental caries. Fistulae. Syphilitic bone disease. Alopecia (with rapid hair re-growth). Old unhealed ulcers.",
     rubrics:
       "BONES — CARIES; VEINS — VARICOSE; SKIN — ULCERS — fistulous; GENERALS — ENERGY — increased; NAILS — BRITTLE",
+    farrington:
+      "Farrington places Fluoric acid in the syphilitic miasm and for tissue breakdown. Compare Syphilinum: both act deeply on syphilitic conditions; Fluoric acid is for the physical manifestations — destruction of bone, fistulae; Syphilinum for the constitutional depth. Compare Silica: both expel foreign bodies; Silica is slow and cold; Fluoric acid is more warm-blooded and appropriate for hot, tissue-destroying conditions. Farrington's key: 'Fluoric acid is suited to the old syphilitic constitution with caries of bone, fistulae that ooze a thin, offensive discharge, and the peculiar mental state of indifference to loved ones but desire for strangers.' The increased sexual desire combined with the destructive physical state is characteristic. Varicose veins in the aged respond to Fluoric acid.",
     relationships: {
       complementary: "Silica (antidote to Silica's excessive suppuration)",
       antidotes: "Silicea",
@@ -1514,6 +1650,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Sunstroke. Hypertension. Angina pectoris. Congestive headache. Heat exhaustion. Meningeal congestion. Cerebral apoplexy. Sun headache.",
     rubrics:
       "HEAD — PAIN — congestive; HEAD — PAIN — sun, from; HEAD — CONSTRICTION — hat, from; MIND — CONFUSION — localities; HEART — PALPITATIONS — violent",
+    farrington:
+      "Farrington notes: Glonoine is the first remedy for sunstroke and violent head congestions. Compare Belladonna: both have congestion of head; Bell is more throbbing; Glonoine has more expansion, as if skull too small for the brain. Compare Amyl nitrite: both produce flushing and pulsation; Amyl nitrite is for the menopausal flush; Glonoine for the acute sunstroke or violent head congestion. Farrington's key: 'The great characteristic of Glonoine is the sensation of expansion — pulsating, throbbing, bursting head — as if the skull is too small.' Distinguishes from Natrum carb: Natrum carb's headache from sun is more chronic; Glonoine is the acute emergency. The patient cannot bear the sun on the head, and the headache comes on in waves at every heartbeat.",
     relationships: {
       complementary: "Aconite, Belladonna",
       antidotes: "Aconite, Camphor",
@@ -1536,6 +1674,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Neurasthenia. Brain fatigue. Depression. Night terrors. Bed-wetting. Typhoid. Septic fevers. Putrid discharges. Locomotor ataxia. Vertigo from overwork.",
     rubrics:
       "MIND — EXHAUSTION — mental; DISCHARGES — PUTRID; EAR — NOISES — humming; URINE — NOCTURNAL — enuresis; MIND — FEAR — nervous",
+    farrington:
+      "Farrington places Kali phos as the nervous tissue salt for the exhausted, worried patient. Compare Natrum mur: both affect the nervous system from grief and worry; Natrum mur has more fixed grief; Kali phos is more from overwork and nervous exhaustion. Compare Arsenicum: both are restless and anxious; Arsenicum's anxiety is about physical death; Kali phos is more about business failure, nervous dread. Farrington's key: 'Kali phosphoricum is the chief remedy for those conditions arising from want of nerve power — students who break down from overwork, business men who worry until their nerves are shattered.' The golden-yellow color of tongue, offensive breath, and nervous dread are characteristic. Depression with inability to collect thoughts after mental overwork is a hallmark.",
     relationships: {
       complementary: "Ferrum phos, Calc phos",
       antidotes: "Camphor",
@@ -1558,6 +1698,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Asthma. Liver disease. Jaundice. Diarrhea. Head injury sequelae. Depression. Sycotic conditions. Warts. Condylomata. Post-concussion syndrome.",
     rubrics:
       "GENERALS — WET — weather agg; HEAD — INJURY — effects of; RECTUM — DIARRHEA — morning; MIND — SUICIDAL — tendency; CHEST — ASTHMA — damp weather",
+    farrington:
+      "Farrington places Natrum sulph as the chief anti-sycotic in the Natrum family. Compare Thuja: both cover sycosis; Thuja is more constitutional; Natrum sulph is more specifically for liver and lung conditions in the sycotic patient. Compare Mercurius: both have bilious conditions; Merc has more glandular; Natrum sulph has more liver congestion worse in damp weather. Farrington's key: 'Natrum sulphuricum is the chronic of Thuja in many sycotic cases — it covers the liver and lungs when the sycotic taint is expressed through these organs.' For asthma worse in damp weather with sycotic history: Natrum sulph is unsurpassed. The characteristic mental symptom — suicidal impulse especially in the morning, must hold on to himself — is a serious Natrum sulph indication.",
     relationships: {
       complementary: "Thuja, Arsenicum",
       antidotes: "Camphor",
@@ -1580,6 +1722,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Apoplexy. Coma. Constipation. Post-fright ailments. Acute alcohol poisoning. Senile constipation. Respiratory failure. Shock. Post-operative ileus.",
     rubrics:
       "GENERALS — PAIN — absence of; MIND — STUPOR; RECTUM — CONSTIPATION — inactivity; RESPIRATION — STERTOROUS; MIND — AILMENTS FROM — fright",
+    farrington:
+      "Farrington's notes: Opium is for states of stupor, insensibility, and painlessness where pain should exist. Compare Stramonium: both have delirium with frightful visions; Stramonium has terror, violence; Opium has more happy, blissful stupor alternating with horror. Compare Baptisia: both have stupor; Baptisia is in septic fevers with offensive discharges; Opium is more constipated, dry, hot, with snoring. Farrington's key: 'The Opium patient is remarkable for the absence of pain and functional activity — constipation without desire, retention without urging, stupor without response.' The peculiar characteristic: complaints dating from shock or fright in the past — the patient recovers but the fright remains. Complete insensibility where there should be reaction is the Opium guiding symptom.",
     relationships: {
       complementary: "Belladonna",
       antidotes: "Nux vomica, Camphor",
@@ -1602,6 +1746,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Nymphomania. Ovarian pain. Vaginismus. Hysteria. Depression with pride. Constipation. Cramping pains. Numbness. Sexual neurosis.",
     rubrics:
       "MIND — HAUGHTY; MIND — CONTEMPTUOUS; FEMALE — SEXUAL DESIRE — increased; GENITALIA — SENSITIVE — extreme; PAINS — GRADUAL — increase and decrease",
+    farrington:
+      "Farrington notes: Platina is the remedy for sexual hypersensitivity combined with proud mental state. Compare Palladium: both are platinum group metals; Palladium has more ovarian pain worse on right; Platina has more excessive sexual desire with hyperesthesia. Compare Lachesis: both have sexual excess; Lachesis is more jealous and loquacious; Platina is more proud and contemptuous. Farrington's key: 'Platina is indicated in nymphomania, in excessive sexual desire combined with the peculiar arrogance — everything seems small to her, other people appear as nothing.' The physical hyperesthesia — touch is intolerable — combined with the mental megalomania is characteristic. For emotional excitement causing hysterical paralysis or convulsions: Platina rivals Ignatia.",
     relationships: {
       complementary: "Pulsatilla",
       antidotes: "Pulsatilla, Sepia",
@@ -1624,6 +1770,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Rheumatism. Gout. Orchitis. Epididymitis. Testicular induration. Neuralgias. Toothache. Fibrositis. Arthritis worse damp weather.",
     rubrics:
       "GENERALS — WEATHER — storm, before; MALE — TESTES — pain; GENERALS — RHEUMATISM; TEETH — PAIN — storm, before; GENERALS — MOTION — ameliorates",
+    farrington:
+      "Farrington places Rhododendron in rheumatic complaints with meteorological sensitivity. Compare Rhus tox: both have rheumatic pain; Rhus tox is worse initial motion, better continued motion; Rhododendron is specifically worse before a storm (before thunder). Compare Dulcamara: both are worse from damp cold; Dulcamara is more from sudden cold after heat; Rhododendron is more specifically from electrical storms approaching. Farrington's key: 'Rhododendron is the remedy for rheumatism and neuralgia that begins or aggravates before a storm — the patient says the weather is about to change before it happens.' Orchitis and testicular induration respond to Rhododendron. Distinguishes from Ruta: both have periosteal pains; Rhododendron is specifically weather-sensitive.",
     relationships: {
       complementary: "Bryonia, Rhus tox",
       antidotes: "Bryonia",
@@ -1646,6 +1794,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Cystitis. Urinary calculi. Syphilitic conditions. Skin eruptions. Herpes. Rheumatism. Marasmus in children. Gonorrhea. Vesical colic.",
     rubrics:
       "BLADDER — URINATION — dribbling — sitting; URINE — PAIN — close of urination; GENERALS — EMACIATION — neck; SKIN — ERUPTIONS — herpetic; URINE — CALCULI",
+    farrington:
+      "Farrington notes: Sarsaparilla is an important remedy for renal and rheumatic conditions. Compare Berberis: both have renal calculi; Berberis has radiating pains; Sarsaparilla has the peculiar symptom that urine flows better when the patient stands up. Compare Lycopodium: both have red sand and renal complaints; Lycopodium's is right-sided; Sarsaparilla has more specific vesical symptoms. Farrington's key: 'Sarsaparilla is indicated when urine dribbles or passes better in the erect position — the patient can only urinate at the end of micturition.' For skin diseases with rheumatic diathesis: Sarsaparilla covers chronic herpetic eruptions. Distinguishes from Mercurius: both have herpetic skin; Merc has more glandular and mucosal involvement.",
     relationships: {
       complementary: "Mercury, Sepia",
       antidotes: "Mercurius, Belladonna",
@@ -1668,6 +1818,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Gangrene. Thromboangiitis obliterans. Uterine hemorrhage. Threatened abortion. Postpartum hemorrhage. Raynaud's disease. Ergotism. Metrorrhagia.",
     rubrics:
       "GENERALS — HEAT — burning, yet better cold; GENERALS — UNCOVERING — better; SKIN — GANGRENE; FEMALE — HEMORRHAGE — passive; UTERUS — CONTRACTIONS",
+    farrington:
+      "Farrington places Secale among the remedies for contracted, spasmodic vascular conditions. Compare Ergot preparations: Secale's action is for passive hemorrhages from atonic blood vessels — thin, dark blood that does not clot. Compare Cantharis: both affect the uterus; Cantharis is violent, burning; Secale has more passive, oozing, thin dark blood with suppressed sensation. Compare Arsenicum: both are cold patients; Arsenicum wants warmth; Secale has the peculiar characteristic of WANTING cold despite being cold — the patient throws off covers even though cold to touch. Farrington's key: 'Secale is characterized by persistent passive hemorrhage of thin, dark blood, and by the paradoxical desire for cold despite objective coldness.' For senile gangrene: Secale is unsurpassed when the skin is cold, shriveled, and dark.",
     relationships: {
       complementary: "Arsenicum (opposite in burning)",
       antidotes: "Camphor",
@@ -1690,6 +1842,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Fractures (healing). Non-union of fractures. Blunt eye injuries. Periostitis. Gastric ulcers. Duodenal ulcers. Traumatic arthritis. Bone pains after old injuries.",
     rubrics:
       "BONES — FRACTURES — promotes union; EYES — INJURIES — blunt trauma; STOMACH — ULCERS; PERIOSTEUM — IRRITATION; BONES — PAIN — old injuries",
+    farrington:
+      "Farrington notes: Symphytum is the specific for bone fractures and periosteal injuries. Compare Ruta: both affect periosteum; Ruta is for bruises and strains; Symphytum is more specifically for fractures — it accelerates union of broken bones. Compare Calcarea phosphorica: Cal-phos helps delayed fracture healing in the young; Symphytum assists union at any age. Farrington's key: 'Symphytum is pre-eminently the bone-healer — the vulnerary of bones — indicated after fracture to hasten callus formation.' For irritability of the stump after amputation and for phantom limb pain, Symphytum is unsurpassed. Distinguishes from Arnica: Arnica handles the initial trauma; Symphytum takes over for the healing phase of the bone.",
     relationships: {
       complementary: "Calcarea phos, Ruta",
       antidotes: "Camphor",
@@ -1712,6 +1866,8 @@ export const SEED_REMEDIES: RemedyData[] = [
       "Chorea. Epilepsy. Brain exhaustion. Restless legs syndrome. Suppressed exanthemata complications. Neurasthenia. Tremors. Echolalia. Spinal weakness.",
     rubrics:
       "EXTREMITIES — RESTLESSNESS — legs; MIND — REPEATING — echolalia; MIND — EXHAUSTION — mental; SKIN — ERUPTIONS — suppressed; GENERALS — TREMBLING",
+    farrington:
+      "Farrington places Zincum at the crossroads of exhausted nervous system and suppression. Compare Helleborus: both have cerebral exhaustion with automatic motions; Helleborus has more complete stupor; Zincum has more fidgety feet and restlessness. Compare Ignatia: both have nervous conditions; Ignatia is from acute emotional causes; Zincum is from chronic suppression, especially of eruptions. Farrington's key: 'Zincum is indicated when suppressed eruptions or discharges produce cerebral symptoms — the vital powers are so low that the system cannot develop the rash.' The characteristic fidgety feet — constant motion of the legs — is one of Zincum's most reliable symptoms. The child who cannot keep the feet still, combined with the inability to develop measles, is Zincum.",
     relationships: {
       complementary: "Ignatia",
       antidotes: "Hepar sulph, Nux vomica",

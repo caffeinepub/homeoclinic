@@ -58,6 +58,8 @@ const RELATION_LABELS: {
   { key: "inimical", label: "Inimical", color: "0.50 0.18 45" },
 ];
 
+const FARRINGTON_COLOR = "0.72 0.15 85";
+
 function RemedyCard({
   remedy,
   onClick,
@@ -230,6 +232,17 @@ function RemedyDetail({
               >
                 Relationships
               </TabsTrigger>
+              {remedy.farrington && (
+                <TabsTrigger
+                  value="farrington"
+                  data-ocid="remedy_detail.farrington.tab"
+                  style={{
+                    color: `oklch(${FARRINGTON_COLOR})`,
+                  }}
+                >
+                  Farrington
+                </TabsTrigger>
+              )}
             </TabsList>
 
             <TabsContent value="keynotes">
@@ -395,6 +408,31 @@ function RemedyDetail({
                 )}
               </div>
             </TabsContent>
+
+            {remedy.farrington && (
+              <TabsContent value="farrington">
+                <div
+                  className="p-4 rounded-lg"
+                  style={{
+                    background: `oklch(${FARRINGTON_COLOR} / 0.06)`,
+                    border: `1px solid oklch(${FARRINGTON_COLOR} / 0.25)`,
+                  }}
+                >
+                  <div
+                    className="text-xs font-semibold uppercase tracking-widest mb-2"
+                    style={{ color: `oklch(${FARRINGTON_COLOR})` }}
+                  >
+                    Farrington's Comparative MM
+                  </div>
+                  <p
+                    className="text-sm leading-relaxed whitespace-pre-line"
+                    style={{ color: "oklch(var(--foreground))" }}
+                  >
+                    {remedy.farrington}
+                  </p>
+                </div>
+              </TabsContent>
+            )}
           </Tabs>
         </div>
       </motion.div>
@@ -418,6 +456,7 @@ const EMPTY_REMEDY: RemedyData = {
     followsWell: "",
     followedBy: "",
   },
+  farrington: "",
 };
 
 export function Remedies() {
@@ -616,6 +655,11 @@ export function Remedies() {
                   field: "rubrics",
                   label: "Key Rubrics (semicolon separated)",
                   rows: 3,
+                },
+                {
+                  field: "farrington",
+                  label: "Farrington's Comparative MM",
+                  rows: 5,
                 },
               ].map(({ field, label, rows }) => (
                 <div key={field} className="space-y-1.5">

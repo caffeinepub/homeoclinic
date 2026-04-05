@@ -1,35 +1,31 @@
 # HomeoClinic
 
 ## Current State
-The app has a sidebar with pages: Dashboard, Patients, Remedy Reference, Compare Remedies, Appointments, Memos, Settings. The remedy database has 78+ remedies each with keynotes, materiaMedicaSummary, synopticKeyHighlights, clinicalIndications, rubrics, and relationships. Investigation suggestions use a pre-built Harrison's-based data pattern.
+The Remedy Reference page (Remedies.tsx) displays 78+ remedies from `remedySeeds.ts`. Each remedy has tabs for: Keynotes, Materia Medica (Boericke), Synoptic Key (Bhanja), Rubrics, and Relationships. The `RemedyData` interface in `remedyDatabase.ts` defines the data structure. There is no Farrington's Comparative Materia Medica data anywhere in the codebase.
 
 ## Requested Changes (Diff)
 
 ### Add
-- New sidebar page: **Diagnosis Finder** (route `/diagnosis-finder`)
-- New file: `src/frontend/src/pages/DiagnosisFinder.tsx`
-- New file: `src/frontend/src/utils/diagnosisData.ts` — pre-built Harrison's clinical data for 40+ common diagnoses
-- Sidebar nav entry with a `Microscope` icon
-- Route in App.tsx
+- `farrington` field to the `RemedyData` interface: a string containing Farrington's comparative and differentiating notes for that remedy
+- Farrington's data for all 78+ seed remedies in `remedySeeds.ts` -- comparative/differentiating points, characteristic keynotes, and clinical indications from Farrington's Lectures on Comparative Materia Medica
+- A new "Farrington" tab in the `RemedyDetail` component, displayed after the existing tabs, with a distinct amber/gold color scheme to differentiate it from Boericke/Bhanja data
+- The tab label should clearly say "Farrington" and the section header inside should say "Farrington's Comparative MM"
 
 ### Modify
-- `AppLayout.tsx` — add Diagnosis Finder to NAV_ITEMS
-- `App.tsx` — add route for `/diagnosis-finder`
+- `RemedyData` interface in `remedyDatabase.ts`: add optional `farrington?: string` field
+- `RemedyDetail` component in `Remedies.tsx`: add a "Farrington" tab after existing tabs
+- `EMPTY_REMEDY` constant in `Remedies.tsx`: add `farrington: ""` field
+- Add remedy form in `Remedies.tsx`: add a Farrington textarea field
+- All 78+ remedies in `remedySeeds.ts`: add `farrington` data
 
 ### Remove
-- Nothing
+Nothing removed.
 
 ## Implementation Plan
-1. Create `diagnosisData.ts` with:
-   - 40+ common diagnoses (covering medicine, respiratory, GI, musculoskeletal, skin, neuro, gynaecology)
-   - Each entry: `name`, `harrisons` (classic symptoms/signs from Harrison's), `keywords[]` (for matching remedy database)
-2. Create `DiagnosisFinder.tsx` page:
-   - Search box with autocomplete/suggestions for diagnosis names
-   - On search: scan remedy database for remedies whose `clinicalIndications`, `keynotes`, `materiaMedicaSummary`, or `synopticKeyHighlights` contain relevant keywords
-   - Score/rank results by number of matching fields
-   - Two-panel layout:
-     - Left: Harrison's clinical summary for the diagnosis (symptoms, signs, key features)
-     - Right: Matched remedies list with highlighted matching text, relevance score, and a "Compare" button to send to the Compare Remedies page
-   - Each remedy card shows name, miasmatic classification, matched symptom snippets
-   - "Send to Compare" button on each remedy card
-3. Add route and nav entry
+1. Update `RemedyData` interface in `remedyDatabase.ts` to add `farrington?: string`
+2. Add Farrington data to all remedies in `remedySeeds.ts` (key polychrests with comparative notes from Farrington's Lectures)
+3. Update `Remedies.tsx`:
+   - Add Farrington tab in `RemedyDetail` with amber/gold color scheme (distinguishable from other tabs)
+   - Add farrington field to `EMPTY_REMEDY`
+   - Add farrington textarea in the Add Remedy form
+4. No backend changes needed -- remedies are frontend-only

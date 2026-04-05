@@ -15,4 +15,5 @@ export interface RemedyData {
     followsWell: string;
     followedBy: string;
   };
+  farrington?: string;
 }
