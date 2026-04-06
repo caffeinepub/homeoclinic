@@ -22,7 +22,7 @@ import {
   X,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
+import { type ReactElement, useState } from "react";
 import { toast } from "sonner";
 import type { RemedyData } from "../data/remedyDatabase";
 import { SEED_REMEDIES } from "../data/remedySeeds";
@@ -44,6 +44,66 @@ function getMiasmColor(miasm: string): string {
     if (miasm.toLowerCase().includes(key.toLowerCase())) return val;
   }
   return "0.45 0.15 260";
+}
+
+// ── Helper: render text as a numbered/bulleted list ──────────────────────────
+function renderAsList(text: string, ordered = false): ReactElement {
+  if (!text || text.trim() === "—" || text === "") {
+    return (
+      <span style={{ color: "oklch(var(--foreground) / 0.85)" }}>
+        {text || "—"}
+      </span>
+    );
+  }
+  // Split by newlines, then semicolons if no newlines found
+  let items = text
+    .split("\n")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  if (items.length <= 1) {
+    items = text
+      .split(";")
+      .map((s) => s.trim())
+      .filter(Boolean);
+  }
+  // If still 1 item, try splitting on numbered patterns like "1. 2. 3."
+  if (items.length <= 1) {
+    const numbered = text
+      .split(/(?=\d+\.\s)/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+    if (numbered.length > 1) items = numbered;
+  }
+  if (items.length <= 1) {
+    return (
+      <span
+        className="text-sm leading-relaxed"
+        style={{ color: "oklch(var(--foreground) / 0.85)" }}
+      >
+        {text}
+      </span>
+    );
+  }
+  const Tag = ordered ? "ol" : "ul";
+  return (
+    <Tag
+      className={
+        ordered
+          ? "list-decimal list-inside space-y-1"
+          : "list-disc list-inside space-y-1"
+      }
+    >
+      {items.map((item, i) => (
+        <li
+          key={`item-${i}-${item.slice(0, 15)}`}
+          className="text-sm leading-relaxed"
+          style={{ color: "oklch(var(--foreground) / 0.85)" }}
+        >
+          {item}
+        </li>
+      ))}
+    </Tag>
+  );
 }
 
 const RELATION_LABELS: {
@@ -260,12 +320,7 @@ function RemedyDetail({
                   >
                     Keynotes
                   </div>
-                  <p
-                    className="text-sm leading-relaxed whitespace-pre-line"
-                    style={{ color: "oklch(var(--foreground))" }}
-                  >
-                    {remedy.keynotes}
-                  </p>
+                  {renderAsList(remedy.keynotes, true)}
                 </div>
                 {remedy.clinicalIndications && (
                   <div
@@ -281,12 +336,7 @@ function RemedyDetail({
                     >
                       Clinical Indications
                     </div>
-                    <p
-                      className="text-sm leading-relaxed"
-                      style={{ color: "oklch(var(--foreground))" }}
-                    >
-                      {remedy.clinicalIndications}
-                    </p>
+                    {renderAsList(remedy.clinicalIndications, true)}
                   </div>
                 )}
               </div>
@@ -306,12 +356,7 @@ function RemedyDetail({
                 >
                   Materia Medica Summary (Boericke)
                 </div>
-                <p
-                  className="text-sm leading-relaxed whitespace-pre-line"
-                  style={{ color: "oklch(var(--foreground))" }}
-                >
-                  {remedy.materiaMedicaSummary}
-                </p>
+                {renderAsList(remedy.materiaMedicaSummary)}
               </div>
             </TabsContent>
 
@@ -329,12 +374,7 @@ function RemedyDetail({
                 >
                   Synoptic Key Highlights (Bhanja)
                 </div>
-                <p
-                  className="text-sm leading-relaxed whitespace-pre-line"
-                  style={{ color: "oklch(var(--foreground))" }}
-                >
-                  {remedy.synopticKeyHighlights}
-                </p>
+                {renderAsList(remedy.synopticKeyHighlights)}
               </div>
             </TabsContent>
 
@@ -424,12 +464,7 @@ function RemedyDetail({
                   >
                     Farrington's Comparative MM
                   </div>
-                  <p
-                    className="text-sm leading-relaxed whitespace-pre-line"
-                    style={{ color: "oklch(var(--foreground))" }}
-                  >
-                    {remedy.farrington}
-                  </p>
+                  {renderAsList(remedy.farrington ?? "", false)}
                 </div>
               </TabsContent>
             )}

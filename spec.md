@@ -1,31 +1,34 @@
 # HomeoClinic
 
 ## Current State
-The Remedy Reference page (Remedies.tsx) displays 78+ remedies from `remedySeeds.ts`. Each remedy has tabs for: Keynotes, Materia Medica (Boericke), Synoptic Key (Bhanja), Rubrics, and Relationships. The `RemedyData` interface in `remedyDatabase.ts` defines the data structure. There is no Farrington's Comparative Materia Medica data anywhere in the codebase.
+- Farrington's Comparative Materia Medica is live in: Remedy Reference (dedicated tab per remedy card), Remedy Comparison Tool (amber section per remedy column)
+- Diagnosis Finder has 14 categories with Harrison's/Davidson's/Alagappan's clinical summaries and remedy match cards
+- Farrington's data is NOT yet shown in the Diagnosis Finder remedy match cards
+- Drug/remedy information is displayed as plain paragraph text across all sections (Remedy Reference tabs, Comparison Tool columns, Diagnosis Finder remedy cards)
 
 ## Requested Changes (Diff)
 
 ### Add
-- `farrington` field to the `RemedyData` interface: a string containing Farrington's comparative and differentiating notes for that remedy
-- Farrington's data for all 78+ seed remedies in `remedySeeds.ts` -- comparative/differentiating points, characteristic keynotes, and clinical indications from Farrington's Lectures on Comparative Materia Medica
-- A new "Farrington" tab in the `RemedyDetail` component, displayed after the existing tabs, with a distinct amber/gold color scheme to differentiate it from Boericke/Bhanja data
-- The tab label should clearly say "Farrington" and the section header inside should say "Farrington's Comparative MM"
+- Farrington's Comparative Materia Medica section to each remedy match card in the Diagnosis Finder page (DiagnosisFinder.tsx)
+- Bullet/numbered list rendering for ALL drug information sections across:
+  - Remedy Reference (Remedies.tsx): keynotes, mind symptoms, physical symptoms, modalities, clinical uses, rubrics, relationships, and Farrington's tab content
+  - Remedy Comparison Tool (RemedyCompare.tsx): all remedy data sections in each column
+  - Diagnosis Finder (DiagnosisFinder.tsx): remedy match card symptom lists, and the new Farrington's section
 
 ### Modify
-- `RemedyData` interface in `remedyDatabase.ts`: add optional `farrington?: string` field
-- `RemedyDetail` component in `Remedies.tsx`: add a "Farrington" tab after existing tabs
-- `EMPTY_REMEDY` constant in `Remedies.tsx`: add `farrington: ""` field
-- Add remedy form in `Remedies.tsx`: add a Farrington textarea field
-- All 78+ remedies in `remedySeeds.ts`: add `farrington` data
+- DiagnosisFinder.tsx: Add Farrington's section (amber-styled, labeled) to each matched remedy card, pulling from the remedy's farrington data in remedyDatabase.ts
+- Remedies.tsx: Convert all plain text remedy data fields to bullet/numbered lists using <ul>/<li> or <ol>/<li> tags
+- RemedyCompare.tsx: Convert all plain text remedy data fields to bullet/numbered lists
+- DiagnosisFinder.tsx: Convert remedy match symptom lists to bullet/numbered format
 
 ### Remove
-Nothing removed.
+- Nothing removed
 
 ## Implementation Plan
-1. Update `RemedyData` interface in `remedyDatabase.ts` to add `farrington?: string`
-2. Add Farrington data to all remedies in `remedySeeds.ts` (key polychrests with comparative notes from Farrington's Lectures)
-3. Update `Remedies.tsx`:
-   - Add Farrington tab in `RemedyDetail` with amber/gold color scheme (distinguishable from other tabs)
-   - Add farrington field to `EMPTY_REMEDY`
-   - Add farrington textarea in the Add Remedy form
-4. No backend changes needed -- remedies are frontend-only
+1. In DiagnosisFinder.tsx: for each matched remedy card, look up the remedy in remedyDatabase by name and render its farrington data (comparative notes, keynotes, clinical indications) in an amber-highlighted collapsible section labeled "Farrington's CM"
+2. Create a shared helper component or utility function `renderAsList(text: string)` that splits text by common delimiters (newlines, semicolons, numbered patterns) and renders as <ol> or <ul> <li> items
+3. Apply this list renderer to all remedy data fields in:
+   - Remedies.tsx: all tabs (Boericke summary, keynotes, mind, physical, modalities, clinical, rubrics, relationships, farrington)
+   - RemedyCompare.tsx: all section rows in the comparison columns
+   - DiagnosisFinder.tsx: remedy match symptom text and new Farrington section
+4. Validate and build

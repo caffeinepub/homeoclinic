@@ -14,7 +14,7 @@ import {
   X,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useEffect, useRef, useState } from "react";
+import { type ReactElement, useEffect, useRef, useState } from "react";
 import type { RemedyData } from "../data/remedyDatabase";
 import { SEED_REMEDIES } from "../data/remedySeeds";
 import {
@@ -36,6 +36,67 @@ function getMiasmColor(miasm: string): string {
     if (miasm.toLowerCase().includes(key.toLowerCase())) return val;
   }
   return "0.45 0.15 260";
+}
+
+// Amber color for Farrington section (matches RemedyCompare)
+const FARRINGTON_COLOR = "0.55 0.18 75";
+
+// ── Helper: render text as a numbered/bulleted list ──────────────────────────
+function renderAsList(text: string, ordered = false): ReactElement {
+  if (!text || text.trim() === "—" || text === "") {
+    return (
+      <span style={{ color: "oklch(var(--foreground) / 0.85)" }}>
+        {text || "—"}
+      </span>
+    );
+  }
+  let items = text
+    .split("\n")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  if (items.length <= 1) {
+    items = text
+      .split(";")
+      .map((s) => s.trim())
+      .filter(Boolean);
+  }
+  if (items.length <= 1) {
+    const numbered = text
+      .split(/(?=\d+\.\s)/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+    if (numbered.length > 1) items = numbered;
+  }
+  if (items.length <= 1) {
+    return (
+      <span
+        className="text-xs leading-relaxed"
+        style={{ color: "oklch(var(--foreground) / 0.68)" }}
+      >
+        {text}
+      </span>
+    );
+  }
+  const Tag = ordered ? "ol" : "ul";
+  return (
+    <Tag
+      className={
+        ordered
+          ? "list-decimal list-inside space-y-0.5"
+          : "list-disc list-inside space-y-0.5"
+      }
+    >
+      {items.map((item, i) => (
+        <li
+          key={`item-${i}-${item.slice(0, 15)}`}
+          className="text-xs leading-relaxed"
+          style={{ color: "oklch(var(--foreground) / 0.68)" }}
+        >
+          {item}
+        </li>
+      ))}
+    </Tag>
+  );
 }
 
 // ── Remedy matching ──────────────────────────────────────────────────────────
@@ -418,13 +479,26 @@ function RemedyMatchCard({
       )}
 
       {/* Excerpt */}
-      {excerpt && (
-        <p
-          className="text-xs leading-relaxed line-clamp-3"
-          style={{ color: "oklch(var(--foreground) / 0.68)" }}
+      {excerpt && <div className="mt-1">{renderAsList(excerpt)}</div>}
+
+      {/* Farrington's CM section */}
+      {match.remedy.farrington && (
+        <div
+          className="mt-3 p-3 rounded-lg"
+          style={{
+            background: `oklch(${FARRINGTON_COLOR} / 0.06)`,
+            border: `1px solid oklch(${FARRINGTON_COLOR} / 0.25)`,
+          }}
         >
-          {excerpt}
-        </p>
+          <div
+            className="text-xs font-semibold uppercase tracking-widest mb-2 flex items-center gap-1.5"
+            style={{ color: `oklch(${FARRINGTON_COLOR})` }}
+          >
+            <BookOpen className="w-3 h-3" />
+            Farrington's CM
+          </div>
+          {renderAsList(match.remedy.farrington)}
+        </div>
       )}
     </motion.div>
   );

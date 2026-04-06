@@ -17,7 +17,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { BookOpen, Columns2, GitCompare, Plus, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
+import { type ReactElement, useState } from "react";
 import type { RemedyData } from "../data/remedyDatabase";
 import { SEED_REMEDIES } from "../data/remedySeeds";
 
@@ -36,6 +36,68 @@ function getMiasmColor(miasm: string): string {
     if (miasm.toLowerCase().includes(key.toLowerCase())) return val;
   }
   return "0.45 0.15 260";
+}
+
+// ── Helper: render text as a numbered/bulleted list ──────────────────────────
+function renderAsList(
+  text: string,
+  ordered = false,
+  className = "",
+): ReactElement {
+  if (!text || text.trim() === "—" || text === "") {
+    return (
+      <span style={{ color: "oklch(var(--foreground) / 0.85)" }}>
+        {text || "—"}
+      </span>
+    );
+  }
+  let items = text
+    .split("\n")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  if (items.length <= 1) {
+    items = text
+      .split(";")
+      .map((s) => s.trim())
+      .filter(Boolean);
+  }
+  if (items.length <= 1) {
+    const numbered = text
+      .split(/(?=\d+\.\s)/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+    if (numbered.length > 1) items = numbered;
+  }
+  if (items.length <= 1) {
+    return (
+      <span
+        className={`text-xs leading-relaxed ${className}`}
+        style={{ color: "oklch(var(--foreground) / 0.85)" }}
+      >
+        {text}
+      </span>
+    );
+  }
+  const Tag = ordered ? "ol" : "ul";
+  return (
+    <Tag
+      className={
+        ordered
+          ? `list-decimal list-inside space-y-0.5 ${className}`
+          : `list-disc list-inside space-y-0.5 ${className}`
+      }
+    >
+      {items.map((item, i) => (
+        <li
+          key={`item-${i}-${item.slice(0, 15)}`}
+          className="text-xs leading-relaxed"
+          style={{ color: "oklch(var(--foreground) / 0.85)" }}
+        >
+          {item}
+        </li>
+      ))}
+    </Tag>
+  );
 }
 
 const SECTIONS = [
@@ -570,13 +632,11 @@ export function RemedyComparePanel({
                             )}
                           />
                         ) : (
-                          <span
-                            style={{
-                              color: "oklch(var(--foreground) / 0.85)",
-                            }}
-                          >
-                            {remedy[sec.key]}
-                          </span>
+                          renderAsList(
+                            remedy[sec.key],
+                            sec.key === "keynotes" ||
+                              sec.key === "clinicalIndications",
+                          )
                         )}
                       </div>
                     ) : (
@@ -654,13 +714,7 @@ export function RemedyComparePanel({
                             miasmColor={FARRINGTON_COLOR}
                           />
                         ) : (
-                          <span
-                            style={{
-                              color: "oklch(var(--foreground) / 0.85)",
-                            }}
-                          >
-                            {remedy.farrington || "—"}
-                          </span>
+                          renderAsList(remedy.farrington || "—")
                         )}
                       </div>
                     ) : (
