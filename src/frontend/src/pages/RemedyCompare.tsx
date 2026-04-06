@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/popover";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { Columns2, GitCompare, Plus, X } from "lucide-react";
+import { BookOpen, Columns2, GitCompare, Plus, X } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
 import type { RemedyData } from "../data/remedyDatabase";
@@ -27,6 +27,9 @@ const MIASM_COLORS: Record<string, string> = {
   Syphilitic: "0.55 0.22 25",
   Acute: "0.50 0.14 90",
 };
+
+// Amber color for Farrington section
+const FARRINGTON_COLOR = "0.55 0.18 75";
 
 function getMiasmColor(miasm: string): string {
   for (const [key, val] of Object.entries(MIASM_COLORS)) {
@@ -56,10 +59,6 @@ const REL_SECTIONS: {
 
 // ---------- Diff helpers ----------
 
-/**
- * Split a string into individual items (by newline, semicolon, or comma)
- * to allow item-level diffing.
- */
 function splitItems(text: string): string[] {
   return text
     .split(/[\n;,]+/)
@@ -67,10 +66,6 @@ function splitItems(text: string): string[] {
     .filter(Boolean);
 }
 
-/**
- * Returns true if at least one remedy in the group has different content
- * for this field vs the others.
- */
 function sectionHasDiffs(
   remedies: RemedyData[],
   key: keyof Omit<
@@ -92,10 +87,12 @@ function relSectionHasDiffs(
   return remedies.some((r) => r.relationships[key] !== first);
 }
 
-/**
- * For a given text value, compute which individual items are unique to this
- * remedy (not found in any other selected remedy's same section).
- */
+function farringtonHasDiffs(remedies: RemedyData[]): boolean {
+  if (remedies.length < 2) return false;
+  const first = remedies[0].farrington ?? "";
+  return remedies.some((r) => (r.farrington ?? "") !== first);
+}
+
 function getUniqueItems(value: string, otherValues: string[]): Set<string> {
   const myItems = splitItems(value);
   const otherAllItems = new Set(otherValues.flatMap((v) => splitItems(v)));
@@ -106,9 +103,6 @@ function getUniqueItems(value: string, otherValues: string[]): Set<string> {
   return unique;
 }
 
-/**
- * Render text with unique items highlighted using the remedy's miasm colour.
- */
 function HighlightedText({
   value,
   uniqueItems,
@@ -126,7 +120,6 @@ function HighlightedText({
     );
   }
 
-  // Split the raw text by lines/sentences to preserve formatting
   const lines = value.split("\n");
   return (
     <>
@@ -279,8 +272,8 @@ export function RemedyComparePanel({
     (key, i) => ({ key, remedy: selected[i] ?? null }),
   );
 
-  // Compute which sections are identical across all selected remedies
   const activeRemedies = selected;
+
   const identicalMainSections = SECTIONS.filter(
     (sec) =>
       activeRemedies.length >= 2 &&
@@ -296,8 +289,13 @@ export function RemedyComparePanel({
     (rs) =>
       activeRemedies.length >= 2 && !relSectionHasDiffs(activeRemedies, rs.key),
   );
+  const farringtonIdentical =
+    activeRemedies.length >= 2 && !farringtonHasDiffs(activeRemedies);
+
   const hiddenCount =
-    identicalMainSections.length + identicalRelSections.length;
+    identicalMainSections.length +
+    identicalRelSections.length +
+    (farringtonIdentical ? 1 : 0);
 
   const visibleMainSections =
     diffMode && activeRemedies.length >= 2
@@ -308,6 +306,9 @@ export function RemedyComparePanel({
     diffMode && activeRemedies.length >= 2
       ? REL_SECTIONS.filter((s) => !identicalRelSections.includes(s))
       : REL_SECTIONS;
+
+  const showFarrington =
+    !diffMode || !farringtonIdentical || activeRemedies.length < 2;
 
   return (
     <div className="flex flex-col gap-4">
@@ -400,7 +401,6 @@ export function RemedyComparePanel({
           </Popover>
         )}
 
-        {/* Diff mode toggle – only visible when 2+ remedies selected */}
         {selected.length >= 2 && (
           <div className="flex items-center gap-2 ml-auto">
             {diffMode && hiddenCount > 0 && (
@@ -537,10 +537,7 @@ export function RemedyComparePanel({
                   className="grid gap-3 p-3"
                   style={{
                     gridTemplateColumns: "160px repeat(3, 1fr)",
-                    borderBottom:
-                      sIdx < visibleMainSections.length - 1
-                        ? "1px solid oklch(var(--border) / 0.5)"
-                        : undefined,
+                    borderBottom: "1px solid oklch(var(--border) / 0.5)",
                     background:
                       sIdx % 2 === 1
                         ? "oklch(var(--muted) / 0.15)"
@@ -596,6 +593,90 @@ export function RemedyComparePanel({
                   )}
                 </div>
               ))
+            )}
+
+            {/* ── Farrington's Comparative MM section ── */}
+            {showFarrington && (
+              <div
+                className="border-t"
+                style={{ borderColor: `oklch(${FARRINGTON_COLOR} / 0.25)` }}
+              >
+                {/* Section header banner */}
+                <div
+                  className="flex items-center gap-2 px-4 py-2 text-xs border-b"
+                  style={{
+                    background: `oklch(${FARRINGTON_COLOR} / 0.08)`,
+                    borderColor: `oklch(${FARRINGTON_COLOR} / 0.2)`,
+                    color: `oklch(${FARRINGTON_COLOR})`,
+                  }}
+                >
+                  <BookOpen className="w-3.5 h-3.5 flex-shrink-0" />
+                  <span className="font-semibold tracking-wide uppercase text-xs">
+                    Farrington's Comparative Materia Medica
+                  </span>
+                  <span
+                    className="ml-1 font-normal normal-case"
+                    style={{ opacity: 0.75 }}
+                  >
+                    — Comparative &amp; differentiating notes
+                  </span>
+                </div>
+
+                {/* Farrington row */}
+                <div
+                  className="grid gap-3 p-3"
+                  style={{
+                    gridTemplateColumns: "160px repeat(3, 1fr)",
+                    background: `oklch(${FARRINGTON_COLOR} / 0.04)`,
+                  }}
+                >
+                  <div
+                    className="text-xs font-semibold pt-1"
+                    style={{ color: `oklch(${FARRINGTON_COLOR})` }}
+                  >
+                    Farrington's Notes
+                  </div>
+                  {columns.map(({ key, remedy }) =>
+                    remedy ? (
+                      <div
+                        key={remedy.name}
+                        className="text-xs leading-relaxed"
+                      >
+                        {diffMode ? (
+                          <HighlightedText
+                            value={remedy.farrington || "—"}
+                            uniqueItems={getUniqueItems(
+                              remedy.farrington || "",
+                              activeRemedies
+                                .filter((r) => r.name !== remedy.name)
+                                .map((r) => r.farrington || ""),
+                            )}
+                            miasmColor={FARRINGTON_COLOR}
+                          />
+                        ) : (
+                          <span
+                            style={{
+                              color: "oklch(var(--foreground) / 0.85)",
+                            }}
+                          >
+                            {remedy.farrington || "—"}
+                          </span>
+                        )}
+                      </div>
+                    ) : (
+                      <div
+                        key={key}
+                        className="text-xs"
+                        style={{
+                          color: "oklch(var(--muted-foreground) / 0.4)",
+                        }}
+                      >
+                        —
+                      </div>
+                    ),
+                  )}
+                </div>
+              </div>
             )}
 
             {/* Relationships section */}
@@ -709,7 +790,6 @@ export function RemedyCompare() {
       style={{ background: "oklch(var(--background))" }}
     >
       <div className="max-w-6xl mx-auto px-4 py-8">
-        {/* Page header */}
         <motion.div
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -740,7 +820,8 @@ export function RemedyCompare() {
             className="text-sm ml-11"
             style={{ color: "oklch(var(--muted-foreground))" }}
           >
-            Compare up to 3 remedies side by side across all sections
+            Compare up to 3 remedies side by side across all sections including
+            Farrington's comparative notes
           </p>
         </motion.div>
 
